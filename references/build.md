@@ -10,7 +10,10 @@
 - **Small units.** Components do one job. Repeated structure is one component.
 - **No scaffolding left behind**: no commented-out experiments, no `lorem`, no dead styles.
 
-## Per section loop
+## Per section loop (these glances are free)
+
+The quick render after each section does not count against the three whole-screen rounds in `look.md`.
+
 
 1. Write the section's copy.
 2. Build the markup and styles.
