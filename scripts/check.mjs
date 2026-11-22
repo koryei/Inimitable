@@ -8,6 +8,7 @@
 import { isMain, parseArgs } from './lib/args.mjs';
 import { format, judge } from './lib/check-report.mjs';
 import { launch, openPage, toUrl } from './lib/chrome.mjs';
+import { sampleBackdrops } from './lib/backdrop.mjs';
 import { CHECK } from './lib/probe.mjs';
 
 export async function check(target, widths = [390, 1440]) {
@@ -15,9 +16,16 @@ export async function check(target, widths = [390, 1440]) {
   const results = [];
   try {
     for (const width of widths) {
-      const page = await openPage(chrome.browser, { width, height: width < 700 ? 844 : 900, mobile: width < 700, deviceScaleFactor: width < 700 ? 2 : 1 });
+      const page = await openPage(chrome.browser, { width, height: width < 700 ? 844 : 900, mobile: width < 700, deviceScaleFactor: 1 });
       await page.goto(toUrl(target));
-      results.push({ width, ...judge(await page.evaluate(CHECK), { width }) });
+      const raw = await page.evaluate(CHECK);
+      try {
+        const samples = await sampleBackdrops(page);
+        for (const t of raw.text) t.samples = samples.get(t.idx);
+      } catch (error) {
+        console.error(`Could not sample rendered backgrounds (${error.message}); using element-based backgrounds.`);
+      }
+      results.push({ width, ...judge(raw, { width }) });
       await page.close();
     }
   } finally {
