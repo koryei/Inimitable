@@ -39,6 +39,8 @@ Everything else, including the logo, the nav and the social proof, is quieter th
 - **Text over product view.** Headline and actions, then a large preview that runs past the fold. *Why:* the crop implies more, which invites the scroll.
 - **Statement.** Large type alone, left-aligned. *Why:* for a product whose name is the idea, the type is the visual. It only works when the line is genuinely good.
 
+These four are the *arrangements*. The move that makes one of them memorable is a separate decision, and it is the one people skip: light from a direction, a masked edge, a sheet on a table, the product's own control as the hero, a number set at scale. `devices.md` has fifteen of them with the reason each works and the way each fails. Pick one as the spine of the page before you write any markup.
+
 ## The one thing
 
 Every page needs **one thing the visitor remembers**: a hero object, a number set at scale, a single interaction, a line of type. It is the reason the page is not interchangeable with the next one. `visual-craft.md` is how to make it; `materials.md` is how to give it a surface.
