@@ -29,6 +29,8 @@ Nothing here is a draft.
 | 19 | Step 2 Decide the mode: modes go in. A mode is what a person is trying to do on the screen. Four from impeccable: Persuade (landing pages), Operate (apps, dashboards), Read (docs, long text), Experience (showpiece, brand). | impeccable | 2026-11-22 |
 | 20 | The terminal app gets its own fifth mode, with its own rules (text and colour only, narrow width, no images). | owner | 2026-11-22 |
 | 21 | The mode is used to pick rules and nothing else; the report (step 8) says which mode was used, and no more. | owner | 2026-11-22 |
+| 22 | Step 3 Fix the direction: when the project has design rules, the direction is taken from them and stated in one sentence (what it should feel like, what it must not look like), then the run proceeds. Nothing is invented over the project's rules. | impeccable, decision 10 | 2026-11-22 |
+| 23 | Step 3: when the project has no design rules, the skill drafts the direction and a few rules from the subject inventory (decision 14) and waits for the owner's yes before building. | tasteskill, decision 10 | 2026-11-22 |
 
 ## Licences (facts, not decisions)
 

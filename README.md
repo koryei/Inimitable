@@ -31,7 +31,7 @@ impeccable and tasteskill have no licence file in the installed copies. Restate 
 |---|---|
 | 1 Read | Approved (decisions 11 to 18) |
 | 2 Decide the mode | Done (decisions 19 to 21). Five modes: Persuade, Operate, Read, Experience, and Terminal. The report names the mode used. |
-| 3 Fix the direction | Not started |
+| 3 Fix the direction | Approved (decisions 22 and 23) |
 | 4 Branch (fix layer by layer, or build around one bright element) | Not started |
 | 5 Build | Not started |
 | 6 Gate | Not started |
