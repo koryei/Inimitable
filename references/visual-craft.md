@@ -20,7 +20,8 @@ Avoid the generic: globes, abstract blobs, gradient orbs, floating cubes, circui
 | Family | What it is | Fits | Recipe |
 | --- | --- | --- | --- |
 | **Line fields** | Contours, flow lines, waveforms, grids that bend | place, terrain, data, sound, time | `assets/recipes/contours.mjs` |
-| **Objects in tonal layers** | A thing drawn from smooth shapes, lit from above with one neutral shifting lighter to darker | cairns, pebbles, plates, jars, hills, leaves | `assets/recipes/shapes.mjs` |
+| **Objects in tonal layers** | A thing drawn from smooth shapes, lit from one side with one hue shifting lighter to darker | cairns, pebbles, plates, hills, leaves | `assets/recipes/shapes.mjs` (blobs, stone stacks with flat bases, speckles) |
+| **Turned objects** | A profile curve revolved into a silhouette, lit and cut with fine rings | pottery, glass, bottles, lamps, columns, lathe work | `assets/recipes/revolve.mjs` (presets: amphora, bowl, cup, jar, bottle) |
 | **Dot and halftone fields** | A grid of dots whose size follows a function or data | maps, density, presence, print and craft | `assets/recipes/dots.mjs` |
 | **Grain and light** | Fine noise to take flatness off a large field, soft light from one direction | any large colour area | `assets/recipes/grain.css` |
 | **The product itself** | A true fragment of the real interface with plausible data, or the real output the product makes | software, tools, anything that produces a result | build in HTML with the project's components |
@@ -44,6 +45,12 @@ const stones = stoneStack({ count: 5, width: 300, seed: 3, centerX: 200, baseY: 
 ```
 
 ```js
+import { vesselSvg, PROFILES } from './assets/recipes/revolve.mjs';
+// Vessels drawn to one scale (same px per cm) beside a ruler make an honest picture of real sizes.
+const vase = vesselSvg({ profile: PROFILES.amphora, height: 360, maxRadius: 100, base: '#7a5a4a', rings: 36, seed: 2, id: 'a' });
+```
+
+```js
 import { dotField, fadeRight } from './assets/recipes/dots.mjs';
 const dots = dotField({ width: 1440, height: 400, step: 14, radius: fadeRight(3) });
 ```
@@ -57,8 +64,11 @@ const dots = dotField({ width: 1440, height: 400, step: 14, radius: fadeRight(3)
 - **Draw once, not everywhere.** One hero moment. A second repeated motif at small scale is fine; a different effect in every section is not.
 - **Real shapes, not filters.** Prefer drawn SVG paths to blur, noise and glow stacks. Grain is the one filter allowed, and it must be invisible as a pattern.
 - **Static by default.** No looping animation. If it moves, it moves once, on load or on a real state change, and honours reduced motion.
-- **Accessible and light.** `aria-hidden="true"`, `focusable="false"`, inline SVG under about 40 KB, no external requests.
-- **Responsive.** Use `preserveAspectRatio="xMidYMid slice"` for backgrounds, and move the subject of an object illustration into the visible part on a phone.
+- **Accessible and light.** `aria-hidden="true"`, `focusable="false"`, no external requests. A background pattern stays under about 50 KB; a detailed hero illustration may reach about 100 KB. Contour fields are already stitched into long smooth lines; raise `cell` or lower `levels` to shrink them. Give each inline SVG with gradients its own `id` prefix so two of them do not collide.
+- **Responsive.** Use `preserveAspectRatio="xMidYMid slice"` for backgrounds, and on a phone keep the moment visible: move the subject of an illustration into the visible part and tune any edge mask at 390 px by eye, not only at 1440.
+- **Let it reach the edge.** A pattern or object that stops at a hard line looks pasted on. Bleed it off the nearest edges, or pull the hero up under the navigation so there is no seam.
+- **Styling an inline SVG.** CSS from the page does not reach inside an SVG `<symbol>` or `<use>` clone; style by an id on the original, or pass colours in as `currentColor`. Do not rely on `box-shadow` to stack cards: use a hard-offset second layer.
+- **Grain on dark.** `grain.css` has a `.grain-dark` variant (light noise, screen blend). The default multiplies, which is invisible on a dark panel.
 - **A brand wins.** If the project has an illustration style, use it. This is for when there is none.
 
 ## Judging it
