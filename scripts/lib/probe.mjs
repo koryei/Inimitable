@@ -163,9 +163,9 @@ for (const el of document.querySelectorAll('body, body *')) {
     if (VAGUE_ERROR.test(text)) add('Vague error message', el, text);
     if ((el.tagName === 'BUTTON' || el.tagName === 'LABEL') && /\\.$/.test(text) && text.split(/\\s+/).length <= 12 && !/\\.\\s+\\S/.test(text)) add('Trailing period on a label', el, text);
     if (/^(new|beta|pro|introducing)\\b/i.test(text.replace(/^[^\\p{L}]+/u, '')) && text.length < 40 && (px(s.borderTopLeftRadius) >= 8 || EMOJI.test(text))) add('Badge above or beside content', el, text);
-    if (s.fontStyle === 'italic' && /^(EM|I)$/.test(el.tagName) && !el.closest('blockquote, cite, q')) add('Italic emphasis', el, text);
+    if (s.fontStyle === 'italic' && /^(EM|I)$/.test(el.tagName) && !el.closest('blockquote, cite, q') && size < 24) add('Italic emphasis', el, text);
   }
-  if (s.animationName !== 'none' && s.animationIterationCount === 'infinite' && !isLive(el)) add('Looping animation', el, s.animationName);
+  if (s.animationName !== 'none' && s.animationIterationCount === 'infinite' && !isLive(el) && !el.closest('[data-loop]')) add('Looping animation', el, s.animationName);
   if (s.transitionProperty === 'all' && parseFloat(s.transitionDuration) > 0) add('transition: all', el, s.transitionDuration);
 }
 return found;
