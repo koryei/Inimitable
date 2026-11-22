@@ -1,6 +1,14 @@
 ---
 name: inimitable
-description: Designs and repairs interfaces so they look made on purpose and right on first show. Builds new screens around one star, or fixes existing ones layer by layer (spacing, colour, icons, copy, type, layout, details, motion). Renders the real screen at 320, 390, 1440 and 2560 px, measures it, and fixes what it finds before showing the result. Use whenever the work is design or visual quality: build, redesign, restyle, polish, review or "make it look better" for web apps, dashboards, landing pages, docs, portfolios, terminal UI and native mobile (iOS, Android), or when a UI looks generated, templated, generic, or shows tells like purple gradients, glows, emoji labels, "New ✨" badges, uppercase tracked labels, uneven spacing or hype copy.
+description: >-
+  Designs and repairs interfaces so they look made on purpose and right on first show. Builds new
+  screens around one star, or fixes existing ones layer by layer (spacing, colour, icons, copy,
+  type, layout, details, motion). Renders the real screen at 320, 390, 1440 and 2560 px, measures
+  it, and fixes what it finds before showing the result. Use whenever the work is design or visual
+  quality: build, redesign, restyle, polish, review or "make it look better" for web apps,
+  dashboards, landing pages, docs, portfolios, terminal UI and native mobile (iOS, Android), or
+  when a UI looks generated, templated, generic, or shows tells like purple gradients, glows,
+  emoji labels, "New ✨" badges, uppercase tracked labels, uneven spacing or hype copy.
 license: Apache-2.0
 ---
 
