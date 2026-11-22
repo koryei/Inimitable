@@ -15,10 +15,25 @@ const HIDE = `(() => {
 
 const UNHIDE = "(() => { document.getElementById('__inim_hide')?.remove(); })()";
 
-const RECTS = `(() => [...document.querySelectorAll('[data-inim-i]')].map((el) => {
+// For every text element in view: grid points inside its box that are not covered by something else
+// (a sticky header, a fixed bar, a modal). Covered points would sample the cover, not the backdrop.
+const POINTS = `(() => [...document.querySelectorAll('[data-inim-i]')].map((el) => {
   const r = el.getBoundingClientRect();
-  return { idx: Number(el.getAttribute('data-inim-i')), x: r.left, y: r.top, w: r.width, h: r.height };
-}).filter((r) => r.w > 1 && r.h > 1 && r.y + r.h > 0 && r.y < innerHeight && r.x + r.w > 0 && r.x < innerWidth))()`;
+  if (r.width <= 1 || r.height <= 1 || r.bottom <= 0 || r.top >= innerHeight || r.right <= 0 || r.left >= innerWidth) return null;
+  const cols = Math.max(1, Math.min(4, Math.floor(r.width / 24)));
+  const rows = Math.max(1, Math.min(2, Math.floor(r.height / 12)));
+  const points = [];
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      const x = r.left + (r.width * (i + 0.5)) / cols;
+      const y = r.top + (r.height * (j + 0.5)) / rows;
+      if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight) continue;
+      const top = document.elementFromPoint(x, y);
+      if (top && (el.contains(top) || top.contains(el))) points.push([x, y]);
+    }
+  }
+  return points.length ? { idx: Number(el.getAttribute('data-inim-i')), points } : null;
+}).filter(Boolean))()`;
 
 // Returns Map(idx -> array of [r, g, b] backdrop samples). The page must render at device scale factor 1.
 export async function sampleBackdrops(page, { maxSlices = 14 } = {}) {
@@ -30,22 +45,12 @@ export async function sampleBackdrops(page, { maxSlices = 14 } = {}) {
     for (let y = 0, n = 0; y < total && n < maxSlices; y += height, n++) {
       await page.evaluate(`window.scrollTo({ top: ${y}, behavior: 'instant' })`);
       await new Promise((r) => setTimeout(r, 120));
-      const rects = await page.evaluate(RECTS);
-      if (!rects.length) continue;
+      const found = await page.evaluate(POINTS);
+      if (!found.length) continue;
       const image = decodePng(await page.screenshot());
-      for (const r of rects) {
-        if (samples.has(r.idx) && samples.get(r.idx).length >= 9) continue;
-        const points = [];
-        const cols = Math.max(1, Math.min(4, Math.floor(r.w / 24)));
-        const rows = Math.max(1, Math.min(2, Math.floor(r.h / 12)));
-        for (let i = 0; i < cols; i++) {
-          for (let j = 0; j < rows; j++) {
-            const px = r.x + (r.w * (i + 0.5)) / cols;
-            const py = r.y + (r.h * (j + 0.5)) / rows;
-            if (px >= 0 && py >= 0 && px < image.width && py < image.height) points.push(pixelAt(image, px, py));
-          }
-        }
-        if (points.length) samples.set(r.idx, [...(samples.get(r.idx) || []), ...points]);
+      for (const item of found) {
+        if (samples.has(item.idx) && samples.get(item.idx).length >= 9) continue;
+        samples.set(item.idx, [...(samples.get(item.idx) || []), ...item.points.map(([x, y]) => pixelAt(image, x, y))]);
       }
     }
   } finally {
