@@ -457,7 +457,7 @@ b, strong { font-weight: 500; }
 .shot:hover .pic img { transform: scale(1.03); }
 .shot-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .shot-meta b { font: 400 1.125rem/1.2 var(--serif); letter-spacing: -0.01em; }
-.shot-line { font-size: 0.875rem; line-height: 1.5; color: var(--ink-2); }
+.shot-line { max-width: 34rem; font-size: 0.875rem; line-height: 1.5; color: var(--ink-2); }
 .shot:hover .shot-meta b { color: var(--accent); }
 
 /* ---------- Results ---------- */
@@ -475,7 +475,7 @@ b, strong { font-weight: 500; }
 .result-stat { padding-top: 1.25rem; border-top: 1px solid var(--line); }
 .result-stat b { display: block; font: 400 1.5rem/1.1 var(--serif); letter-spacing: -0.01em; }
 .result-stat span { display: block; margin-top: 0.5rem; font-size: 0.875rem; color: var(--ink-2); }
-.note { max-width: 52rem; margin: 2.5rem 0 0; font-size: 0.875rem; line-height: 1.6; color: var(--ink-2); }
+.note { max-width: 34rem; margin: 2.5rem 0 0; font-size: 0.875rem; line-height: 1.6; color: var(--ink-2); }
 .note a { color: var(--ink); }
 
 /* ---------- Install ---------- */
