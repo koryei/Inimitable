@@ -108,8 +108,9 @@ Plain Node scripts, no dependencies. The agent runs them for you, and you can ru
 | --- | --- |
 | `scripts/shoot.mjs <url or file>` | Screenshots at 320, 390, 1440 and 2560 px. Flags sideways scrolling and console errors. `--eval` puts the page in a state first, `--slices` captures every screenful, `--wait` lets animations finish. |
 | `scripts/drift.mjs <url or file>` | Counts the font sizes, weights, radii, colours and spacing values in use and flags drift. `--save` and `--against` give a before and after. |
-| `scripts/signs.mjs <url or file>` | Finds machine-made tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims, looping animation and more. |
+| `scripts/signs.mjs <url or file>` | Finds machine-made tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims, looping animation and more. `--allow` licenses devices a committed direction uses on purpose. |
 | `scripts/check.mjs <url or file>` | WCAG contrast read from the rendered pixels (so gradients, images and pseudo-element backgrounds are judged too), touch-target size, small text, missing names, visible focus styles, images that cause layout shift, and document basics, at phone and desktop widths. |
+| `scripts/dotify.mjs <image or svg>` | Turns any picture or drawn SVG into dithered, halftone, hex-dot or ASCII art for a hero object. |
 | `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100 with what cost points. |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal program at a set width in a real pseudo-terminal and captures text and an image. |
 
@@ -125,13 +126,14 @@ references/
   anti-slop.md           the tells, each with its fix
   principles.md          why design works: perception, grouping, type, colour, feedback, trust
   visual-craft.md        finding and drawing the one memorable moment in code
+  directions.md          committed looks: instrument dark and light, blueprint, horizon, dithered data
   feels-cheap.md         trust, feedback, loading, retention, consistency, permissions
   components.md          what a finished component does, state by state
   motion.md              recipes for menus, modals, toasts, tabs and state changes
   libraries.md           where to take parts from, and the rules for taking them
   layers/                spacing, colour, icons, copy, type, layout, details, motion
   surfaces/              web app, landing, reading, showpiece, terminal, iOS, Android
-assets/recipes/          contour lines, stones, turned vessels, dot fields and grain, as tested generators
+assets/recipes/          generators and kits, all tested: contours, stones, vessels, dither and halftone, HUD callouts, isometric art, the instrument CSS kit
 scripts/                 the measuring tools above, plus score.mjs
 evals/                   briefs, scoring and the protocol used to test and improve the skill
 examples/                real before and after runs
