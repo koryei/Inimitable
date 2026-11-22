@@ -3,7 +3,7 @@
 ## Rules
 
 - **One neutral ramp**, tinted toward the product's world. Background, raised surfaces, borders and text all come from it (`house-rules.md` has ramps).
-- **Apps stay neutral.** On app and dashboard screens surfaces, borders and text are grey; content carries the colour. A background that reads orange, brown, blue or green has gone too far. Landing pages and showpieces may tint surfaces further.
+- **Apps stay quiet.** On app and dashboard screens surfaces, borders and text come from a low-saturation ramp (graphite, or a slightly warm or ink-tinted one that suits the product); content carries the colour. A background that reads orange, brown, blue or green has gone too far. Landing pages and showpieces may tint surfaces further.
 - **Three text roles**: primary, secondary, muted. Not ten lavenders.
 - **One accent, used rarely**, on the primary action, the selection, or the one number that matters.
 - **A real brand colour** becomes the accent and leaves the surfaces. No brand colour: take one from the world (warm → amber, coral; cool → cobalt, teal; natural → moss). Avoid the violet-to-blue family unless the brand really is violet.
