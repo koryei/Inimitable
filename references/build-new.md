@@ -33,6 +33,8 @@ The brand decides. It does not have to be a colour. A brand that is black and gr
 
 ## Moments
 
+A clean screen is not yet a memorable one. Each new Persuade or Experience screen needs one rich moment that only this product could have, and Operate screens benefit from one too (a signature detail, a well-drawn chart, a true object). `visual-craft.md` says how to find the idea in the subject inventory and draw it in code, with generators in `assets/recipes/`.
+
 Beyond the star, a screen can have one or two **moments**: places where colour, material or detail gets richer than the quiet chrome: a rendered object, a chart whose colours each mean a series, a figure set beautifully. Chrome stays quiet so moments read. Never spread richness evenly over everything.
 
 ## Visuals
