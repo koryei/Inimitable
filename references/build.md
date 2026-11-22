@@ -18,6 +18,10 @@
 4. Look at the pictures: grouping, alignment, hierarchy, the star.
 5. Fix. Move on only when the section is right.
 
+## Parts and motion
+
+Before you write a component, read `components.md` for the states and behaviours it needs, and `motion.md` for how it should open, close and swap. Before you add anything from outside the project (a component, a kit, a transition), read `libraries.md`: ask first, check the licence, and re-skin it to the project's tokens.
+
 ## Accessibility is part of building
 
 - Contrast 4.5:1 body, 3:1 large text and UI parts.
