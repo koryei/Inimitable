@@ -32,7 +32,7 @@ Also load, as the work needs them: the surface file for the mode ([web-app](refe
 
 1. **The project's own rules win.** A brand guide, tokens, a design system or `DESIGN.md` outrank this skill's taste. Where they are silent, use `house-rules.md`. Where there are none at all, propose rules and a direction and wait for a yes.
 2. **What exists is evidence, not approval.** Sloppy styling already in the code is never a rule.
-3. **Decide, do not interrogate.** A vague request gets a one-line reading and a start. Ask only when a missing fact blocks the work. Never ask about colours, fonts or vibe.
+3. **Decide, do not interrogate.** A vague request gets a one-line reading and a start. Ask only when a missing fact blocks the work. Never ask about colours, fonts or vibe. If nobody can answer (a one-shot or non-interactive run), state your assumptions in the report and proceed; never stall.
 4. **Keep the product.** Features, content and section order stay. Do not rename it, invent features, claims, data or customers.
 5. **Never replace decoration with decoration.** Removing a tell leaves space; fill it with scale, real content, or nothing.
 6. **Remove the tells** in `anti-slop.md` as part of the work. Say so only if it mattered.
