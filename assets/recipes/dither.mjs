@@ -175,7 +175,8 @@ export function ditherSvg(grid, { cell = 6, gap = 0, fill = 'currentColor', back
 }
 
 // Dots whose size follows brightness, on a straight or rotated grid: a classic halftone screen.
-export function halftoneSvg(field, { cell = 8, maxRadius, angle = 0, fill = 'currentColor', background, hex = false, invert = false, minRadius = 0.35, scale = 1 } = {}) {
+export function halftoneSvg(field, { cell = 8, maxRadius, angle = 0, fill = 'currentColor', background, hex = false, invert = false, minRadius = 0.35, scale = 1, compact = true, sizes = 8 } = {}) {
+  // `compact` groups dots into `sizes` radius classes drawn as round-capped strokes (small files); false draws one circle each.
   // `scale` is how many output pixels one field cell covers: use the downsampling factor's inverse so a
   // coarse field still draws at full size. `cell` is the dot pitch in output pixels.
   const r = maxRadius ?? cell * 0.5;
@@ -202,11 +203,20 @@ export function halftoneSvg(field, { cell = 8, maxRadius, angle = 0, fill = 'cur
       if (x < 0 || y < 0 || x >= w || y >= h) continue;
       const v = invert ? sample(x, y) : 1 - sample(x, y);
       const rad = v * r;
-      if (rad >= minRadius) dots.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rad.toFixed(2)}"/>`);
+      if (rad >= minRadius) dots.push({ x, y, r: rad });
     }
   }
   const bg = background ? `<rect width="${w}" height="${h}" fill="${background}"/>` : '';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true" focusable="false">${bg}<g fill="${fill}">${dots.join('')}</g></svg>`;
+  if (!compact) return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true" focusable="false">${bg}<g fill="${fill}">${dots.map((d) => `<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}"/>`).join('')}</g></svg>`;
+  // Compact: dots of similar size share one path of zero-length strokes with round caps. About a quarter the size.
+  const buckets = new Map();
+  for (const d of dots) {
+    const key = Math.max(1, Math.round((d.r / r) * sizes));
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key).push(`M${d.x.toFixed(1)} ${d.y.toFixed(1)}h0`);
+  }
+  const paths = [...buckets.entries()].map(([k, list]) => `<path d="${list.join('')}" stroke-width="${((k / sizes) * r * 2).toFixed(2)}"/>`).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true" focusable="false">${bg}<g fill="none" stroke="${fill}" stroke-linecap="round">${paths}</g></svg>`;
 }
 
 // The field as text characters, dark to light along `ramp`. Returns an array of lines.
@@ -239,4 +249,20 @@ export function lit(grid) {
   let n = 0;
   for (const v of grid.data) n += v;
   return n / grid.data.length;
+}
+
+// Make a picture dissolve into noise along an axis: past `start` (0..1) each cell is increasingly likely to be
+// replaced by a random value, until at `end` it is pure noise. Good for "encryption", decay and glitch.
+export function dissolve(field, { axis = 'x', start = 0.4, end = 1, seed = 1, noise = (r) => r } = {}) {
+  const rand = rng(seed);
+  const out = new Float32Array(field.data.length);
+  for (let y = 0; y < field.height; y++) {
+    for (let x = 0; x < field.width; x++) {
+      const t = axis === 'x' ? x / field.width : y / field.height;
+      const p = Math.min(1, Math.max(0, (t - start) / (end - start || 1)));
+      const i = y * field.width + x;
+      out[i] = rand() < p ? noise(rand()) : field.data[i];
+    }
+  }
+  return { width: field.width, height: field.height, data: out };
 }
