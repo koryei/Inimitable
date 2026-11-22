@@ -21,7 +21,7 @@ node scripts/term-shot.mjs --cols 60  --label after --no-color -- node examples/
 | Lines wrapped by the width at 60 columns | 3 | 0 |
 | Lines wrapped by the width at 120 columns | 1 | 0 |
 | Colours used | 6 | 2 (green and yellow, each with one meaning) |
-| Emoji | 8 | 0 |
+| Emoji | 14 | 0 |
 | Readable without colour | no (meaning lives in colour and emoji) | yes (`✓` and `!` carry it) |
 
 ## What the run decided
