@@ -16,7 +16,7 @@ Find them (`package.json` scripts, `Makefile`, CI config, `CLAUDE.md`): usually 
 | --- | --- | --- |
 | Drift | `node scripts/drift.mjs <screen> --against before.json` | font sizes, weights, radii, colour hues and off-grid values are the same or lower than before, and within the scale |
 | Contrast, targets and states | `node scripts/check.mjs <screen>` | every text and control pair meets contrast; touch targets are at least 44 px on mobile; every control shows a visible focus style; images reserve their size |
-| Tells | `node scripts/signs.mjs <screen>` | no `[scan]` tells remain, except ones the project's own rules require |
+| Tells | `node scripts/signs.mjs <screen> [--allow "Tell,Tell"]` | no `[scan]` tells remain, except devices the committed direction licenses (pass them with `--allow` and name them in the report) |
 | Overflow and errors | `node scripts/shoot.mjs <screen>` | no sideways scroll at any width, no console errors |
 
 For a terminal UI, the gate runs `scripts/term-shot.mjs` at 60 and 120 columns instead (no line over the width, no lost colour meaning when colour is off).
