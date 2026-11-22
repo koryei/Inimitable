@@ -4,8 +4,10 @@
 //   node scripts/craft.mjs <url or file> [--widths 390,1440] [--shots dir] [--json]
 //
 // Hover is tested the only way that means anything: a real mouse move over the control, then a diff of
-// its computed style and its children's. A control whose hover changes nothing is reported, because a
-// page where nothing answers the pointer reads as a picture of a page.
+// its computed style and its children's, and a diff of the pixels. A control whose hover changes nothing
+// is reported, because a page where nothing answers the pointer reads as a picture of a page. The pixel
+// diff catches the other failure: a hover that changes a computed value nobody can see, such as a fill
+// painted behind the control's own background.
 //
 // Also reported: transitions on layout properties (they force a reflow every frame), a missing
 // prefers-reduced-motion block, and looping animations that keep running when motion is reduced.
@@ -16,6 +18,21 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { isMain, parseArgs } from './lib/args.mjs';
 import { launch, openPage, toUrl } from './lib/chrome.mjs';
+import { decodePng } from './lib/png.mjs';
+
+// The share of pixels that must change for a hover to be visible. A 1 px underline across a 160 px control
+// is about 0.6% of its box, so the floor is low; anything under this reads as no reply at all.
+const VISIBLE_SHARE = 0.002;
+
+// How much of the box changed, counting only pixels that moved by more than a rounding error.
+function changedShare(a, b) {
+  if (a.width !== b.width || a.height !== b.height) return 1;
+  let changed = 0;
+  for (let i = 0; i < a.data.length; i += 4) {
+    if (Math.abs(a.data[i] - b.data[i]) > 6 || Math.abs(a.data[i + 1] - b.data[i + 1]) > 6 || Math.abs(a.data[i + 2] - b.data[i + 2]) > 6) changed++;
+  }
+  return changed / (a.width * a.height);
+}
 
 // What a hover is allowed to change. Anything outside this list is not a hover state, it is a layout jump.
 const WATCHED = [
@@ -74,7 +91,7 @@ const fingerprint = (i) => `(() => {
   // rect and point are viewport coordinates (the mouse needs those); page is document coordinates, which is
   // what a screenshot clip uses.
   const page = { x: r.left + scrollX, y: r.top + scrollY, width: r.width, height: r.height };
-  return { rect: r.toJSON(), page, point, print: nodes.map(readAll).join('\\n') };
+  return { rect: r.toJSON(), page, point, scrollY, viewport: { width: innerWidth, height: innerHeight }, print: nodes.map(readAll).join('\\n') };
 })()`;
 
 const STATIC = `(() => {
@@ -153,6 +170,7 @@ export async function craft(target, { widths = [390, 1440], shots } = {}) {
 
       const controls = await page.evaluate(CONTROLS);
       const silent = [];
+      const unseen = [];
       for (const c of controls) {
         // Park the control in the middle of the viewport, then move the real pointer onto it.
         await page.evaluate(`(() => {
@@ -164,12 +182,26 @@ export async function craft(target, { widths = [390, 1440], shots } = {}) {
         if (!before) continue;
         const x = Math.round(before.point.x);
         const y = Math.round(before.point.y);
+        // The control's own box, in document coordinates, clamped to what the viewport is showing.
+        const box = {
+          x: Math.max(0, Math.round(before.page.x - 8)),
+          y: Math.max(0, Math.round(before.page.y - 8)),
+          width: Math.round(before.page.width + 16),
+          height: Math.round(before.page.height + 16),
+          scale: 1,
+        };
+        box.width = Math.min(box.width, width - box.x);
+        box.height = Math.min(box.height, before.viewport.height - (box.y - before.scrollY));
+        const rest = decodePng(await page.screenshot({ clip: box }));
         await page.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y, buttons: 0 });
         await new Promise((r) => setTimeout(r, 420));
         const after = await page.evaluate(fingerprint(c.i));
+        const hover = decodePng(await page.screenshot({ clip: box }));
         await page.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 1, y: 1, buttons: 0 });
         await new Promise((r) => setTimeout(r, 120));
         if (after && after.print === before.print) silent.push(c);
+        // The style changed but the picture did not: the reply is painted where nobody can see it.
+        else if (changedShare(rest, hover) < VISIBLE_SHARE) unseen.push(c);
 
         if (shots) {
           mkdirSync(shots, { recursive: true });
@@ -193,6 +225,9 @@ export async function craft(target, { widths = [390, 1440], shots } = {}) {
       }
       for (const c of silent) {
         problems.push({ kind: 'silent hover', where: c.where, detail: `hovering changes nothing${c.label ? ` ("${c.label}")` : ''}` });
+      }
+      for (const c of unseen) {
+        problems.push({ kind: 'invisible hover', where: c.where, detail: `the hover changes a style but not one pixel${c.label ? ` ("${c.label}")` : ''}; nothing about the reply is visible` });
       }
 
       // Reduced motion: the same page with the setting on. Anything still moving is a problem, and so is a
