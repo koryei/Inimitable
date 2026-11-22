@@ -33,6 +33,8 @@ Nothing here is a draft.
 | 23 | Step 3: when the project has no design rules, the skill drafts the direction and a few rules from the subject inventory (decision 14) and waits for the owner's yes before building. | tasteskill, decision 10 | 2026-11-22 |
 | 24 | Step 4 Branch, fixing an existing screen: work in layers in this order: spacing, colour, icons, copy, type, layout, details, motion. | unslop (CC BY 4.0, Damir Sokolovsky) | 2026-11-22 |
 | 25 | Step 4 Branch, building a new screen: every new screen has one star (the "bright element"). The brand's own palette decides what bright means; it does not have to be a colour. The star is made first with size, weight, contrast or imagery, and an accent colour is used only if the project's rules allow one (owner's example: Apple is black and grey). | tasteskill, owner | 2026-11-22 |
+| 26 | Step 5 Build: reuse first. Use the project's existing components, tokens and icon set; add a new piece only when nothing fits, and name it in the report. | impeccable, decision 10 | 2026-11-22 |
+| 27 | Step 5 Build: build one section at a time, rendering and checking each before the next, rather than the whole screen at once. Real content, and empty, loading and error states are part of each section. | owner | 2026-11-22 |
 
 ## Licences (facts, not decisions)
 
