@@ -27,9 +27,12 @@
   .panel h3 { margin: 0 0 14px; font-size: 16px; font-weight: 800; }
   .bars { height: 150px; display: flex; gap: 9px; align-items: flex-end; }
   .bars i { flex: 1; border-radius: 9999px; box-shadow: 0 0 12px currentColor; }
-  .bars i:nth-child(1){height:40%;background:#f472b6;color:#f472b6}.bars i:nth-child(2){height:70%;background:#a78bfa;color:#a78bfa}.bars i:nth-child(3){height:55%;background:#60a5fa;color:#60a5fa}.bars i:nth-child(4){height:90%;background:#34d399;color:#34d399}.bars i:nth-child(5){height:65%;background:#fbbf24;color:#fbbf24}.bars i:nth-child(6){height:80%;background:#fb7185;color:#fb7185}
+  .bars i:nth-child(1){height:40%;background:#f472b6;color:#f472b6}.bars i:nth-child(2){height:70%;background:#a78bfa;color:#a78bfa}.bars i:nth-child(3){height:55%;background:#60a5fa;color:#60a5fa}.bars i:nth-child(4){height:90%;background:#34d399;color:#34d399}.bars i:nth-child(5){height:65%;background:#fbbf24;color:#fbbf24}.bars i:nth-child(6){height:80%;background:#fb7185;color:#fb7185}.bars i:nth-child(7){height:50%;background:#22d3ee;color:#22d3ee}.bars i:nth-child(8){height:72%;background:#c084fc;color:#c084fc}
   .rows div { display: flex; justify-content: space-between; padding: 9px 0; font-size: 14px; }
   .pill { padding: 3px 10px; border-radius: 9999px; background: rgba(52,211,153,.2); color: #6ee7b7; box-shadow: 0 0 10px rgba(52,211,153,.5); font-size: 12px; }
+  .promo { margin-top: 17px; padding: 18px 21px; border-radius: 24px; font-size: 14px; color: #ddd6fe; background: linear-gradient(90deg, rgba(124,58,237,.45), rgba(219,39,119,.35)); border: 1px solid rgba(196,181,253,.5); box-shadow: 0 0 26px rgba(124,58,237,.4); display: flex; align-items: center; gap: 10px; }
+  .promo b { font-weight: 900; }
+  .promo .cta { margin-left: auto; padding: 9px 16px; border-radius: 9999px; font-weight: 800; color: #fff; background: linear-gradient(90deg,#f472b6,#fbbf24); box-shadow: 0 0 18px rgba(244,114,182,.6); }
   @media (max-width: 800px) { body { grid-template-columns: 1fr; } aside { display: none; } .stats { grid-template-columns: 1fr 1fr; } .grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -61,6 +64,15 @@
       <div><span>Atlas Courier Co.</span><span>$ 3,480</span></div>
       <div><span>Wren &amp; Moss</span><span>$640.50</span></div></div></section>
   </div>
+  <div class="grid" style="margin-top:17px">
+    <section class="panel"><h3>🏆 Top clients</h3><div class="rows">
+      <div><span>Atlas Courier Co.</span><span>$ 3,480</span></div>
+      <div><span>Harbour &amp; Finch Studio</span><span>$2,480.00</span></div>
+      <div><span>Bramble Studio</span><span>$2060</span></div>
+      <div><span>Kestrel Print</span><span class="pill">Paid 🎉</span></div></div></section>
+    <section class="panel"><h3>💸 Cash flow</h3><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></section>
+  </div>
+  <div class="promo">🚀 <b>Go PRO</b> and unlock unlimited invoices, custom branding, team seats and priority support!! <span class="cta">Upgrade now →</span></div>
 </main>
 </body>
 </html>
