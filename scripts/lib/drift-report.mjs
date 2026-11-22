@@ -1,5 +1,7 @@
 // Turns the raw counts from the page into numbers and flags. No browser needed, so it is testable.
 
+const MONO = /mono|code|courier|consolas|menlo|plex mono|jetbrains|fira code|source code|sf mono/i;
+
 export const SCALE = [4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128];
 
 const sum = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
@@ -55,13 +57,14 @@ export function analyse(raw, { scale = SCALE } = {}) {
   if (tinyText.length) flags.push(`text smaller than 12 px: ${tinyText.join(', ')}`);
   if (weights.some((w) => w >= 700)) flags.push(`weights ${weights.filter((w) => w >= 700).join(', ')} in use (heavy)`);
   if (weights.length > 3) flags.push(`${weights.length} font weights in use`);
-  if (Object.keys(raw.fontFamilies).length > 2) flags.push(`${Object.keys(raw.fontFamilies).length} font families in use`);
+  const proportional = Object.keys(raw.fontFamilies).filter((f) => !MONO.test(f));
+  if (proportional.length > 2) flags.push(`${proportional.length} proportional font families in use (one family plus one partner is the rule; a mono for code or figures is extra)`);
   if (radii.length > 4) flags.push(`${radii.length} different corner radii`);
   if (onGridShare < 0.9) flags.push(`only ${Math.round(onGridShare * 100)}% of spacing values sit on the 4 px grid`);
   if (Object.keys(offGrid).length) flags.push(`off-grid spacing: ${Object.keys(offGrid).join(', ')}`);
-  const textColorCount = Object.keys(raw.textColors).length;
-  if (textColorCount > 5) flags.push(`${textColorCount} different text colours (aim for three roles)`);
-  if (Object.keys(hues).length > 2) flags.push(`${Object.keys(hues).length} colour hues in use (${Object.keys(hues).join(', ')} degrees)`);
+  const neutralText = Object.keys(raw.textColors).filter((hex) => hexToHsl(hex).s < 0.25);
+  if (neutralText.length > 6) flags.push(`${neutralText.length} different neutral text colours (aim for three roles per surface)`);
+  if (Object.keys(hues).length > 3) flags.push(`${Object.keys(hues).length} colour hues in use (${Object.keys(hues).join(', ')} degrees; an accent plus red and green for meaning is fine)`);
   return {
     totals: { elements: raw.elements, textElements: raw.textElements },
     fontSizes: sorted(raw.fontSizes),

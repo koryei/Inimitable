@@ -55,9 +55,12 @@ for (const el of document.querySelectorAll('body, body *')) {
     out.textElements++;
     tally(out.fontSizes, px(s.fontSize));
     tally(out.fontWeights, s.fontWeight);
-    tally(out.fontFamilies, s.fontFamily.split(',')[0].replace(/["']/g, '').trim());
-    const c = toRGBA(s.color);
-    if (c[3] > 0) tally(out.textColors, toHex(c));
+    // Code blocks have their own syntax colours and mono face: they do not count toward the page's roles.
+    if (!el.closest('pre, code, kbd, samp')) {
+      tally(out.fontFamilies, s.fontFamily.split(',')[0].replace(/["']/g, '').trim());
+      const c = toRGBA(s.color);
+      if (c[3] > 0) tally(out.textColors, toHex(c));
+    }
   }
   const bg = toRGBA(s.backgroundColor);
   if (bg[3] > 0.05) tally(out.surfaceColors, toHex(bg));
