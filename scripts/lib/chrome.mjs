@@ -178,8 +178,8 @@ export async function openPage(browser, { width, height, deviceScaleFactor = 1, 
       }
       return result.result.value;
     },
-    async screenshot({ fullPage = false } = {}) {
-      let clip;
+    async screenshot({ fullPage = false, clip: region } = {}) {
+      let clip = region;
       if (fullPage) {
         const { cssContentSize } = await send('Page.getLayoutMetrics');
         clip = { x: 0, y: 0, width: width, height: Math.min(Math.ceil(cssContentSize.height), 16000), scale: 1 };
