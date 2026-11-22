@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.1
+
+From round 3 (`evals/results/2026-11-22-r3.md`).
+
+- `dotify.mjs` handles bare SVGs and photos (a real wrapper file, not a `data:` page) and short subjects.
+- Hex and halftone output is compact: dots share round-capped strokes by size.
+- `dissolve()` makes a picture break into noise along an axis.
+- `instrument.css` is in rem and scales on big screens with `html.inst-scale`.
+- Build guidance for actions with nothing to connect to; type guidance per direction.
+
 ## 0.4.0
 
 Driven by a reference set of technical landing pages (dotted and dithered hero objects, HUD annotation, corner brackets, isometric line art, gradient horizons).
