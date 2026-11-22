@@ -5,7 +5,8 @@
 import { spawn } from 'node:child_process';
 import { existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const CANDIDATES = {
   darwin: [
@@ -199,5 +200,5 @@ export async function openPage(browser, { width, height, deviceScaleFactor = 1, 
 // Turn a path or URL into something Chrome can open.
 export function toUrl(input) {
   if (/^[a-z][a-z0-9+.-]*:/i.test(input)) return input;
-  return `file://${join(process.cwd(), input)}`;
+  return pathToFileURL(resolve(input)).href;
 }
