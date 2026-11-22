@@ -223,7 +223,9 @@ for (const el of document.querySelectorAll('body, body *')) {
     const bd = backdrop(el);
     const fg = toRGBA(s.color);
     fg[3] *= opacityOf(el);
-    text.push({ where: describe(el), text: t.slice(0, 40), size: px(s.fontSize), weight: parseInt(s.fontWeight, 10), fg, bg: bd.rgb, unknown: bd.unknown });
+    const idx = text.length;
+    el.setAttribute('data-inim-i', String(idx));
+    text.push({ idx, where: describe(el), text: t.slice(0, 40), size: px(s.fontSize), weight: parseInt(s.fontWeight, 10), fg, bg: bd.rgb, unknown: bd.unknown });
   }
   if (el.matches(interactive) && !el.disabled) {
     const r = el.getBoundingClientRect();
