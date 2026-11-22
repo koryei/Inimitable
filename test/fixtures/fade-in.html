@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Fade in</title>
+<style>
+  body { margin: 0; font: 16px/24px system-ui, sans-serif; background: #f7f4ee; color: #1f1b16; }
+  main { padding: 24px; }
+  /* An entrance animation that is still running when a slow machine measures the page. */
+  @keyframes rise { from { opacity: 0.1; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  p { margin: 0 0 16px; animation: rise 3s ease-out both; }
+</style></head>
+<body><main><h1>Entrance</h1><p>Dark text on a light page that fades in over three seconds.</p></main></body></html>

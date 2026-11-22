@@ -67,3 +67,8 @@ test('a slow colour transition does not leave the text visible in the backdrop s
   const [desktop] = await check(fileURLToPath(new URL('./fixtures/transition-text.html', import.meta.url)), [1440]);
   assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);
 });
+
+test('text that is mid-way through an entrance animation is judged at its end state', { skip }, async () => {
+  const [desktop] = await check(fileURLToPath(new URL('./fixtures/fade-in.html', import.meta.url)), [1440]);
+  assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);
+});
