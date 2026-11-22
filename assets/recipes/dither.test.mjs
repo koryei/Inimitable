@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { asciiLines, bayer, contentBox, crop, downsample, ditherPath, ditherSvg, fieldFromImage, floydSteinberg, halftoneSvg, lit, orderedDither, stipple } from './dither.mjs';
+import { asciiLines, bayer, contentBox, crop, dissolve, downsample, ditherPath, ditherSvg, fieldFromImage, floydSteinberg, halftoneSvg, lit, orderedDither, stipple } from './dither.mjs';
 import { bars, disc, gradient, makeField, mul, terrain } from './fields.mjs';
 
 const flat = (v, w = 16, h = 16) => makeField(w, h, () => v);
@@ -50,7 +50,7 @@ test('an image becomes a field and downsamples', () => {
 });
 
 test('halftone makes bigger dots where it is darker', () => {
-  const svg = halftoneSvg(gradient(60, 60, { from: 0, to: 1, angle: 0 }), { cell: 6 });
+  const svg = halftoneSvg(gradient(60, 60, { from: 0, to: 1, angle: 0 }), { cell: 6, compact: false });
   const radii = [...svg.matchAll(/cx="([\d.]+)" cy="[\d.]+" r="([\d.]+)"/g)].map((m) => [Number(m[1]), Number(m[2])]);
   const left = radii.filter(([x]) => x < 15).map(([, r]) => r);
   const right = radii.filter(([x]) => x > 45).map(([, r]) => r);
@@ -93,4 +93,23 @@ test('a graticule draws thin lines inside the sphere only', () => {
   assert.equal(g.data[0], 0);
   const lit = g.data.reduce((a, b) => a + b, 0);
   assert.ok(lit > 20 && lit < 1500, String(lit));
+});
+
+test('compact halftone is much smaller than one circle per dot and still has the same dots', () => {
+  const f = gradient(80, 80, { from: 0, to: 1, angle: 0 });
+  const compact = halftoneSvg(f, { cell: 4, hex: true });
+  const full = halftoneSvg(f, { cell: 4, hex: true, compact: false });
+  assert.ok(compact.length < full.length * 0.5, `${compact.length} vs ${full.length}`);
+  const dotsCompact = (compact.match(/h0/g) || []).length;
+  const dotsFull = (full.match(/<circle/g) || []).length;
+  assert.equal(dotsCompact, dotsFull);
+});
+
+test('dissolve keeps the left and turns the right to noise', () => {
+  const f = makeField(100, 40, () => 1);
+  const d = dissolve(f, { axis: 'x', start: 0.3, end: 1, seed: 2 });
+  const col = (x0, x1) => { let sum = 0; let n = 0; for (let y = 0; y < 40; y++) for (let x = x0; x < x1; x++) { sum += d.data[y * 100 + x]; n++; } return sum / n; };
+  assert.equal(col(0, 25), 1);
+  assert.ok(col(80, 100) < 0.7, 'the right is mixed with noise');
+  assert.deepEqual(dissolve(f, { seed: 2 }).data, dissolve(f, { seed: 2 }).data);
 });
