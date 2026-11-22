@@ -3,7 +3,7 @@
 `before.html` is a landing page built the way a model builds one when nobody decides anything. `after.html` is the same product and the same content after an Inimitable run. Open both in a browser, or run the scripts yourself:
 
 ```bash
-node scripts/signs.mjs   examples/landing/before.html     # 11 kinds of tell
+node scripts/signs.mjs   examples/landing/before.html     # 12 kinds of tell, 36 in all
 node scripts/signs.mjs   examples/landing/after.html      # none
 node scripts/drift.mjs   examples/landing/before.html --save before.json
 node scripts/drift.mjs   examples/landing/after.html  --against before.json
@@ -29,13 +29,13 @@ Numbers from the scripts, not estimates.
 
 | | Before | After |
 | --- | --- | --- |
-| Kinds of machine-made tell found by `signs.mjs` | 11 | 0 |
+| Machine-made tells found by `signs.mjs` | 36 (12 kinds) | 0 |
 | Font sizes in use | 9 | 6 |
 | Font weights in use | 4 (700, 800, 900) | 2 (400, 500) |
 | Spacing values off the 4 px grid | 15 | 0 |
 | Text colours | 7 | 4 |
 | Drift flags | 6 | 0 |
-| Touch-target problems at 390 px | 3 | 0 |
+| Touch-target problems at 390 px | 1 (and text on a gradient that cannot be checked) | 0 |
 
 Two numbers went up on purpose and are stated here rather than hidden: font families went from 1 to 2 (a serif for the headline only) and corner radii from 2 to 4 (the radii now follow size: tag 6, button 10, card 16, dot round).
 
