@@ -8,7 +8,7 @@ Default numbers and rules for when a project has none of its own. If the project
 2. **One neutral ramp.** Background, raised surface, border and text all come from a single tinted grey ramp. Three text roles: primary, secondary, muted.
 3. **One accent, used rarely.** It marks the primary action, the selection, or the one number that matters. If the brand has no accent, the star of a screen is made with size and contrast instead.
 4. **Six type sizes or fewer** per screen, from the scale below. Two weights (400 and 500); 600 only for rare emphasis. Hierarchy comes from size and colour, not boldness.
-5. **One family for the interface**, plus at most one partner (a display face for large headlines). A mono for code and tabular figures is extra and does not count. Three proportional families is too many.
+5. **One family for the interface**, plus at most one partner (a display face for large headlines). A mono for code and tabular figures is extra and does not count. Three proportional families is too many. The display face covers headlines and any large figure set at headline size (a price, a total, a big number), not labels or buttons.
 6. **Radius by size, and nested radii add up.** Inner radius = outer radius minus the padding between them, never below 4.
 7. **One icon set, one size, one stroke.** Icons take the colour of their text role and never have colours of their own.
 8. **One easing curve, three durations.** Motion is feedback or explanation, never decoration. Only colour, background, border, opacity and transform animate.
