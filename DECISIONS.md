@@ -35,6 +35,8 @@ Nothing here is a draft.
 | 25 | Step 4 Branch, building a new screen: every new screen has one star (the "bright element"). The brand's own palette decides what bright means; it does not have to be a colour. The star is made first with size, weight, contrast or imagery, and an accent colour is used only if the project's rules allow one (owner's example: Apple is black and grey). | tasteskill, owner | 2026-11-22 |
 | 26 | Step 5 Build: reuse first. Use the project's existing components, tokens and icon set; add a new piece only when nothing fits, and name it in the report. | impeccable, decision 10 | 2026-11-22 |
 | 27 | Step 5 Build: build one section at a time, rendering and checking each before the next, rather than the whole screen at once. Real content, and empty, loading and error states are part of each section. | owner | 2026-11-22 |
+| 28 | Step 6 Gate: run the project's own checks (lint, types, tests). On a failure, fix what the work broke and re-run; move on only when green. If it cannot get green, stop and say what is failing. | owner | 2026-11-22 |
+| 29 | Step 6 Gate: also run the skill's own design checks, measured: repeat the drift count from step 1 (decision 16) so the report can show it went down, and check contrast and tap-target size (44 px). | owner's Activity test, decision 16 | 2026-11-22 |
 
 ## Licences (facts, not decisions)
 

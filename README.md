@@ -34,7 +34,7 @@ impeccable and tasteskill have no licence file in the installed copies. Restate 
 | 3 Fix the direction | Approved (decisions 22 and 23) |
 | 4 Branch (fix layer by layer, or build around one bright element) | Approved (decisions 24 and 25) |
 | 5 Build | Approved (decisions 26 and 27) |
-| 6 Gate | Not started |
+| 6 Gate | Approved (decisions 28 and 29) |
 | 7 Look | Not started |
 | 8 Report | Not started |
 | 9 Log | Not started |
