@@ -89,6 +89,12 @@ test('a clean page passes craft', { skip }, async () => {
   assert.deepEqual(desktop.problems, []);
 });
 
+test('craft catches a hover that changes a style but not a pixel', { skip }, async () => {
+  const [desktop] = await craft(fileURLToPath(new URL('./fixtures/hidden-hover.html', import.meta.url)), { widths: [1440] });
+  const unseen = desktop.problems.filter((p) => p.kind === 'invisible hover').map((p) => p.where);
+  assert.deepEqual(unseen, ['a.hidden'], 'the outline colour moves but the outline style is none, so nothing is painted');
+});
+
 test('an icon beside the text is not treated as the text backdrop', { skip }, async () => {
   const [desktop] = await check(fileURLToPath(new URL('./fixtures/icon-in-link.html', import.meta.url)), [1440]);
   assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);

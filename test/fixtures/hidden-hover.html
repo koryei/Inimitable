@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hidden hover fixture</title>
+<style>
+  body { margin: 0; font: 400 16px/1.5 system-ui, sans-serif; background: #f7f4ee; color: #1f1b16; }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 24px; }
+  h1 { font-size: 32px; line-height: 1.2; font-weight: 500; margin: 0 0 16px; }
+  p { color: #5a544c; margin: 0 0 24px; }
+
+  /* A hover that changes a computed value nobody can see: the outline colour moves, but the outline style
+     is none, so not one pixel of the control changes. This is the failure a style diff cannot catch. */
+  a.hidden { display: inline-flex; align-items: center; height: 48px; padding: 0 24px; border-radius: 8px; background: #1f1b16; color: #f7f4ee; text-decoration: none; outline-style: none; outline-color: transparent; transition: outline-color 160ms; }
+  a.hidden:hover { outline-color: #c4261c; }
+
+  /* The same control done properly: the fill sweeps and the pixels move. */
+  a.shown { display: inline-flex; align-items: center; height: 48px; padding: 0 24px; border-radius: 8px; background: #1f1b16; color: #f7f4ee; text-decoration: none; transition: background-color 160ms; }
+  a.shown:hover { background: #c4261c; }
+</style>
+</head>
+<body>
+<main>
+  <h1>A hover you cannot see</h1>
+  <p>The first control changes a style on hover and not a single pixel. The second one moves.</p>
+  <a class="hidden" href="#hidden">Invisible reply</a>
+  <a class="shown" href="#shown">Visible reply</a>
+</main>
+</body>
+</html>
