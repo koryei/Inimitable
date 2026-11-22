@@ -124,6 +124,7 @@ b, strong { font-weight: 500; }
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
+  min-height: 2.75rem;
   font: 500 1rem/1 var(--sans);
   letter-spacing: -0.01em;
   text-decoration: none;
@@ -519,6 +520,7 @@ b, strong { font-weight: 500; }
   .shot:nth-child(n) { grid-column: span 1; }
 }
 @media (max-width: 44rem) {
+  .btn-small, .copy { min-height: 2.75rem; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat:nth-child(2) { border-right: 0; }
   .stat:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
