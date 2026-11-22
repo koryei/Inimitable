@@ -6,9 +6,15 @@ export function judge(raw, { width }) {
   const problems = [];
   const seen = new Set();
   for (const t of raw.text) {
-    if (t.unknown) continue; // over an image or gradient: needs eyes
-    const fg = t.fg[3] < 1 ? over(t.fg, t.bg) : t.fg.slice(0, 3);
-    const r = ratio(fg, t.bg);
+    // With rendered samples the backdrop is exact (even over images and gradients). Without them, fall back to the
+    // element-based guess, and skip text the guess cannot read.
+    if (t.fg[3] === 0) continue; // transparent text (gradient fill) is judged by the tell scan, not by contrast
+    const sampled = t.samples?.length ? t.samples : null;
+    if (t.unknown && !sampled) continue;
+    const backdrops = sampled || [t.bg];
+    const ratios = backdrops.map((bg) => ratio(t.fg[3] < 1 ? over(t.fg, bg) : t.fg.slice(0, 3), bg)).sort((a, b) => a - b);
+    // The lower quartile: conservative, but one odd pixel (an edge, an icon) does not decide it.
+    const r = ratios[Math.floor((ratios.length - 1) * 0.25)];
     const need = required(t.size, t.weight);
     const key = `${t.where}|${t.text}`;
     if (r < need && !seen.has(key)) {
@@ -34,7 +40,7 @@ export function judge(raw, { width }) {
   if (!raw.viewport) problems.push({ kind: 'document', where: 'head', detail: 'no viewport meta tag' });
   if (raw.h1 !== 1) problems.push({ kind: 'document', where: 'h1', detail: `${raw.h1} h1 elements (expected 1)` });
   if (raw.sideways) problems.push({ kind: 'layout', where: 'page', detail: 'scrolls sideways' });
-  const unknown = raw.text.filter((t) => t.unknown).length;
+  const unknown = raw.text.filter((t) => t.unknown && !t.samples?.length).length;
   return { problems, unknown };
 }
 
