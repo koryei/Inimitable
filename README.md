@@ -8,6 +8,7 @@ A skill for coding agents that builds and repairs interfaces until they look rig
   <img src="https://img.shields.io/badge/node-22%2B-24292f?style=flat" alt="Node 22+">
   <img src="https://img.shields.io/badge/dependencies-none-24292f?style=flat" alt="No dependencies">
   <a href="https://skills.sh/koryei/inimitable"><img src="https://skills.sh/b/koryei/Inimitable" alt="skills.sh installs"></a>
+  <a href="https://koryei.github.io/Inimitable/"><img src="https://img.shields.io/badge/website-koryei.github.io%2FInimitable-24292f?style=flat" alt="Website"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/changelog-view-24292f?style=flat" alt="Changelog"></a>
 </p>
 
