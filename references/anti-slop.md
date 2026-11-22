@@ -4,6 +4,8 @@ Interfaces made without decisions fail in the same predictable ways. This is the
 
 Items marked `[scan]` are found automatically by `scripts/signs.mjs`. The rest need your eyes on the screenshots.
 
+A third caution: a tell can be a **choice**. When the project's direction (`directions.md`) commits to a device on purpose, names it, and uses it consistently where it belongs, it is part of the look, not a tell, and you keep it (passing it to `signs.mjs --allow` and naming it in the report). Habit is a tell. A committed device is a decision. What is never a choice: gradient text, emoji as icons, stock imagery, and proof you cannot back up.
+
 Two cautions. First, removing a tell leaves space: never fill that space with a different trend (glass, grain, neon, bento boxes). Fill it with scale, real content or nothing. Second, a tell that is part of the project's own brand guide is not a tell for that project. Keep it and say so.
 
 ## Surfaces and colour
