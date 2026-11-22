@@ -163,3 +163,59 @@ for (const el of document.querySelectorAll('body, body *')) {
 }
 return found;
 })()`;
+
+// Raw material for contrast, target-size and naming checks. Judged in Node (see check.mjs).
+export const CHECK = `(() => {
+${HELPERS}
+const root = document.documentElement;
+function backdrop(el) {
+  // Walk up, collecting backgrounds until one is opaque. Flags images and gradients as unknown.
+  const layers = [];
+  let unknown = false;
+  for (let n = el; n; n = n.parentElement) {
+    const s = getComputedStyle(n);
+    if (s.backgroundImage && s.backgroundImage !== 'none') unknown = true;
+    const c = toRGBA(s.backgroundColor);
+    if (c[3] > 0) layers.push(c);
+    if (c[3] >= 1) break;
+  }
+  let base = [255, 255, 255];
+  for (const c of layers.reverse()) base = [0, 1, 2].map((i) => c[i] * c[3] + base[i] * (1 - c[3]));
+  return { rgb: base, unknown };
+}
+function opacityOf(el) {
+  let o = 1;
+  for (let n = el; n; n = n.parentElement) o *= parseFloat(getComputedStyle(n).opacity);
+  return o;
+}
+const text = [];
+const targets = [];
+const names = [];
+const interactive = 'a[href], button, input:not([type=hidden]), select, textarea, summary, [role=button], [role=link], [role=tab], [role=switch], [role=checkbox], [tabindex]:not([tabindex="-1"])';
+for (const el of document.querySelectorAll('body, body *')) {
+  if (el.closest('script, style, svg') || !visible(el)) continue;
+  const s = getComputedStyle(el);
+  const t = ownText(el);
+  if (t && !el.disabled && s.visibility === 'visible') {
+    const bd = backdrop(el);
+    const fg = toRGBA(s.color);
+    fg[3] *= opacityOf(el);
+    text.push({ where: describe(el), text: t.slice(0, 40), size: px(s.fontSize), weight: parseInt(s.fontWeight, 10), fg, bg: bd.rgb, unknown: bd.unknown });
+  }
+  if (el.matches(interactive) && !el.disabled) {
+    const r = el.getBoundingClientRect();
+    const inline = s.display === 'inline' && el.tagName === 'A' && !!el.closest('p, li, dd, blockquote');
+    targets.push({ where: describe(el), width: Math.round(r.width), height: Math.round(r.height), inline, label: (el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 30) });
+    const hasName = (el.textContent || '').trim() || el.getAttribute('aria-label') || el.getAttribute('aria-labelledby') || el.getAttribute('title') || el.querySelector('img[alt]:not([alt=""])') || (el.labels && el.labels.length) || (el.tagName === 'INPUT' && ['submit', 'button'].includes(el.type) && el.value);
+    if (!hasName) names.push({ where: describe(el), problem: 'interactive element has no accessible name' });
+  }
+  if (el.tagName === 'IMG' && !el.hasAttribute('alt')) names.push({ where: describe(el), problem: 'image has no alt attribute' });
+}
+return {
+  text, targets, names,
+  lang: !!root.getAttribute('lang'),
+  h1: document.querySelectorAll('h1').length,
+  viewport: !!document.querySelector('meta[name=viewport]'),
+  sideways: root.scrollWidth > root.clientWidth + 1,
+};
+})()`;
