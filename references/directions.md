@@ -49,7 +49,11 @@ The look leans on tiny type. Keep micro labels at 12 px or larger, give them 4.5
 6. **Colour it.** One tone on one ground. Add the accent to one point of interest.
 7. **Check it.** At 390 px the object must still read: crop to the best part, simplify the annotation, and make sure the headline and actions come first.
 
-Budget: a hex or halftone object of about 60 to 90 dots across is 100 to 200 KB of SVG; use fewer dots, a larger `--cell`, or `fs` mode (merged runs are much smaller) for backgrounds.
+Budget: halftone and hex output is compact (dots share round-capped strokes), about 70 KB for 56 dots across; an organic-grain (`fs`) picture merges runs and is smaller still. Use fewer dots or a larger `--cell` for backgrounds. To dot a headline, a message or a logo, put it in a small HTML file and run `dotify` on that; `dissolve()` in `dither.mjs` makes it break into noise along an axis, which is how a product claim like "encrypted" or "decaying" can be drawn.
+
+### Type in a file with no web fonts
+
+Use the system stacks in `house-rules.md`. By direction: **Instrument** pairs the neutral sans stack for display (tight, `-0.03em` from 56 px) with the mono stack for metadata; **Blueprint** pairs the editorial serif stack for display with the neutral sans for body; **Horizon** takes the neutral sans in a heavy weight or the editorial serif, large and centred; **Warm editorial** takes the editorial serif with a humanist sans. Check the render on the machine you have: the first available face wins.
 
 ---
 
