@@ -54,3 +54,11 @@ test('text covered by a fixed bar is not judged against the bar', { skip }, asyn
   const [desktop] = await check(fileURLToPath(new URL('./fixtures/occluded.html', import.meta.url)), [1440]);
   assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);
 });
+
+test('a direction can license named tells with --allow, and nothing else', { skip }, async () => {
+  const all = await scan(fixture);
+  const licensed = await scan(fixture, 1440, { allow: ['Uppercase tracked label', 'Emoji in the interface'] });
+  assert.ok(all.some((f) => f.tell === 'Uppercase tracked label'));
+  assert.ok(!licensed.some((f) => f.tell === 'Uppercase tracked label'));
+  assert.ok(licensed.some((f) => f.tell === 'Gradient text'), 'unlicensed tells remain');
+});

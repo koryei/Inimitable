@@ -79,3 +79,18 @@ test('the content box finds the subject and crop cuts it out', () => {
   assert.equal(c.width, 7);
   assert.ok(c.data.every((v) => v === 0));
 });
+
+import { graticule, sphere } from './fields.mjs';
+
+test('a sphere is lit on the side facing the light and empty outside', () => {
+  const s = sphere(80, 80, { r: 0.4, light: [-1, 0, 0.3] });
+  assert.equal(s.data[0], 0); // a corner is outside the sphere
+  assert.ok(s.data[40 * 80 + 24] > s.data[40 * 80 + 56], 'the left of the sphere is brighter than the right');
+});
+
+test('a graticule draws thin lines inside the sphere only', () => {
+  const g = graticule(80, 80, { r: 0.4 });
+  assert.equal(g.data[0], 0);
+  const lit = g.data.reduce((a, b) => a + b, 0);
+  assert.ok(lit > 20 && lit < 1500, String(lit));
+});
