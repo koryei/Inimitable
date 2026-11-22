@@ -39,7 +39,7 @@ impeccable and tasteskill have no licence file in the installed copies. Restate 
 | 8 Report | Approved (decision 32) |
 | 9 Log | Approved (decision 33) |
 
-Also open: house rules, the anti-slop list, rules per surface (web app, landing page, terminal, native), the verification method, scripts, and how lessons are recorded after each project.
+Decided on 2026-11-22 (decisions 34 to 42): house rules, anti-slop list, per-surface rules, rendering, scripts, structure and proof. What is left is the content, built with the owner item by item: see `PLAN.md`.
 
 ## Files
 
@@ -47,3 +47,5 @@ Also open: house rules, the anti-slop list, rules per surface (web app, landing 
 |---|---|
 | `DECISIONS.md` | Every approved decision, with source and date. The only input to `SKILL.md`. |
 | `README.md` | This file. |
+| `PLAN.md` | What is left to build, in order. |
+| `CLAUDE.md` | Project context for any Claude session. |

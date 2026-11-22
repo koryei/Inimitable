@@ -41,6 +41,15 @@ Nothing here is a draft.
 | 31 | Step 7 Look: look, fix, look again until clean, at most three rounds; then show, and list anything left over honestly. | owner | 2026-11-22 |
 | 32 | Step 8 Report: short, and it holds whatever the owner would want to know, judged each run rather than a fixed template. It always names the mode (decision 21) and any leftovers (decision 31). | owner | 2026-11-22 |
 | 33 | Step 9 Log: lessons about a project go in that project's own notes (its CLAUDE.md or design notes); general lessons are proposed to the owner in chat and added to DECISIONS.md only once approved. The skill never changes itself. | owner | 2026-11-22 |
+| 34 | House rules: the skill ships a small fixed set (about ten) of default numbers and rules (spacing steps, type sizes, corner radii, colour count), used only when the project has none of its own. They are built with the owner, one at a time. | owner, decision 10 | 2026-11-22 |
+| 35 | Anti-slop list: start from unslop's list and go item by item with the owner (approve, cut or change each), then add items from impeccable and tasteskill. Credit to Damir Sokolovsky kept. | unslop (CC BY 4.0), owner | 2026-11-22 |
+| 36 | When the skill finds an anti-slop item on a screen, it removes it as part of the work and says so in the report when it mattered. | owner | 2026-11-22 |
+| 37 | Per-surface rules are built in this order: web apps, landing pages, terminal, native mobile. Native covers both iOS and Android conventions. | owner | 2026-11-22 |
+| 38 | Rendering: the skill ships its own headless Chrome script for looking at a real screen; terminal and native get their own capture methods. | owner | 2026-11-22 |
+| 39 | Scripts are written in Node: a drift counter (font sizes, radii, colours, spacing in use), a contrast and tap-size check, and a screenshot at the four widths. | owner | 2026-11-22 |
+| 40 | Structure on disk: a short `SKILL.md` holding the nine-step run, plus reference files (each surface, the anti-slop list, house rules) loaded only when needed. | owner | 2026-11-22 |
+| 41 | Proof the skill works: before and after on real screens (Remy's Activity screen and one landing page) against a no-skill agent, judged side by side by the owner. The best cases are saved as a test set afterward. | owner | 2026-11-22 |
+| 42 | Inimitable is its own project at `~/Documents/Active Projects/Inimitable`, local git only for now, with the history carried over from Remy.plus. `~/.claude/skills/inimitable` links to it. Publishing is decided after the skill is proven and the source licences are settled. | owner | 2026-11-22 |
 
 ## Licences (facts, not decisions)
 
@@ -49,4 +58,4 @@ Nothing here is a draft.
 
 ## Open
 
-Not yet decided: the steps of the run, house rules, anti-slop list, per-surface rules, verification method, scripts, how lessons are logged after each project.
+Nothing about the shape of the skill is undecided. Content still to be built with the owner, one item at a time: the house rules (decision 34), the anti-slop items (35), the rules for each surface (37), the three scripts (39). Then `SKILL.md` and the reference files (40), then the proof (41).
