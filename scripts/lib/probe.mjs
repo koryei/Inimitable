@@ -173,10 +173,23 @@ export const CHECK = `(() => {
 ${HELPERS}
 const root = document.documentElement;
 function backdrop(el) {
-  // Walk up, collecting backgrounds until one is opaque. Flags images and gradients as unknown.
+  // Find what is really behind the text: hit-test the stack of elements under the text's centre,
+  // so a coloured sibling or a positioned panel behind it counts, not just the ancestors.
   const layers = [];
   let unknown = false;
-  for (let n = el; n; n = n.parentElement) {
+  const r = el.getBoundingClientRect();
+  const inView = r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
+  let stack = [];
+  if (inView) {
+    const cx = Math.min(innerWidth - 1, Math.max(0, r.left + Math.min(r.width / 2, 40)));
+    const cy = Math.min(innerHeight - 1, Math.max(0, r.top + r.height / 2));
+    stack = document.elementsFromPoint(cx, cy);
+  }
+  const startAt = stack.indexOf(el);
+  // Elements above the text (overlays) are ignored; elements from the text downwards form the backdrop.
+  const chain = startAt >= 0 ? stack.slice(startAt) : null;
+  const nodes = chain && chain.length ? chain : (() => { const a = []; for (let n = el; n; n = n.parentElement) a.push(n); return a; })();
+  for (const n of nodes) {
     const s = getComputedStyle(n);
     if (s.backgroundImage && s.backgroundImage !== 'none') unknown = true;
     const c = toRGBA(s.backgroundColor);
@@ -202,6 +215,8 @@ for (const el of document.querySelectorAll('body, body *')) {
   const s = getComputedStyle(el);
   const t = ownText(el);
   if (t && !el.disabled && s.visibility === 'visible') {
+    const br = el.getBoundingClientRect();
+    if (br.bottom < 0 || br.top > innerHeight) { el.scrollIntoView({ block: 'center', inline: 'nearest' }); }
     const bd = backdrop(el);
     const fg = toRGBA(s.color);
     fg[3] *= opacityOf(el);
@@ -231,7 +246,7 @@ for (const el of [...document.querySelectorAll(interactive)].filter((e) => visib
 return {
   text, targets, names, images, focus,
   lang: !!root.getAttribute('lang'),
-  h1: document.querySelectorAll('h1').length,
+  h1: [...document.querySelectorAll('h1')].filter(visible).length,
   viewport: !!document.querySelector('meta[name=viewport]'),
   sideways: root.scrollWidth > root.clientWidth + 1,
 };
