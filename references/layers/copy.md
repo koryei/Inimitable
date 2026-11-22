@@ -7,7 +7,7 @@
 - **No greeting headlines** (`Welcome back, Sam! 👋`). The title names the context: the page, or the period (`November 2026`).
 - **Short labels.** `Search`, not `Search anything...`.
 - **A change says what it compares to**: `+12% vs last month`, `3 fewer than last week`.
-- **No trailing periods** on headlines, subheads, labels, buttons or captions. Paragraphs of several sentences keep theirs.
+- **No trailing periods** on labels, buttons, captions or navigation. Paragraphs of several sentences keep theirs. A display headline written as a declarative sentence (`Understand behavior.`) may end in a full stop if the whole page does it consistently; pick one and stay with it.
 - **No hype words**: supercharge, seamless, unlock, magic, revolutionize, game-changing, effortless, next-generation, cutting-edge. No "AI-powered" on everything.
 - **Unverifiable claims** (`Loved by 10,000+ teams`, `10x faster`) are asked about. If real and confirmed, make them quiet and specific; otherwise remove. List them in the report.
 - **Mock data looks real**: plausible names, amounts, dates. Never `John Doe`, `[X]`, `123,456`.
