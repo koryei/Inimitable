@@ -17,7 +17,19 @@ const UNHIDE = "(() => { document.getElementById('__inim_hide')?.remove(); })()"
 
 // For every text element in view: grid points inside its box that are not covered by something else
 // (a sticky header, a fixed bar, a modal). Covered points would sample the cover, not the backdrop.
-const POINTS = `(() => [...document.querySelectorAll('[data-inim-i]')].map((el) => {
+// A point over a child that paints its own box (an icon beside the text, a badge, a thumbnail) is skipped
+// for the same reason: that child is not what the text sits on.
+const POINTS = `(() => {
+  const replaced = ['img', 'svg', 'canvas', 'video', 'picture', 'iframe'];
+  const paints = (node, el) => {
+    if (!node || node === el) return false;
+    const s = getComputedStyle(node);
+    if (s.backgroundImage !== 'none') return true;
+    const bg = s.backgroundColor;
+    if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') return true;
+    return replaced.includes(node.tagName.toLowerCase());
+  };
+  return [...document.querySelectorAll('[data-inim-i]')].map((el) => {
   const r = el.getBoundingClientRect();
   if (r.width <= 1 || r.height <= 1 || r.bottom <= 0 || r.top >= innerHeight || r.right <= 0 || r.left >= innerWidth) return null;
   const cols = Math.max(1, Math.min(4, Math.floor(r.width / 24)));
@@ -29,11 +41,14 @@ const POINTS = `(() => [...document.querySelectorAll('[data-inim-i]')].map((el) 
       const y = r.top + (r.height * (j + 0.5)) / rows;
       if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight) continue;
       const top = document.elementFromPoint(x, y);
-      if (top && (el.contains(top) || top.contains(el))) points.push([x, y]);
+      if (!top || !(el.contains(top) || top.contains(el))) continue;
+      if (top !== el && el.contains(top) && paints(top, el)) continue;
+      points.push([x, y]);
     }
   }
   return points.length ? { idx: Number(el.getAttribute('data-inim-i')), points } : null;
-}).filter(Boolean))()`;
+  }).filter(Boolean);
+})()`;
 
 // Returns Map(idx -> array of [r, g, b] backdrop samples). The page must render at device scale factor 1.
 export async function sampleBackdrops(page, { maxSlices = 14 } = {}) {

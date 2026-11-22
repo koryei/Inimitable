@@ -88,3 +88,8 @@ test('a clean page passes craft', { skip }, async () => {
   const [desktop] = await craft(clean, { widths: [1440] });
   assert.deepEqual(desktop.problems, []);
 });
+
+test('an icon beside the text is not treated as the text backdrop', { skip }, async () => {
+  const [desktop] = await check(fileURLToPath(new URL('./fixtures/icon-in-link.html', import.meta.url)), [1440]);
+  assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);
+});

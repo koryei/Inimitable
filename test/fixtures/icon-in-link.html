@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Icon in link fixture</title>
+<style>
+  body { margin: 0; font: 400 16px/1.5 system-ui, sans-serif; background: #ffffff; color: #14120f; }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 24px; }
+  h1 { font-size: 36px; line-height: 1.15; font-weight: 500; margin: 0 0 16px; }
+  p { color: #4a463f; margin: 0 0 24px; }
+
+  /* A dark mark sits beside dark text. The mark is not the text's backdrop, so the text must be judged
+     against the white page, not against the mark. */
+  a.brand { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: #14120f; text-decoration: none; }
+  a.brand .mark { width: 17px; height: 17px; border-radius: 50%; background: #c4261c; }
+  a.brand:hover .mark { background: #14120f; }
+
+  a.button { display: inline-flex; align-items: center; height: 48px; padding: 0 24px; border-radius: 10px; background: #14120f; color: #ffffff; text-decoration: none; transition: background-color 160ms; }
+  a.button:hover { background: #c4261c; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Your invoices, paid on time</h1>
+  <p>Send, track and reconcile invoices without leaving your inbox.</p>
+  <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>Inimitable</a>
+  <a class="button" href="#start">Start free</a>
+</main>
+</body>
+</html>
