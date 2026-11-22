@@ -33,3 +33,15 @@ test('compare reports before and after per metric', () => {
   const row = compare(before, after).find((r) => r.metric === 'sizes');
   assert.deepEqual(row, { metric: 'sizes', before: 8, after: 2 });
 });
+
+test('a serif display face plus a sans and a mono is fine; three proportional families are not', () => {
+  assert.deepEqual(analyse({ ...base, fontFamilies: { Newsreader: 2, 'Instrument Sans': 12, 'JetBrains Mono': 3 } }).flags, []);
+  assert.match(analyse({ ...base, fontFamilies: { Newsreader: 2, 'Instrument Sans': 12, Inter: 3 } }).flags.join(' '), /3 proportional/);
+});
+
+test('an accent plus red and green is not hue drift, five hues is', () => {
+  const ok = analyse({ ...base, surfaceColors: { '#141415': 3, '#5fbf8f': 1, '#ff6369': 1, '#2b6cb0': 1 } });
+  assert.deepEqual(ok.flags.filter((f) => /hues/.test(f)), []);
+  const bad = analyse({ ...base, surfaceColors: { '#ff0000': 1, '#00ff00': 1, '#0000ff': 1, '#ffff00': 1, '#ff00ff': 1 } });
+  assert.match(bad.flags.join(' '), /colour hues/);
+});
