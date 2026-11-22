@@ -12,6 +12,10 @@ Take the direction **from them**. State it in one sentence (what the screen shou
 
 Draft a direction and a few rules from the subject inventory (`read.md`), **show them, and wait for a yes** before building. Changing the direction later means redoing everything, so the wait is cheap. Skip the wait only if the person has already said to just do it, **or nobody can answer** (a one-shot or non-interactive run). In that case write the five lines, state them at the top of the report as assumptions, and build. Do not stall.
 
+## Start from a proven direction
+
+`directions.md` is a library of committed looks (Instrument dark and light, Blueprint, Horizon, Dithered data, Warm editorial) with their palettes, devices and recipes. Pick the closest to the product, then make it this product's own with the subject inventory. When a direction commits to a **device** that the anti-slop list would normally remove (small uppercase mono labels, a gradient surface), name it in the direction. Name at most four devices, use them consistently, and pass them to the scanner with `--allow` when you run the gate.
+
 ## The five lines
 
 - **Product.** What it does and for whom, in one plain sentence.
