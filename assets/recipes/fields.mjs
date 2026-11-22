@@ -52,3 +52,32 @@ export const invert = (a) => makeField(a.width, a.height, (_u, _v, x, y) => 1 - 
 // Edge fade: multiply by a mask that is 1 in the middle and falls to 0 at the borders (a soft vignette).
 export const vignette = (w, h, { inner = 0.5, outer = 1 } = {}) =>
   makeField(w, h, (u, v) => 1 - smoothstep(inner, outer, Math.hypot((u - 0.5) * 2, (v - 0.5) * 2)));
+
+// A sphere lit from a direction: brightness follows the surface normal. light = [x, y, z], unit-ish.
+export const sphere = (w, h, { cx = 0.5, cy = 0.5, r = 0.4, light = [-0.5, -0.6, 0.62], ambient = 0.06, soft = 0.01 } = {}) => {
+  const len = Math.hypot(...light) || 1;
+  const L = light.map((c) => c / len);
+  return makeField(w, h, (u, v) => {
+    const x = ((u - cx) * (w / h)) / r;
+    const y = (v - cy) / r;
+    const d2 = x * x + y * y;
+    if (d2 > 1 + soft) return 0;
+    const z = Math.sqrt(Math.max(0, 1 - d2));
+    const edge = 1 - smoothstep(1 - soft * 2, 1 + soft, Math.sqrt(d2));
+    return Math.min(1, Math.max(0, ambient + (x * L[0] + y * L[1] + z * L[2]) * (1 - ambient))) * edge;
+  });
+};
+
+// A latitude and longitude graticule across a sphere's face: thin bright lines for a globe.
+export const graticule = (w, h, { cx = 0.5, cy = 0.5, r = 0.4, lines = 10, width = 0.004 } = {}) =>
+  makeField(w, h, (u, v) => {
+    const x = ((u - cx) * (w / h)) / r;
+    const y = (v - cy) / r;
+    const d2 = x * x + y * y;
+    if (d2 > 1) return 0;
+    const z = Math.sqrt(1 - d2);
+    const lat = Math.asin(y);
+    const lon = Math.atan2(x, z);
+    const near = (a) => Math.abs(((a / Math.PI) * lines + 0.5) % 1 - 0.5) / lines;
+    return near(lat) < width || near(lon) < width ? 1 : 0;
+  });
