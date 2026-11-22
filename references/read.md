@@ -38,6 +38,9 @@ Run `scripts/drift.mjs` on each affected screen and save the result (`--save bef
 
 ## 6. Decide, do not interrogate
 
+If nobody can answer (a one-shot or non-interactive run), never stall. State the reading, name your assumptions in one line each, and carry on. Put the assumptions at the top of the report so the person can correct them.
+
+
 A vague request ("make it look better") gets one stated reading and a start: "Reading this as: fix the Activity screen layer by layer, keep its content and the brand guide." Ask a question only when a missing fact blocks the work and cannot be found (which of two products is meant; whether a claim on the page is true).
 
 ## What this step produces

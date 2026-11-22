@@ -10,7 +10,7 @@ Take the direction **from them**. State it in one sentence (what the screen shou
 
 ## When it has none
 
-Draft a direction and a few rules from the subject inventory (`read.md`), **show them, and wait for a yes** before building. Changing the direction later means redoing everything, so the wait is cheap. Skip the wait only if the person has already said to just do it.
+Draft a direction and a few rules from the subject inventory (`read.md`), **show them, and wait for a yes** before building. Changing the direction later means redoing everything, so the wait is cheap. Skip the wait only if the person has already said to just do it, **or nobody can answer** (a one-shot or non-interactive run). In that case write the five lines, state them at the top of the report as assumptions, and build. Do not stall.
 
 ## The five lines
 
