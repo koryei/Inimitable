@@ -18,6 +18,9 @@ export async function check(target, widths = [390, 1440]) {
     for (const width of widths) {
       const page = await openPage(chrome.browser, { width, height: width < 700 ? 844 : 900, mobile: width < 700, deviceScaleFactor: 1 });
       await page.goto(toUrl(target));
+      // Let entrance animations and transitions reach their end state, or text measured mid-fade looks low in contrast.
+      await page.evaluate("document.getAnimations().forEach((a) => { try { a.finish(); } catch {} })");
+      await new Promise((resolve) => setTimeout(resolve, 150));
       const raw = await page.evaluate(CHECK);
       try {
         // A page that scrolls sideways is scaled to fit by mobile browsers, so screenshot pixels no longer line up with

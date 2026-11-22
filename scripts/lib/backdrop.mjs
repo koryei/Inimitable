@@ -9,7 +9,7 @@ import { decodePng, pixelAt } from './png.mjs';
 const HIDE = `(() => {
   const style = document.createElement('style');
   style.id = '__inim_hide';
-  style.textContent = '*, *::before, *::after { color: transparent !important; -webkit-text-fill-color: transparent !important; text-shadow: none !important; caret-color: transparent !important; transition: none !important; animation: none !important; } svg text, svg tspan { fill: transparent !important; } ::placeholder { color: transparent !important; } html { scroll-behavior: auto !important; }';
+  style.textContent = '*, *::before, *::after { color: transparent !important; -webkit-text-fill-color: transparent !important; text-shadow: none !important; caret-color: transparent !important; transition: none !important; } svg text, svg tspan { fill: transparent !important; } ::placeholder { color: transparent !important; } html { scroll-behavior: auto !important; }';
   document.head.appendChild(style);
 })()`;
 
