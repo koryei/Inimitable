@@ -17,6 +17,7 @@ The skill taught rules but not reasons, and the site was clean and static. Both 
 - `scripts/lib/probe.mjs`: italic emphasis is only a tell below 24px, and `[data-loop]` licenses an infinite animation.
 - The site is rebuilt as an editorial page: a lit ground, Instrument Serif for the statements, one accent, a choreographed entrance, scroll reveals, and a designed hover and press state on every control. It is published only after passing `signs`, `check` and `craft`.
 - The site counts itself and prints the receipt under the hero: font sizes, text colours, radii and spacing values, measured with the same probe `drift.mjs` runs, so the page and the tool cannot disagree. The numbers are authored in the markup so they are right without JavaScript, and a test fails if either the markup or the probe drifts.
+- The site's own review pass, done by eye at 1440 and 390: the gallery captions and the limits note are held to the page's measure, the two install cards line up their Copy buttons and their notes, the footer credit is set as a sentence instead of three lines of tracked caps, the hero frame crops between two table rows instead of through one, the nine steps carry serif numerals so the run reads as a sequence, and the questions section opens its first answer.
 
 ## 0.5.0
 
