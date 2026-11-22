@@ -516,7 +516,7 @@ b, strong { font-weight: 500; }
    instead: the reply is visible, and it does not pretend the row has opened. */
 .faq summary:hover { color: var(--accent); }
 .faq summary:hover::after { color: var(--accent); transform: scale(1.25); }
-.faq p { max-width: 46rem; margin: 0 0 1.5rem; color: var(--ink-2); }
+.faq p { max-width: 34rem; margin: 0 0 1.5rem; color: var(--ink-2); }
 /* The answer opens at its own height instead of snapping, where the browser can interpolate it. */
 @supports selector(::details-content) {
   .faq details::details-content {
