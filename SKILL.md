@@ -20,13 +20,13 @@ One fixed run for every request. Do the steps in order. Each step names the file
 | 2 | **Decide the mode** | Persuade, Operate, Read, Experience or Terminal: what the person is doing here | [references/modes.md](references/modes.md) |
 | 3 | **Fix the direction** | Five lines: product, character, world, moments, signature. From the project's rules if it has them | [references/direction.md](references/direction.md) |
 | 4 | **Branch** | Existing screen: repair layer by layer. New screen: build around one star | [fix.md](references/fix.md) or [build-new.md](references/build-new.md) |
-| 5 | **Build** | One section at a time, from the project's own parts, with every state | [references/build.md](references/build.md) |
+| 5 | **Build** | One section at a time, from the project's own parts, with every state | [build.md](references/build.md), [components.md](references/components.md), [motion.md](references/motion.md) |
 | 6 | **Gate** | The project's checks, then measured design checks | [references/gate.md](references/gate.md) |
-| 7 | **Look** | Render at four widths, fix what shows, up to three rounds | [references/look.md](references/look.md) |
+| 7 | **Look** | Render at four widths, fix what shows, up to three rounds | [look.md](references/look.md), [feels-cheap.md](references/feels-cheap.md) |
 | 8 | **Report** | Short, plain, honest about what is left | [references/report.md](references/report.md) |
 | 9 | **Log** | Project lessons into the project; skill lessons proposed, never self-applied | [references/lessons.md](references/lessons.md) |
 
-Also load, as the work needs them: the surface file for the mode ([web-app](references/surfaces/web-app.md), [landing](references/surfaces/landing.md), [reading](references/surfaces/reading.md), [showpiece](references/surfaces/showpiece.md), [terminal](references/surfaces/terminal.md), [iOS](references/surfaces/native-ios.md), [Android](references/surfaces/native-android.md)); [house-rules.md](references/house-rules.md) for default numbers; [anti-slop.md](references/anti-slop.md) for the tells to remove.
+Also load, as the work needs them: the surface file for the mode ([web-app](references/surfaces/web-app.md), [landing](references/surfaces/landing.md), [reading](references/surfaces/reading.md), [showpiece](references/surfaces/showpiece.md), [terminal](references/surfaces/terminal.md), [iOS](references/surfaces/native-ios.md), [Android](references/surfaces/native-android.md)); [house-rules.md](references/house-rules.md) for default numbers; [anti-slop.md](references/anti-slop.md) for the tells to remove; [libraries.md](references/libraries.md) before adding any outside component, kit or library.
 
 ## Rules that always hold
 
@@ -36,7 +36,7 @@ Also load, as the work needs them: the surface file for the mode ([web-app](refe
 4. **Keep the product.** Features, content and section order stay. Do not rename it, invent features, claims, data or customers.
 5. **Never replace decoration with decoration.** Removing a tell leaves space; fill it with scale, real content, or nothing.
 6. **Remove the tells** in `anti-slop.md` as part of the work. Say so only if it mattered.
-7. **Reuse first.** The project's components, tokens and icon set. Add a new piece only when nothing fits, and name it.
+7. **Reuse first.** The project's components, tokens and icon set, then a library it already uses. Add a new piece only when nothing fits, and name it. A new dependency is the person's decision: ask, and check the licence (`libraries.md`).
 8. **Look before you show.** Render the real screen at 320, 390, 1440 and 2560 px (terminal: 60 and 120 columns). Do not claim a width looks fine if you did not render it.
 9. **Measure, do not guess.** Run the scripts. The report's numbers come from them.
 10. **Be honest.** If a check fails, say so with the output. If a step was skipped, say that. If something is left over, list it.
