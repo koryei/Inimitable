@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0
+
+Driven by a reference set of technical landing pages (dotted and dithered hero objects, HUD annotation, corner brackets, isometric line art, gradient horizons).
+
+- `references/directions.md`: a library of committed looks (Instrument dark and light, Blueprint, Horizon, Dithered data, Warm editorial), the grammar they share, the hero-object pipeline, an honesty rule for annotation and a legibility floor.
+- `scripts/dotify.mjs` and `assets/recipes/dither.mjs`, `fields.mjs`: turn any image, drawn SVG or maths into ordered or error-diffusion dither, stipple, halftone, hex cells or ASCII.
+- `assets/recipes/hud.mjs`, `iso.mjs`, `instrument.css`, `instrument-demo.mjs`: callouts, corner brackets, crosshairs, rulers, tags, readouts; isometric boxes and exploded stacks; a CSS kit for bracket buttons, micro type, stat strips, grid and hatch grounds, ticker and a grain-textured horizon; a dark and light demo.
+- `signs.mjs --allow` and `score.mjs --allow`: a committed direction can license named devices. Display headlines may end in a full stop.
+- Anti-slop now distinguishes habit (a tell) from a committed, named, consistent device (a choice).
+
 ## 0.3.0
 
 Driven by two rounds of testing the skill against a no-skill baseline on eight briefs (`evals/results/`).
