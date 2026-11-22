@@ -30,6 +30,8 @@ Inimitable changes what happens between your request and the result. The agent r
 - **Builds around one star.** Every new screen has one thing that is clearly the point, and everything else steps back. A brand with no accent colour makes its star with size and contrast.
 - **Measures instead of guessing.** Included scripts count the font sizes, radii, colours and spacing values actually in use, find the tells of machine-made UI, and check contrast and touch targets.
 - **Looks before it shows.** It renders the real screen at 320, 390, 1440 and 2560 px (terminal UI at 60 and 120 columns) and fixes up to three rounds of problems.
+- **Knows what makes an app feel cheap.** Silent failures, dead-end empty states, vague errors, permission prompts before value, truncated text that matters: it walks a six-area checklist on the running screen, not just the pixels.
+- **Knows where good parts live.** A catalogue of component, motion and design-system sources (Bencho, Transitions.dev, BoardUI, Astryx, Aceternity, ObsidianUI, HorizonX) and where to study real products (Mobbin, 21st.dev, react.dev), with the rules for taking from them: ask first, check the licence, re-skin to your tokens.
 - **Reports in plain words.** Short, with real before and after numbers, and it names anything it could not fix.
 
 ## What it covers
@@ -107,7 +109,7 @@ Plain Node scripts, no dependencies. The agent runs them for you, and you can ru
 | `scripts/shoot.mjs <url or file>` | Screenshots at 320, 390, 1440 and 2560 px. Flags sideways scrolling and console errors. |
 | `scripts/drift.mjs <url or file>` | Counts the font sizes, weights, radii, colours and spacing values in use and flags drift. `--save` and `--against` give a before and after. |
 | `scripts/signs.mjs <url or file>` | Finds machine-made tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims, looping animation and more. |
-| `scripts/check.mjs <url or file>` | WCAG contrast, touch-target size, small text, missing names and document basics, at phone and desktop widths. |
+| `scripts/check.mjs <url or file>` | WCAG contrast, touch-target size, small text, missing names, visible focus styles, images that cause layout shift, and document basics, at phone and desktop widths. |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal program at a set width in a real pseudo-terminal and captures text and an image. |
 
 `shoot`, `signs`, `check` and `term-shot` exit non-zero when they find a problem, so they also work as gates in CI.
@@ -120,6 +122,10 @@ references/
   read.md … lessons.md   one file per step
   house-rules.md         default numbers for projects with no rules of their own
   anti-slop.md           the tells, each with its fix
+  feels-cheap.md         trust, feedback, loading, retention, consistency, permissions
+  components.md          what a finished component does, state by state
+  motion.md              recipes for menus, modals, toasts, tabs and state changes
+  libraries.md           where to take parts from, and the rules for taking them
   layers/                spacing, colour, icons, copy, type, layout, details, motion
   surfaces/              web app, landing, reading, showpiece, terminal, iOS, Android
 scripts/                 the five tools above
