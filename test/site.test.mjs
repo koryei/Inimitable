@@ -98,3 +98,63 @@ test('the questions section shows an answer before it is clicked', { skip }, asy
     await chrome.close();
   }
 });
+
+// The nav is a map, not a message, and on a phone it is one control. Below the split the five links fold
+// into a panel behind a Menu button. Without it the bar shows a logo and a GitHub button and every section
+// on the page is unreachable except by scrolling, which is the one thing a map is for.
+test('the phone gets a menu that reaches every section', { skip }, async () => {
+  execFileSync(process.execPath, [join(root, 'site', 'build.mjs')], { stdio: 'ignore' });
+
+  const chrome = await launch();
+  try {
+    const tab = await openPage(chrome.browser, { width: 390, height: 844, mobile: true, deviceScaleFactor: 1 });
+    await tab.goto(toUrl(page));
+
+    const before = await tab.evaluate(`(() => {
+      const btn = document.querySelector('[data-menu-btn]');
+      if (!btn) return { missing: true };
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      return {
+        missing: false,
+        expanded: btn.getAttribute('aria-expanded'),
+        panelShown: panel ? getComputedStyle(panel).display !== 'none' : null,
+        targets: panel ? [...panel.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute('href')) : [],
+      };
+    })()`);
+    assert.equal(before.missing, false, 'the phone has no menu control, so the sections are unreachable');
+    assert.equal(before.expanded, 'false', 'the menu claims to be open before it is touched');
+    assert.equal(before.panelShown, false, 'the panel is visible before the menu is opened');
+    assert.ok(before.targets.length >= 5, 'the panel does not carry the section links');
+
+    // Every link in the panel has to land somewhere.
+    const landed = await tab.evaluate(`(() => ${JSON.stringify(before.targets)}.map((href) => Boolean(document.querySelector(href))))()`);
+    assert.deepEqual(landed, before.targets.map(() => true), 'a menu link points at a section that does not exist');
+
+    await tab.evaluate(`document.querySelector('[data-menu-btn]').click()`);
+    const opened = await tab.evaluate(`(() => {
+      const btn = document.querySelector('[data-menu-btn]');
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      return { expanded: btn.getAttribute('aria-expanded'), shown: getComputedStyle(panel).display !== 'none' };
+    })()`);
+    assert.equal(opened.expanded, 'true', 'the button does not report that it opened');
+    assert.equal(opened.shown, true, 'the panel stays hidden after the menu is opened');
+
+    await tab.evaluate(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))`);
+    const closed = await tab.evaluate(`(() => {
+      const btn = document.querySelector('[data-menu-btn]');
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      return {
+        expanded: btn.getAttribute('aria-expanded'),
+        shown: getComputedStyle(panel).display !== 'none',
+        focused: document.activeElement === btn,
+      };
+    })()`);
+    assert.equal(closed.expanded, 'false', 'Escape does not close the menu');
+    assert.equal(closed.shown, false, 'the panel stays open after Escape');
+    assert.equal(closed.focused, true, 'Escape closes the menu but drops the reader somewhere else');
+
+    await tab.close();
+  } finally {
+    await chrome.close();
+  }
+});
