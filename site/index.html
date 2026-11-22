@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inimitable: design that looks decided</title>
+<meta name="description" content="A skill for coding agents that builds and repairs interfaces until they look made on purpose, then checks them in a real browser before showing you.">
+<meta property="og:title" content="Inimitable: design that looks decided">
+<meta property="og:description" content="A skill for coding agents. It reads your project, decides what the screen is for, builds it, measures it in a real browser and fixes what it finds.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="inst inst-light" id="top">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <nav class="bar-in" aria-label="Main">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>Inimitable</a>
+    <ul class="links">
+      <li><a href="#what">What it does</a></li>
+      <li><a href="#how">The run</a></li>
+      <li><a href="#examples">Examples</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#install">Install</a></li>
+    </ul>
+    <a class="btn" href="https://github.com/koryei/Inimitable">GitHub</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="micro micro-caps slash">A design skill for coding agents</p>
+      <h1 id="hero-title" class="display">Design that looks <span class="br-word">decided</span>.</h1>
+      <p class="lede">Inimitable builds and repairs interfaces until they look made on purpose. Then it opens them in a real browser at four sizes, measures them, and fixes what it finds before showing you.</p>
+      <div class="install-line">
+        <code id="cmd-hero">npx skills add koryei/Inimitable</code>
+        <button class="btn copy" type="button" data-copy="npx skills add koryei/Inimitable">Copy</button>
+      </div>
+      <div class="actions">
+        <a class="btn btn-accent" href="#install">Install the skill</a>
+        <a class="btn" href="#examples">See it work</a>
+      </div>
+    </div>
+    <figure class="stage" aria-label="The same dashboard screen before and after an Inimitable run: dotted on the left, clean on the right">
+      <img class="clean" src="img/dashboard-after.jpg" width="1440" height="900" alt="The dashboard after a run: graphite surfaces, one main chart, numbers with their comparisons">
+      <img class="dots" src="hero-dots.svg" width="900" height="560" alt="">
+      <img class="overlay" src="hero-overlay.svg" width="960" height="600" alt="">
+      <figcaption class="micro">The same screen, before and after. Measured, not described.</figcaption>
+    </figure>
+  </section>
+
+  <div class="wrap">
+    <div class="stats" role="list">
+      <div class="stat" role="listitem"><b>9 steps</b><span>one fixed run</span></div>
+      <div class="stat" role="listitem"><b>7 tools</b><span>measure and capture</span></div>
+      <div class="stat" role="listitem"><b>0 packages</b><span>just Node and a browser</span></div>
+      <div class="stat" role="listitem"><b>Apache 2.0</b><span>free to use</span></div>
+    </div>
+  </div>
+
+  <section class="wrap section" id="what" aria-labelledby="what-title">
+    <p class="micro micro-caps slash">What it does</p>
+    <h2 id="what-title" class="h2">Agents make screens that work and look like everything else. This changes what happens between your request and the result.</h2>
+    <div class="cards">
+      <article class="card brk"><span class="micro">[01]</span><h3>Respects what you already have</h3><p>Your brand guide, tokens and design notes outrank its own taste. It never repaints a product in a style that is not yours.</p></article>
+      <article class="card brk"><span class="micro">[02]</span><h3>Measures instead of guessing</h3><p>Scripts count the font sizes, radii, colours and spacing in use, find the tells of machine-made UI, and read contrast from the rendered pixels.</p></article>
+      <article class="card brk"><span class="micro">[03]</span><h3>Looks before it shows</h3><p>It renders the real screen at 320, 390, 1440 and 2560 px and fixes up to three rounds of problems, so you only give taste feedback.</p></article>
+      <article class="card brk"><span class="micro">[04]</span><h3>Knows why, and how to be memorable</h3><p>It reasons from principles of perception and feedback, and it draws one rich moment in code: contours, vessels, dithered objects, annotation.</p></article>
+    </div>
+  </section>
+
+  <section class="wrap section" id="how" aria-labelledby="how-title">
+    <p class="micro micro-caps slash">The run</p>
+    <h2 id="how-title" class="h2">One fixed run for every request.</h2>
+    <ol class="steps">
+      <li><span class="micro">[01]</span><b>Read</b><span>Finds your design rules, sees the screens running, measures the drift.</span></li>
+      <li><span class="micro">[02]</span><b>Decide the mode</b><span>Persuade, Operate, Read, Experience or Terminal: what the person is doing here.</span></li>
+      <li><span class="micro">[03]</span><b>Fix the direction</b><span>Five lines on what it should feel like and what it must never look like.</span></li>
+      <li><span class="micro">[04]</span><b>Branch</b><span>Repair a screen layer by layer, or build a new one around one star.</span></li>
+      <li><span class="micro">[05]</span><b>Build</b><span>One section at a time, from your own components, with every state designed.</span></li>
+      <li><span class="micro">[06]</span><b>Gate</b><span>Your lint and tests, then measured contrast, targets and tell checks.</span></li>
+      <li><span class="micro">[07]</span><b>Look</b><span>Renders at four widths, fixes what shows, up to three rounds.</span></li>
+      <li><span class="micro">[08]</span><b>Report</b><span>Short and honest, with real before and after numbers.</span></li>
+      <li><span class="micro">[09]</span><b>Log</b><span>Lessons go into your project&rsquo;s notes. The skill never changes itself.</span></li>
+    </ol>
+  </section>
+
+  <section class="wrap section" id="examples" aria-labelledby="ex-title">
+    <p class="micro micro-caps slash">Examples</p>
+    <h2 id="ex-title" class="h2">The same brief, with and without the skill.</h2>
+    <p class="lede">Drag the handle, or use the arrow keys when it is focused. Every number is measured by the included scripts.</p>
+    <div class="tabs" role="tablist" aria-label="Examples">
+      <button class="tab" role="tab" aria-selected="true" data-key="dashboard">Dashboard</button>
+      <button class="tab" role="tab" aria-selected="false" data-key="landing">Landing page</button>
+      <button class="tab" role="tab" aria-selected="false" data-key="messaging">Encrypted messaging</button>
+      <button class="tab" role="tab" aria-selected="false" data-key="chip">AI chip</button>
+      <button class="tab" role="tab" aria-selected="false" data-key="terminal">Terminal</button>
+    </div>
+    <div class="compare" id="compare">
+      <div class="compare-frame">
+        <img class="c-after" src="img/dashboard-after.jpg" width="1440" height="900" alt="After">
+        <img class="c-before" src="img/dashboard-before.jpg" width="1440" height="900" alt="Before">
+        <span class="c-line" aria-hidden="true"></span>
+        <label class="sr" for="c-range">Drag to compare before and after</label>
+        <input id="c-range" type="range" min="0" max="100" value="50">
+        <span class="tag tag-l micro">Without the skill</span><span class="tag tag-r micro">With the skill</span>
+      </div>
+      <p class="c-note" id="c-note"></p>
+    </div>
+    <noscript><p class="micro">Turn on JavaScript to compare, or see each pair in the <a href="https://github.com/koryei/Inimitable/tree/main/examples">examples folder</a>.</p></noscript>
+  </section>
+
+  <section class="wrap section" id="tools" aria-labelledby="tools-title">
+    <p class="micro micro-caps slash">The tools</p>
+    <h2 id="tools-title" class="h2">Plain Node scripts. No dependencies. Run them yourself on any page.</h2>
+    <div class="table-wrap">
+      <table class="tools">
+        <thead><tr><th scope="col">Command</th><th scope="col">What it does</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>shoot.mjs</code></th><td>Screenshots at 320, 390, 1440 and 2560 px. Flags sideways scrolling and console errors. Can set a page state first.</td></tr>
+          <tr><th scope="row"><code>drift.mjs</code></th><td>Counts the font sizes, weights, radii, colours and spacing values in use, and flags drift. Before and after.</td></tr>
+          <tr><th scope="row"><code>signs.mjs</code></th><td>Finds machine-made tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims.</td></tr>
+          <tr><th scope="row"><code>check.mjs</code></th><td>WCAG contrast read from rendered pixels, touch targets, small text, names, focus styles, layout shift.</td></tr>
+          <tr><th scope="row"><code>score.mjs</code></th><td>Runs every check and prints one score out of 100 with what cost points.</td></tr>
+          <tr><th scope="row"><code>dotify.mjs</code></th><td>Turns any image or drawn SVG into dither, halftone, hex dots or ASCII for a hero object.</td></tr>
+          <tr><th scope="row"><code>term-shot.mjs</code></th><td>Runs a terminal program at a set width in a real pseudo-terminal and captures text and an image.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap section" id="results" aria-labelledby="res-title">
+    <p class="micro micro-caps slash">Results</p>
+    <h2 id="res-title" class="h2">Tested against the same model with no skill, and fixed where it lost.</h2>
+    <div class="stats stats-big" role="list">
+      <div class="stat" role="listitem"><b>96 vs 62</b><span>mean mechanical score out of 100, with and without</span></div>
+      <div class="stat" role="listitem"><b>9 of 12</b><span>side-by-side comparisons won, judged by eye</span></div>
+      <div class="stat" role="listitem"><b>3 rounds</b><span>each one changed the skill</span></div>
+      <div class="stat" role="listitem"><b>9 briefs</b><span>landing, dashboard, settings, pricing, sign-up, docs, portfolio, two technical</span></div>
+    </div>
+    <p class="note">The honest limits: one reviewer, the last round was not blind, and both sides were the same model. The skill lost two comparisons in round 1, because it made clean pages where the other side drew something memorable. That is why it now has a guide and recipes for the one rich moment. <a href="https://github.com/koryei/Inimitable/tree/main/evals/results">Read the write-ups.</a></p>
+  </section>
+
+  <section class="wrap section" id="install" aria-labelledby="inst-title">
+    <p class="micro micro-caps slash">Install</p>
+    <h2 id="inst-title" class="h2">One command.</h2>
+    <div class="install-grid">
+      <div class="install-box brk">
+        <p class="micro">Any agent</p>
+        <div class="install-line"><code>npx skills add koryei/Inimitable</code><button class="btn copy" type="button" data-copy="npx skills add koryei/Inimitable">Copy</button></div>
+        <p>Installs into Claude Code, Codex, Cursor and the other agents you have. Add <code>-g</code> for every project. Listed on <a href="https://skills.sh/koryei/inimitable">skills.sh</a>.</p>
+      </div>
+      <div class="install-box brk">
+        <p class="micro">From a clone</p>
+        <div class="install-line"><code>git clone https://github.com/koryei/Inimitable.git &amp;&amp; cd Inimitable &amp;&amp; ./install.sh</code><button class="btn copy" type="button" data-copy="git clone https://github.com/koryei/Inimitable.git && cd Inimitable && ./install.sh">Copy</button></div>
+        <p>Links the folder into <code>~/.claude/skills/inimitable</code> so <code>git pull</code> updates it.</p>
+      </div>
+    </div>
+    <p class="note">Needs Node 22 or newer and an installed Chrome, Edge or Chromium. Terminal screenshots also use Python 3. No packages and no API keys.</p>
+  </section>
+
+  <section class="wrap section" id="faq" aria-labelledby="faq-title">
+    <p class="micro micro-caps slash">Questions</p>
+    <h2 id="faq-title" class="h2">Short answers.</h2>
+    <div class="faq">
+      <details><summary>Will it override my brand?</summary><p>No. Your own rules win over everything in the skill. Where a device is part of your brand, say so once and it is kept.</p></details>
+      <details><summary>Does it need an image generator?</summary><p>No. It draws visuals in code. Where an image would help it writes the prompt and leaves a labelled slot.</p></details>
+      <details><summary>Does it work on existing apps?</summary><p>Yes, that is the main use. It repairs a screen in your own stack and components and leaves your product, content and section order alone.</p></details>
+      <details><summary>What does it not do?</summary><p>It cannot make photographs, and it does not invent facts: labels it draws are true or marked as examples. Native mobile rules are written but not yet tested on a device.</p></details>
+      <details><summary>What does it cost?</summary><p>Nothing to run: no services, no keys. It uses the tokens your agent already spends.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <p><b>Inimitable</b> &middot; Apache 2.0 &middot; <a href="https://github.com/koryei/Inimitable">GitHub</a> &middot; <a href="https://skills.sh/koryei/inimitable">skills.sh</a> &middot; <a href="https://github.com/koryei/Inimitable/blob/main/CHANGELOG.md">Changelog</a></p>
+  <p class="micro">Builds on ideas from unslop by Damir Sokolovsky (CC BY 4.0), impeccable and tasteskill. This page was built with Inimitable&rsquo;s own instrument kit.</p>
+</footer>
+
+<script src="site.js" defer></script>
+</body>
+</html>
