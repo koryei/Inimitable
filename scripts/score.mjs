@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Score one page with every measuring script and print one number.
 //
-//   node scripts/score.mjs <url or file> [--json] [--out dir --label name]   (--out also saves screenshots)
+//   node scripts/score.mjs <url or file> [--json] [--out dir --label name] [--allow 'Tell one,Tell two']
 //
 // Runs signs (tells), check (contrast, targets, names, focus, layout shift), drift and shoot (overflow).
 
@@ -12,8 +12,8 @@ import { measure } from './drift.mjs';
 import { scan } from './signs.mjs';
 import { shoot } from './shoot.mjs';
 
-export async function scorePage(target, { out, label = 'page' } = {}) {
-  const tells = await scan(target);
+export async function scorePage(target, { out, label = 'page', allow = [] } = {}) {
+  const tells = await scan(target, 1440, { allow });
   const checks = await check(target, [390, 1440]);
   const drift = await measure(target);
   const shots = await shoot(target, { out: out ?? '/tmp/inimitable-score', label, widths: [320, 390, 1440, 2560] });
@@ -26,7 +26,7 @@ if (isMain(import.meta.url)) {
     console.error('Usage: node scripts/score.mjs <url or file> [--json] [--out dir --label name]');
     process.exit(2);
   }
-  const result = await scorePage(positional[0], { out: flags.out, label: flags.label });
+  const result = await scorePage(positional[0], { out: flags.out, label: flags.label, allow: typeof flags.allow === 'string' ? flags.allow.split(',') : [] });
   if (flags.json) console.log(JSON.stringify(result, null, 2));
   else {
     const b = result.breakdown;
