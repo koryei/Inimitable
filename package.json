@@ -1,0 +1,14 @@
+{
+  "name": "inimitable",
+  "version": "0.1.0",
+  "description": "A design skill for coding agents: builds and fixes interfaces until they look made on purpose.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": { "type": "git", "url": "git+https://github.com/koryei/Inimitable.git" },
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test scripts/ test/",
+    "doctor": "./install.sh --check"
+  },
+  "files": ["SKILL.md", "references", "scripts", "install.sh", "NOTICE.md", "LICENSE"]
+}
