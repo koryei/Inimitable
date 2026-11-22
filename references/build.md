@@ -41,6 +41,14 @@ Before you write a component, read `components.md` for the states and behaviours
 - Images sized to their slot, modern formats, lazy below the fold, explicit width and height to avoid layout shift.
 - No animation of layout properties.
 
+## When there is nothing to connect to
+
+A brief often has actions with no backend (a download, an order, a sign-up, store links). Do not fake it and do not leave a dead end:
+
+- Point real links at a real placeholder (`#get`, `#order`) and list each one under "left over" in the report, so they are swapped for the true address.
+- A button that must do something in a preview shows a plain, honest state (`Not connected in this preview`) as removable scaffolding. Say so in the report.
+- Never invent a store URL, a price, a form action or a feature to make the page feel complete.
+
 ## Respect the stack
 
 Match the project's framework, styling approach and file layout. A Tailwind project gets Tailwind classes; a CSS-modules project gets modules. Do not introduce a new library to build one screen unless nothing in the project can do the job.
