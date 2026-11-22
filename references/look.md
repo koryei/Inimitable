@@ -22,6 +22,10 @@ Go through the images in this order and write down every problem:
 8. **The tells.** Read `anti-slop.md` against the picture one more time.
 9. **The template check.** Would this screen still fit a competitor if the name were swapped?
 
+## Feels cheap
+
+For Operate screens and anything with state, also walk `feels-cheap.md` against the running screen: trust, feedback and errors, loading, retention, consistency, permissions and navigation. Break the screen on purpose (bad input, no network, empty account) and see what it says.
+
 ## Rounds
 
 Look, fix, look again until nothing is wrong, **at most three rounds**. After the third, show the screen and list honestly what is left over. Do not pretend a known flaw is fine, and do not keep polishing past three rounds: the person's taste feedback is worth more than a fourth pass.
