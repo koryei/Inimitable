@@ -17,3 +17,9 @@ export const PLACEHOLDER_PATTERNS = [
 ];
 
 export const GREETING_PATTERN = '^(welcome back|welcome,|hey,|hi,|hello,|good (morning|afternoon|evening))';
+
+// Button labels that say nothing about what will happen.
+export const VAGUE_BUTTON_PATTERN = '^(submit|ok|okay|click here|here|yes|no)$';
+
+// Errors that blame, shrug or say nothing.
+export const VAGUE_ERROR_PATTERN = '(oops|something went wrong|an error occurred|unknown error|unexpected error|error occurred|please try again later)';
