@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { check } from '../scripts/check.mjs';
+import { craft } from '../scripts/craft.mjs';
 import { measure } from '../scripts/drift.mjs';
 import { findChrome } from '../scripts/lib/chrome.mjs';
 import { scan } from '../scripts/signs.mjs';
@@ -71,4 +72,19 @@ test('a slow colour transition does not leave the text visible in the backdrop s
 test('text that is mid-way through an entrance animation is judged at its end state', { skip }, async () => {
   const [desktop] = await check(fileURLToPath(new URL('./fixtures/fade-in.html', import.meta.url)), [1440]);
   assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);
+});
+
+test('craft finds a control that ignores the pointer, a reflowing transition and a loop that will not stop', { skip }, async () => {
+  const [desktop] = await craft(fileURLToPath(new URL('./fixtures/craftless.html', import.meta.url)), { widths: [1440] });
+  const kinds = new Set(desktop.problems.map((p) => p.kind));
+  assert.ok(kinds.has('silent hover'), 'a button with no hover rule');
+  assert.ok(kinds.has('layout transition'), 'a transition on padding');
+  assert.ok(kinds.has('reduced motion'), 'an infinite animation that ignores the setting');
+  const silent = desktop.problems.filter((p) => p.kind === 'silent hover').map((p) => p.where);
+  assert.ok(!silent.includes('a.underlined'), 'a hover that only moves a pseudo-element still counts');
+});
+
+test('a clean page passes craft', { skip }, async () => {
+  const [desktop] = await craft(clean, { widths: [1440] });
+  assert.deepEqual(desktop.problems, []);
 });

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Craftless fixture</title>
+<style>
+  body { margin: 0; font: 400 16px/1.5 system-ui, sans-serif; background: #141415; color: #ededed; }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 24px; }
+  h1 { font-size: 36px; line-height: 1.15; font-weight: 500; margin: 0 0 16px; }
+  p { color: #a1a1a6; margin: 0 0 24px; }
+
+  /* A button that never answers the pointer. */
+  a.button { display: inline-flex; align-items: center; height: 48px; padding: 0 24px; border-radius: 10px; background: #ededed; color: #141415; text-decoration: none; }
+
+  /* A hover that only changes a pseudo-element still counts, so this one is fine. */
+  a.underlined { color: #ededed; }
+  a.underlined::after { content: ""; display: block; height: 1px; background: currentColor; transform: scaleX(0); transition: transform 160ms; }
+  a.underlined:hover::after { transform: scaleX(1); }
+
+  /* A transition on a layout property: a reflow every frame. */
+  a.wide { display: inline-block; padding: 8px 12px; color: #ededed; transition: padding 200ms, color 200ms; }
+  a.wide:hover { padding: 8px 20px; color: #ffffff; }
+
+  /* A loop that keeps running when motion is reduced, because nothing stops it. */
+  .marquee { overflow: hidden; white-space: nowrap; }
+  .marquee span { display: inline-block; animation: slide 6s linear infinite; }
+  @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Three ways a page stops feeling alive</h1>
+  <p>A control that ignores the pointer, a transition that reflows, and a loop that never stops.</p>
+  <a class="button" href="#start">Start free</a>
+  <a class="underlined" href="#docs">Read the docs</a>
+  <a class="wide" href="#more">More</a>
+  <div class="marquee" data-loop><span>Shipping, measuring, fixing, shipping, measuring, fixing, </span></div>
+</main>
+</body>
+</html>
