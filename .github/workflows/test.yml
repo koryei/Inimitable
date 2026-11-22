@@ -15,4 +15,8 @@ jobs:
           node scripts/check.mjs examples/landing/after.html
           node scripts/signs.mjs examples/dashboard/after.html
           node scripts/check.mjs examples/dashboard/after.html --widths 320,390,1440,2560
+          node scripts/signs.mjs examples/instrument-messaging/with-skill.html
+          node scripts/check.mjs examples/instrument-messaging/with-skill.html
+          node scripts/signs.mjs examples/instrument-chip/with-skill.html
+          node scripts/check.mjs examples/instrument-chip/with-skill.html
           node scripts/term-shot.mjs --cols 60 --out /tmp/shots -- node examples/terminal/after.mjs
