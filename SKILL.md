@@ -51,7 +51,7 @@ Plain Node 22+ scripts in `scripts/`, no installs, using the Chrome on the machi
 | `scripts/drift.mjs <url or file> --save before.json` | Counts font sizes, weights, radii, colours, spacing in use; later `--against before.json` |
 | `scripts/signs.mjs <url or file>` | Finds machine-made tells in the rendered page |
 | `scripts/check.mjs <url or file>` | Contrast, touch-target size, small text, missing names |
-| `scripts/term-shot.mjs -- <command>` | Runs a terminal command at a given width and captures text and image |
+| `scripts/term-shot.mjs -- <command>` | Runs a terminal command at a given width and captures text and image (needs Python 3) |
 
 A page needs a URL or file path. For a project with a dev server, use its address; otherwise open the built HTML file.
 
