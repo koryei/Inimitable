@@ -26,7 +26,7 @@ One fixed run for every request. Do the steps in order. Each step names the file
 | 8 | **Report** | Short, plain, honest about what is left | [references/report.md](references/report.md) |
 | 9 | **Log** | Project lessons into the project; skill lessons proposed, never self-applied | [references/lessons.md](references/lessons.md) |
 
-Also load, as the work needs them: the surface file for the mode ([web-app](references/surfaces/web-app.md), [landing](references/surfaces/landing.md), [reading](references/surfaces/reading.md), [showpiece](references/surfaces/showpiece.md), [terminal](references/surfaces/terminal.md), [iOS](references/surfaces/native-ios.md), [Android](references/surfaces/native-android.md)); [house-rules.md](references/house-rules.md) for default numbers; [anti-slop.md](references/anti-slop.md) for the tells to remove; [libraries.md](references/libraries.md) before adding any outside component, kit or library; [principles.md](references/principles.md) for the reason under every rule, when a case is not covered; [visual-craft.md](references/visual-craft.md) for the one rich moment on a new screen.
+Also load, as the work needs them: the surface file for the mode ([web-app](references/surfaces/web-app.md), [landing](references/surfaces/landing.md), [reading](references/surfaces/reading.md), [showpiece](references/surfaces/showpiece.md), [terminal](references/surfaces/terminal.md), [iOS](references/surfaces/native-ios.md), [Android](references/surfaces/native-android.md)); [house-rules.md](references/house-rules.md) for default numbers; [anti-slop.md](references/anti-slop.md) for the tells to remove; [libraries.md](references/libraries.md) before adding any outside component, kit or library; [principles.md](references/principles.md) for the reason under every rule, when a case is not covered; [visual-craft.md](references/visual-craft.md) for the one rich moment on a new screen; [directions.md](references/directions.md) for committed looks and the hero object pipeline.
 
 ## Rules that always hold
 
@@ -49,8 +49,10 @@ Plain Node 22+ scripts in `scripts/`, no installs, using the Chrome on the machi
 | --- | --- |
 | `scripts/shoot.mjs <url or file> --out shots --label before` | Screenshots at the four widths; flags sideways scroll and console errors |
 | `scripts/drift.mjs <url or file> --save before.json` | Counts font sizes, weights, radii, colours, spacing in use; later `--against before.json` |
-| `scripts/signs.mjs <url or file>` | Finds machine-made tells in the rendered page |
+| `scripts/signs.mjs <url or file> [--allow "Tell"]` | Finds machine-made tells in the rendered page; `--allow` licenses devices a committed direction uses on purpose |
 | `scripts/check.mjs <url or file>` | Contrast, touch-target size, small text, missing names |
+| `scripts/dotify.mjs <image or svg> --mode hex` | Turns any picture or drawn SVG into dithered, halftone, hex-dot or ASCII art for a hero object |
+| `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100 |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal command at a given width and captures text and image (needs Python 3) |
 
 A page needs a URL or file path. For a project with a dev server, use its address; otherwise open the built HTML file.
