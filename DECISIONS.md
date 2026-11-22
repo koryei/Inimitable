@@ -37,6 +37,8 @@ Nothing here is a draft.
 | 27 | Step 5 Build: build one section at a time, rendering and checking each before the next, rather than the whole screen at once. Real content, and empty, loading and error states are part of each section. | owner | 2026-11-22 |
 | 28 | Step 6 Gate: run the project's own checks (lint, types, tests). On a failure, fix what the work broke and re-run; move on only when green. If it cannot get green, stop and say what is failing. | owner | 2026-11-22 |
 | 29 | Step 6 Gate: also run the skill's own design checks, measured: repeat the drift count from step 1 (decision 16) so the report can show it went down, and check contrast and tap-target size (44 px). | owner's Activity test, decision 16 | 2026-11-22 |
+| 30 | Step 7 Look: always render the real screen at four widths: 320 px (small phone), 390 px (phone), 1440 px (desktop) and 2560 px (big screen). Terminal UI is checked at its narrow and wide column counts instead. | owner, decision 6 | 2026-11-22 |
+| 31 | Step 7 Look: look, fix, look again until clean, at most three rounds; then show, and list anything left over honestly. | owner | 2026-11-22 |
 
 ## Licences (facts, not decisions)
 
