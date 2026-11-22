@@ -39,6 +39,8 @@ Nothing here is a draft.
 | 29 | Step 6 Gate: also run the skill's own design checks, measured: repeat the drift count from step 1 (decision 16) so the report can show it went down, and check contrast and tap-target size (44 px). | owner's Activity test, decision 16 | 2026-11-22 |
 | 30 | Step 7 Look: always render the real screen at four widths: 320 px (small phone), 390 px (phone), 1440 px (desktop) and 2560 px (big screen). Terminal UI is checked at its narrow and wide column counts instead. | owner, decision 6 | 2026-11-22 |
 | 31 | Step 7 Look: look, fix, look again until clean, at most three rounds; then show, and list anything left over honestly. | owner | 2026-11-22 |
+| 32 | Step 8 Report: short, and it holds whatever the owner would want to know, judged each run rather than a fixed template. It always names the mode (decision 21) and any leftovers (decision 31). | owner | 2026-11-22 |
+| 33 | Step 9 Log: lessons about a project go in that project's own notes (its CLAUDE.md or design notes); general lessons are proposed to the owner in chat and added to DECISIONS.md only once approved. The skill never changes itself. | owner | 2026-11-22 |
 
 ## Licences (facts, not decisions)
 

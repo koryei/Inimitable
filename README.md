@@ -36,8 +36,8 @@ impeccable and tasteskill have no licence file in the installed copies. Restate 
 | 5 Build | Approved (decisions 26 and 27) |
 | 6 Gate | Approved (decisions 28 and 29) |
 | 7 Look | Approved (decisions 30 and 31) |
-| 8 Report | Not started |
-| 9 Log | Not started |
+| 8 Report | Approved (decision 32) |
+| 9 Log | Approved (decision 33) |
 
 Also open: house rules, the anti-slop list, rules per surface (web app, landing page, terminal, native), the verification method, scripts, and how lessons are recorded after each project.
 
