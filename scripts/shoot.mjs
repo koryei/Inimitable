@@ -2,7 +2,14 @@
 // Render a page at the four standard widths and save screenshots.
 //
 //   node scripts/shoot.mjs <url or file> [--out shots] [--label before] [--widths 320,390,1440,2560]
-//                          [--full] [--dark | --light] [--json]
+//                          [--full | --slices] [--dark | --light] [--wait 1500] [--eval 'js'] [--json]
+//
+//   --wait ms     settle time after load, for entrance animations and drawn charts (default 400)
+//   --eval js     run this JavaScript in the page after load and before the shot, to set a state
+//                 (open a menu, click a tab, add ?state= by editing the page's own hash)
+//   --slices      instead of one image per width, save one image per screenful while scrolling,
+//                 so scroll-triggered content shows and tall pages stay legible
+//   --full        one tall image of the whole page (very tall pages are capped at 16,000 px)
 //
 // Prints one line per width: file, whether the page scrolls sideways, and console errors.
 // Exit code 1 when any width scrolls sideways or logs an error, so it can gate a run.
@@ -39,6 +46,9 @@ export async function shoot(target, options = {}) {
     label = 'shot',
     widths,
     full = false,
+    slices = false,
+    wait = 400,
+    evalJs,
     colorScheme,
   } = options;
   const sizes = widths ? widths.map((w) => STANDARD.find((s) => s.width === w) ?? { width: w, height: Math.round(w * 0.62), mobile: w < 700, deviceScaleFactor: w < 700 ? 2 : 1 }) : STANDARD;
@@ -48,11 +58,27 @@ export async function shoot(target, options = {}) {
   try {
     for (const size of sizes) {
       const page = await openPage(chrome.browser, { ...size, colorScheme });
-      await page.goto(toUrl(target));
+      await page.goto(toUrl(target), wait);
+      if (evalJs) {
+        await page.evaluate(evalJs);
+        await new Promise((r) => setTimeout(r, Math.min(wait, 1500)));
+      }
       const overflow = await page.evaluate(OVERFLOW);
       const file = join(out, `${label}-${size.width}.png`);
-      writeFileSync(file, await page.screenshot({ fullPage: full }));
-      results.push({ width: size.width, file, ...overflow, errors: [...page.logs] });
+      const extra = [];
+      if (slices) {
+        const total = await page.evaluate('document.documentElement.scrollHeight');
+        const step = size.height;
+        for (let y = 0, n = 1; y < total && n <= 12; y += step, n++) {
+          await page.evaluate(`window.scrollTo(0, ${y})`);
+          await new Promise((r) => setTimeout(r, 350));
+          const sliceFile = join(out, `${label}-${size.width}-${String(n).padStart(2, '0')}.png`);
+          writeFileSync(sliceFile, await page.screenshot());
+          extra.push(sliceFile);
+        }
+        await page.evaluate('window.scrollTo(0, 0)');
+      } else writeFileSync(file, await page.screenshot({ fullPage: full }));
+      results.push({ width: size.width, file: slices ? extra[0] : file, slices: extra, ...overflow, errors: [...page.logs] });
       await page.close();
     }
   } finally {
@@ -62,9 +88,9 @@ export async function shoot(target, options = {}) {
 }
 
 if (isMain(import.meta.url)) {
-  const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['full', 'dark', 'light', 'json'] });
+  const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['full', 'slices', 'dark', 'light', 'json'] });
   if (!positional[0]) {
-    console.error('Usage: node scripts/shoot.mjs <url or file> [--out dir] [--label name] [--widths 320,390] [--full] [--dark|--light] [--json]');
+    console.error('Usage: node scripts/shoot.mjs <url or file> [--out dir] [--label name] [--widths 320,390] [--full|--slices] [--wait ms] [--eval js] [--dark|--light] [--json]');
     process.exit(2);
   }
   const results = await shoot(positional[0], {
@@ -72,6 +98,9 @@ if (isMain(import.meta.url)) {
     label: flags.label,
     widths: flags.widths ? String(flags.widths).split(',').map(Number) : undefined,
     full: Boolean(flags.full),
+    slices: Boolean(flags.slices),
+    wait: flags.wait ? Number(flags.wait) : 400,
+    evalJs: typeof flags.eval === 'string' ? flags.eval : undefined,
     colorScheme: flags.dark ? 'dark' : flags.light ? 'light' : undefined,
   });
   if (flags.json) console.log(JSON.stringify(results, null, 2));
@@ -80,7 +109,7 @@ if (isMain(import.meta.url)) {
       const notes = [];
       if (r.sideways) notes.push(`scrolls sideways (${r.scrollWidth} > ${r.clientWidth}; ${r.wide.join(', ')})`);
       if (r.errors.length) notes.push(`${r.errors.length} console error(s): ${r.errors[0]}`);
-      console.log(`${String(r.width).padStart(4)} px  ${r.file}  ${notes.length ? 'WARN ' + notes.join('; ') : 'ok'}`);
+      console.log(`${String(r.width).padStart(4)} px  ${r.slices?.length ? `${r.slices.length} slices from ${r.file}` : r.file}  ${notes.length ? 'WARN ' + notes.join('; ') : 'ok'}`);
     }
   }
   process.exit(results.some((r) => r.sideways || r.errors.length) ? 1 : 0);
