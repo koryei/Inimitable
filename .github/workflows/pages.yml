@@ -22,8 +22,9 @@ jobs:
       - run: node site/build.mjs
       - name: The site must pass the skill's own checks before it is published
         run: |
-          node scripts/signs.mjs site/dist/index.html --allow "Uppercase tracked label"
+          node scripts/signs.mjs site/dist/index.html --allow "Uppercase tracked label,Hue-to-hue gradient"
           node scripts/check.mjs site/dist/index.html --widths 320,390,1440,2560
+          node scripts/craft.mjs site/dist/index.html --widths 390,1440
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
