@@ -11,7 +11,7 @@
 .inst {
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  --bs: 9px;            /* corner bracket arm length */
+  --bs: 0.5625rem;            /* corner bracket arm length */
   --accent: #ff5a1f;
   --on-accent: #0f0f10;
   font-family: var(--sans);
@@ -30,7 +30,7 @@
 
 /* ---------- Type ---------- */
 .inst .micro {                     /* tiny mono metadata: coordinates, status, version, captions */
-  font: 400 12px/1.4 var(--mono);
+  font: 400 0.75rem/1.4 var(--mono);
   letter-spacing: 0.04em;
   color: var(--ink-3);
 }
@@ -39,7 +39,7 @@
 .inst .br-word::before { content: "["; opacity: 0.55; margin-right: 0.04em; }
 .inst .br-word::after { content: "]"; opacity: 0.55; margin-left: 0.04em; }
 .inst .display {
-  font: 400 clamp(40px, 6.2vw, 88px)/1.02 var(--sans);
+  font: 400 clamp(2.5rem, 6.2vw, 5.5rem)/1.02 var(--sans);
   letter-spacing: -0.03em;
   margin: 0;
 }
@@ -67,10 +67,10 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 0 22px;
-  font: 400 14px/1 var(--mono);
+  gap: 0.625rem;
+  min-height: 2.75rem;
+  padding: 0 1.375rem;
+  font: 400 0.875rem/1 var(--mono);
   letter-spacing: 0.02em;
   color: var(--ink);
   background: var(--surface);
@@ -102,15 +102,15 @@
   background-image:
     linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 64px 64px;
+  background-size: 4rem 4rem;
   background-position: -1px -1px;
 }
 .inst .grid-dots {
   background-image: radial-gradient(var(--line-strong) 1px, transparent 1.5px);
-  background-size: 24px 24px;
+  background-size: 1.5rem 1.5rem;
 }
 .inst .hatch {
-  height: 14px;
+  height: 0.875rem;
   background: repeating-linear-gradient(135deg, transparent 0 7px, var(--line-strong) 7px 8px);
 }
 .inst .module { border: 1px dashed var(--line-strong); }
@@ -119,15 +119,15 @@
 
 /* ---------- Stat strip: a row of figures in hairline cells ---------- */
 .inst .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); border: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 70%, transparent); }
-.inst .stat { padding: 14px 16px; border-left: 1px solid var(--line); }
+.inst .stat { padding: 0.875rem 1rem; border-left: 1px solid var(--line); }
 .inst .stat:first-child { border-left: 0; }
-.inst .stat b { display: block; font: 400 28px/1 var(--mono); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-.inst .stat span { display: block; margin-top: 8px; font: 400 12px/1.3 var(--mono); color: var(--ink-3); }
+.inst .stat b { display: block; font: 400 1.75rem/1 var(--mono); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.inst .stat span { display: block; margin-top: 0.5rem; font: 400 0.75rem/1.3 var(--mono); color: var(--ink-3); }
 
 /* ---------- Ticker strip: a line of short facts, static unless motion is welcome ---------- */
-.inst .ticker { display: flex; gap: 28px; overflow: hidden; white-space: nowrap; padding: 8px 0; border-block: 1px solid var(--line); font: 400 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.inst .ticker { display: flex; gap: 1.75rem; overflow: hidden; white-space: nowrap; padding: 0.5rem 0; border-block: 1px solid var(--line); font: 400 0.75rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 .inst .ticker > * { flex: none; }
-.inst .ticker > *::before { content: "\25CF"; margin-right: 28px; font-size: 7px; vertical-align: 2px; opacity: 0.7; }
+.inst .ticker > *::before { content: "\25CF"; margin-right: 1.75rem; font-size: 0.4375rem; vertical-align: 0.125rem; opacity: 0.7; }
 @media (prefers-reduced-motion: no-preference) {
   .inst .ticker-run > * { animation: ticker 40s linear infinite; }
   @keyframes ticker { to { transform: translateX(-100%); } }
@@ -136,7 +136,7 @@
 /* ---------- Atmospheric horizon: one big gradient surface as the star, with grain ---------- */
 .inst .horizon {
   position: relative;
-  min-height: 560px;
+  min-height: 35rem;
   background: linear-gradient(to bottom, #000 0%, #000 52%, #06207a 66%, #2f78c4 78%, #e8b49c 88%, #d63a2c 100%);
   isolation: isolate;
 }
@@ -152,4 +152,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .inst * { transition: none !important; }
+}
+
+/* Big screens: put class "inst-scale" on <html> and the whole kit grows with the screen, because its sizes are in rem. */
+@media (min-width: 1800px) {
+  html.inst-scale { font-size: clamp(16px, 0.62vw + 6px, 24px); }
 }
