@@ -1,6 +1,6 @@
 # Motion recipes
 
-Layer 8 (`layers/motion.md`) says what motion to remove. This file says what to build when a surface needs motion. The patterns come from studying well-made motion libraries (see `libraries.md`); the numbers are starting points, restated here, and the project's own motion tokens win where it has them.
+Layer 8 (`references/layers/motion.md`) says what motion to remove. This file says what to build when a surface needs motion. The patterns come from studying well-made motion libraries (see `libraries.md`); the numbers are starting points, restated here, and the project's own motion tokens win where it has them.
 
 ## Principles
 

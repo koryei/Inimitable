@@ -4,13 +4,13 @@ A mode is what a person is trying to do on this screen. Pick it from the **surfa
 
 | Mode | The person is | Success looks like | Priorities | Rule files |
 | --- | --- | --- | --- | --- |
-| **Persuade** | deciding whether to act | they understand the promise in five seconds and take the one action | a clear claim, one true visual, one action, trust built from facts | `surfaces/landing.md` |
-| **Operate** | getting a job done | they finish the task without thinking about the interface | scanning, consistency, familiar controls, honest states, density | `surfaces/web-app.md` |
-| **Read** | understanding something | they find the answer and keep reading | structure, line length, hierarchy, quiet chrome | `surfaces/reading.md` |
-| **Experience** | inside the work itself | the work leads and the interface recedes | the artifact from the first screen, restraint, pacing | `surfaces/showpiece.md` |
-| **Terminal** | reading and typing in a console | they know what happened and what to do next | hierarchy by colour and weight, width discipline, signal over noise | `surfaces/terminal.md` |
+| **Persuade** | deciding whether to act | they understand the promise in five seconds and take the one action | a clear claim, one true visual, one action, trust built from facts | `references/surfaces/landing.md` |
+| **Operate** | getting a job done | they finish the task without thinking about the interface | scanning, consistency, familiar controls, honest states, density | `references/surfaces/web-app.md` |
+| **Read** | understanding something | they find the answer and keep reading | structure, line length, hierarchy, quiet chrome | `references/surfaces/reading.md` |
+| **Experience** | inside the work itself | the work leads and the interface recedes | the artifact from the first screen, restraint, pacing | `references/surfaces/showpiece.md` |
+| **Terminal** | reading and typing in a console | they know what happened and what to do next | hierarchy by colour and weight, width discipline, signal over noise | `references/surfaces/terminal.md` |
 
-Native mobile screens take their mode from what the person is doing (most are Operate) and add `surfaces/native-ios.md` or `surfaces/native-android.md`.
+Native mobile screens take their mode from what the person is doing (most are Operate) and add `references/surfaces/native-ios.md` or `references/surfaces/native-android.md`.
 
 ## How the mode changes the work
 

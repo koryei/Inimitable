@@ -19,8 +19,8 @@ The brand decides. It does not have to be a colour. A brand that is black and gr
 1. **Name the star** in one sentence, and say why it belongs to this product (use the subject inventory from Read).
 2. **Write the screen's argument**, one line: who arrives, what they need to leave with, what they do next.
 3. **List the sections** needed to deliver that argument, in order. Fewer is better: each section must earn its place with a different job and a different composition from its neighbours.
-4. **Choose the composition** for the first screen (see `layers/layout.md` for hero options; `surfaces/*.md` for the others). The star sits at the optical centre of attention; supporting content aligns to a shared grid.
-5. **Write the real copy first**, to the standard in `layers/copy.md`. Layout follows words, not the reverse.
+4. **Choose the composition** for the first screen (see `references/layers/layout.md` for hero options; `references/surfaces/*.md` for the others). The star sits at the optical centre of attention; supporting content aligns to a shared grid.
+5. **Write the real copy first**, to the standard in `references/layers/copy.md`. Layout follows words, not the reverse.
 6. **Choose what is real**: use only images, logos and data that exist. A true product preview in code beats a generic picture; no image beats a decorative one. Never invent a customer, a number, a testimonial or a feature.
 7. **Plan every state** the screen can be in: empty, loading, error, success, long content, one item, a thousand items.
 8. **Then build** (step 5), one section at a time.
