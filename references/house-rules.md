@@ -138,7 +138,7 @@ Rise on enter 6 to 12 px. Press scale 0.97 to 0.98. At most one entrance on load
 A fixed-pixel layout floats small in a sea of space at 2560 px. Scale it instead of stretching it:
 
 - Keep the content width capped (apps near 1440 to 1600) and let the **root size grow**: `html { font-size: clamp(16px, 0.62vw + 6px, 24px); }` with sizes, spacing and widths in `rem`, so everything scales together.
-- Prefer `rem` and `lvh` or `svh` for heights. **Do not use CSS `zoom` on the root**: it breaks `vh` and `dvh` minimum heights, so a screen meant to fill the viewport ends up short or long by the zoom factor. If you must use `zoom`, divide viewport-based heights by the factor.
+- Write sizes in `rem` from the start (`1rem` = 16 px), so one root setting scales everything; the instrument kit already does (`html.inst-scale`). Prefer `lvh` or `svh` for heights. **Do not use CSS `zoom` on the root**: it breaks `vh` and `dvh` minimum heights, so a screen meant to fill the viewport ends up short or long by the zoom factor. If you must use `zoom`, divide viewport-based heights by the factor.
 - Apps still fill the width with their shell; landing pages scale their type and keep generous margins.
 - Always render at 2560 px: it is where unscaled layouts look wrong.
 
