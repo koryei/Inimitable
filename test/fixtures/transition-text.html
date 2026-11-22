@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Transition text</title>
+<style>
+  body { margin: 0; font: 16px/24px system-ui, sans-serif; background: #f7f4ee; color: #1f1b16; }
+  main { padding: 24px; }
+  /* A slow colour transition: if the checker hides text with a colour change, the text is still visible at the screenshot. */
+  .slow { transition: color 2s linear; color: #1f1b16; }
+  .big { font: 900 160px/1 system-ui, sans-serif; letter-spacing: 0; margin: 0; }
+</style></head>
+<body><main><h1 class="slow big">MMMM</h1><p class="slow">A paragraph whose colour transitions slowly, on a light page.</p></main></body></html>

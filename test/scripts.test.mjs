@@ -62,3 +62,8 @@ test('a direction can license named tells with --allow, and nothing else', { ski
   assert.ok(!licensed.some((f) => f.tell === 'Uppercase tracked label'));
   assert.ok(licensed.some((f) => f.tell === 'Gradient text'), 'unlicensed tells remain');
 });
+
+test('a slow colour transition does not leave the text visible in the backdrop sample', { skip }, async () => {
+  const [desktop] = await check(fileURLToPath(new URL('./fixtures/transition-text.html', import.meta.url)), [1440]);
+  assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);
+});
