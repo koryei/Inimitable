@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledgerly dashboard</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Inter, system-ui, sans-serif; background: linear-gradient(135deg, #1a1040, #0b0b1e); color: #ede9fe; display: grid; grid-template-columns: 230px 1fr; min-height: 100vh; }
+  aside { padding: 22px 14px; background: rgba(255,255,255,0.04); border-right: 1px solid rgba(167,139,250,0.3); }
+  .brand { font-weight: 900; font-size: 20px; margin: 0 0 26px 7px; background: linear-gradient(90deg,#a78bfa,#f472b6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .nav { display: block; padding: 11px 13px; margin-bottom: 7px; border-radius: 9999px; color: #c4b5fd; text-decoration: none; font-size: 14px; transition: all .3s; }
+  .nav.active { background: linear-gradient(90deg,#7c3aed,#db2777); color: #fff; box-shadow: 0 0 20px rgba(124,58,237,.6); }
+  .label { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8b7ec8; margin: 24px 0 9px 13px; }
+  main { padding: 27px 31px; }
+  h1 { font-size: 30px; font-weight: 800; margin: 0 0 6px; }
+  .sub { color: #a78bfa; margin: 0 0 26px; font-size: 14px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 17px; margin-bottom: 21px; }
+  .stat { padding: 19px; border-radius: 24px; background: linear-gradient(135deg, rgba(124,58,237,.35), rgba(219,39,119,.25)); border: 1px solid rgba(196,181,253,.5); box-shadow: 0 0 26px rgba(124,58,237,.35); }
+  .stat .k { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; color: #ddd6fe; }
+  .stat .v { font-size: 30px; font-weight: 900; margin: 8px 0 4px; }
+  .stat .d { font-size: 13px; color: #6ee7b7; }
+  .spark { height: 22px; margin-top: 9px; display: flex; gap: 3px; align-items: flex-end; }
+  .spark i { flex: 1; background: linear-gradient(#f472b6, #8b5cf6); border-radius: 9999px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; }
+  .panel { padding: 21px; border-radius: 24px; background: rgba(255,255,255,.06); border: 1px solid rgba(167,139,250,.4); box-shadow: 0 0 24px rgba(139,92,246,.25); }
+  .panel h3 { margin: 0 0 14px; font-size: 16px; font-weight: 800; }
+  .bars { height: 150px; display: flex; gap: 9px; align-items: flex-end; }
+  .bars i { flex: 1; border-radius: 9999px; box-shadow: 0 0 12px currentColor; }
+  .bars i:nth-child(1){height:40%;background:#f472b6;color:#f472b6}.bars i:nth-child(2){height:70%;background:#a78bfa;color:#a78bfa}.bars i:nth-child(3){height:55%;background:#60a5fa;color:#60a5fa}.bars i:nth-child(4){height:90%;background:#34d399;color:#34d399}.bars i:nth-child(5){height:65%;background:#fbbf24;color:#fbbf24}.bars i:nth-child(6){height:80%;background:#fb7185;color:#fb7185}
+  .rows div { display: flex; justify-content: space-between; padding: 9px 0; font-size: 14px; }
+  .pill { padding: 3px 10px; border-radius: 9999px; background: rgba(52,211,153,.2); color: #6ee7b7; box-shadow: 0 0 10px rgba(52,211,153,.5); font-size: 12px; }
+  @media (max-width: 800px) { body { grid-template-columns: 1fr; } aside { display: none; } .stats { grid-template-columns: 1fr 1fr; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand">✨ Ledgerly</div>
+  <a class="nav active" href="#">🏠 Dashboard</a>
+  <a class="nav" href="#">📄 Invoices</a>
+  <a class="nav" href="#">👥 Clients</a>
+  <a class="nav" href="#">💰 Payments</a>
+  <div class="label">SETTINGS</div>
+  <a class="nav" href="#">⚙️ Account</a>
+  <a class="nav" href="#">🔥 Upgrade to PRO</a>
+</aside>
+<main>
+  <h1>Welcome back, Sam! 👋</h1>
+  <p class="sub">Here's what's happening with your business today!!</p>
+  <div class="stats">
+    <div class="stat"><div class="k">PAID THIS MONTH</div><div class="v">$48,210</div><div class="d">+12%!!</div><div class="spark"><i style="height:40%"></i><i style="height:60%"></i><i style="height:45%"></i><i style="height:80%"></i><i style="height:100%"></i></div></div>
+    <div class="stat"><div class="k">OUTSTANDING</div><div class="v">$124,860.40</div><div class="d">3 less 🎉</div><div class="spark"><i style="height:70%"></i><i style="height:55%"></i><i style="height:60%"></i><i style="height:40%"></i><i style="height:35%"></i></div></div>
+    <div class="stat"><div class="k">OVERDUE</div><div class="v">07</div><div class="d">⚠️ needs attention</div><div class="spark"><i style="height:30%"></i><i style="height:50%"></i><i style="height:70%"></i><i style="height:60%"></i><i style="height:90%"></i></div></div>
+    <div class="stat"><div class="k">AVG DAYS TO PAY</div><div class="v">12.4</div><div class="d">+3.1%</div><div class="spark"><i style="height:50%"></i><i style="height:45%"></i><i style="height:65%"></i><i style="height:55%"></i><i style="height:75%"></i></div></div>
+  </div>
+  <div class="grid">
+    <section class="panel"><h3>📈 Revenue</h3><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i></div></section>
+    <section class="panel"><h3>🧾 Recent invoices</h3><div class="rows">
+      <div><span>Harbour &amp; Finch Studio</span><span class="pill">Paid 🎉</span></div>
+      <div><span>Northlight Dental</span><span>$1,200.00</span></div>
+      <div><span>Atlas Courier Co.</span><span>$ 3,480</span></div>
+      <div><span>Wren &amp; Moss</span><span>$640.50</span></div></div></section>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledgerly: November 2026</title>
+<style>
+  /* Mode: Operate. Direction: calm and exact, like a good instrument; never glowing or decorated.
+     Graphite ramp. One accent (ledger green) marks paid money and the month being tracked. */
+  :root {
+    --bg: #141415; --side: #0f0f10; --card: #19191b; --raised: #232325;
+    --ink: #ededed; --ink-2: #a1a1a6; --ink-3: #85858b;
+    --line: rgba(237, 237, 237, 0.08);
+    --accent: #5fbf8f; --warn: #ff6369;
+    --sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 14px/20px var(--sans); display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  a { color: inherit; text-decoration: none; }
+
+  aside { background: var(--side); border-right: 1px solid var(--line); padding: 16px 12px; }
+  .brand { display: block; height: 36px; padding: 8px 12px; margin-bottom: 24px; font-size: 16px; font-weight: 500; }
+  .group { margin: 0 0 24px; }
+  .group h2 { margin: 0 0 8px; padding: 0 12px; font-size: 12px; line-height: 16px; font-weight: 400; color: var(--ink-3); }
+  .nav { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; margin-bottom: 2px; border-radius: 8px; color: var(--ink-2); transition: background-color 160ms var(--ease), color 160ms var(--ease); }
+  .nav:hover { background: var(--card); color: var(--ink); }
+  .nav[aria-current="page"] { background: var(--raised); color: var(--ink); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08); }
+  .nav svg { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  main { padding: 32px; max-width: 1440px; width: 100%; }
+  .topbar { display: none; }
+  .mark { display: inline-flex; align-items: center; height: 44px; font-weight: 500; }
+  h1 { margin: 0 0 24px; font-size: 32px; line-height: 36px; font-weight: 500; letter-spacing: -0.02em; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .stat .k { color: var(--ink-3); font-size: 12px; line-height: 16px; }
+  .stat .v { margin: 8px 0 4px; font-size: 28px; line-height: 32px; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .stat .d { color: var(--ink-2); font-size: 12px; line-height: 16px; }
+
+  .split { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 16px; margin-bottom: 24px; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+  .panel h2 { margin: 0 0 4px; font-size: 16px; line-height: 24px; font-weight: 500; }
+  .panel .hint { margin: 0 0 16px; color: var(--ink-3); font-size: 12px; line-height: 16px; }
+  .legend { display: flex; gap: 16px; margin-bottom: 8px; color: var(--ink-2); font-size: 12px; line-height: 16px; }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .swatch { width: 12px; height: 2px; background: var(--accent); }
+  .swatch.muted { background: var(--ink-3); }
+  svg.chart { display: block; width: 100%; height: 280px; }
+  .chart text { fill: var(--ink-3); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .chart .grid { stroke: var(--line); }
+
+  .list { list-style: none; margin: 0; padding: 0; }
+  .list li { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 44px; border-top: 1px solid var(--line); }
+  .list li:first-child { border-top: 0; }
+  .list .late { color: var(--warn); font-size: 12px; }
+  .more { display: inline-flex; align-items: center; height: 44px; margin-top: 8px; color: var(--ink-2); }
+  .more:hover { color: var(--ink); }
+  .amount { font-variant-numeric: tabular-nums; color: var(--ink-2); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 0 16px 0 0; }
+  th:last-child, td:last-child { padding-right: 0; }
+  th { text-align: left; padding-bottom: 8px; color: var(--ink-3); font-size: 12px; line-height: 16px; font-weight: 400; }
+  th:last-child, td:last-child { text-align: right; }
+  td { height: 44px; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .status { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-3); }
+  .dot.paid { background: var(--accent); }
+  .dot.late { background: var(--warn); }
+
+  @media (max-width: 900px) {
+    body { grid-template-columns: minmax(0, 1fr); }
+    aside { display: none; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 16px; border-bottom: 1px solid var(--line); background: var(--side); }
+    .topbar button { height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; }
+    main { padding: 24px 16px; }
+    h1 { font-size: 28px; line-height: 32px; margin-bottom: 16px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .stat { padding: 16px; }
+    .split { grid-template-columns: 1fr; }
+    .panel { padding: 16px; }
+    svg.chart { height: 220px; }
+    .hide-s { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<aside aria-label="Main">
+  <a class="brand" href="#">Ledgerly</a>
+  <nav>
+    <div class="group">
+      <a class="nav" href="#" aria-current="page"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 7.5 8 2.5l6 5M3.5 6.5V13h9V6.5"/></svg>Overview</a>
+      <a class="nav" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2h6l2.5 2.5V14H4zM6 7h4M6 10h4"/></svg>Invoices</a>
+      <a class="nav" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 13.5c.5-2.5 2.5-3.5 5-3.5s4.5 1 5 3.5"/></svg>Clients</a>
+      <a class="nav" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="4" width="12" height="8.5" rx="1.5"/><path d="M2 7h12"/></svg>Payments</a>
+    </div>
+    <div class="group">
+      <h2>Settings</h2>
+      <a class="nav" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14M3.8 3.8l1 1M11.2 11.2l1 1M3.8 12.2l1-1M11.2 4.8l1-1"/></svg>Account</a>
+      <a class="nav" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3M3 13h10"/></svg>Plan and billing</a>
+    </div>
+  </nav>
+</aside>
+<div>
+  <div class="topbar"><a class="mark" href="#">Ledgerly</a><button type="button">Menu</button></div>
+  <main>
+    <h1>November 2026</h1>
+    <section class="stats" aria-label="This month">
+      <div class="stat"><div class="k">Paid this month</div><div class="v">£48,210</div><div class="d">+12% vs October</div></div>
+      <div class="stat"><div class="k">Outstanding</div><div class="v">£124,860</div><div class="d">3 fewer invoices than October</div></div>
+      <div class="stat"><div class="k">Overdue</div><div class="v">7</div><div class="d">2 more than October</div></div>
+      <div class="stat"><div class="k">Days to get paid</div><div class="v">12.4</div><div class="d">0.4 days slower than October</div></div>
+    </section>
+
+    <div class="split">
+      <section class="panel" aria-label="Payments received">
+        <h2>Payments received</h2>
+        <p class="hint">Running total by day of the month</p>
+        <div class="legend"><span><i class="swatch"></i>November</span><span><i class="swatch muted"></i>October</span></div>
+        <svg class="chart" id="chart" viewBox="0 0 640 280" preserveAspectRatio="none" role="img" aria-label="November payments are ahead of October by 12 percent"></svg>
+      </section>
+      <section class="panel" aria-label="Needs attention">
+        <h2>Needs attention</h2>
+        <p class="hint">Overdue invoices, oldest first</p>
+        <ul class="list">
+          <li><span>Atlas Courier Co.<br><span class="late">21 days overdue</span></span><span class="amount">£3,480</span></li>
+          <li><span>Wren &amp; Moss<br><span class="late">14 days overdue</span></span><span class="amount">£640</span></li>
+          <li><span>Northlight Dental<br><span class="late">9 days overdue</span></span><span class="amount">£1,200</span></li>
+          <li><span>Kestrel Print<br><span class="late">6 days overdue</span></span><span class="amount">£915</span></li>
+          <li><span>Bramble Studio<br><span class="late">3 days overdue</span></span><span class="amount">£2,060</span></li>
+        </ul>
+        <a class="more" href="#">View all 7 overdue</a>
+      </section>
+    </div>
+
+    <section class="panel" aria-label="Recent invoices">
+      <h2>Recent invoices</h2>
+      <table>
+        <thead><tr><th>Client</th><th class="hide-s">Sent</th><th>Status</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td>Harbour &amp; Finch Studio</td><td class="hide-s">3 Nov</td><td><span class="status"><i class="dot paid"></i>Paid</span></td><td>£2,480</td></tr>
+          <tr><td>Northlight Dental</td><td class="hide-s">28 Oct</td><td><span class="status"><i class="dot late"></i>Overdue</span></td><td>£1,200</td></tr>
+          <tr><td>Atlas Courier Co.</td><td class="hide-s">12 Oct</td><td><span class="status"><i class="dot late"></i>Overdue</span></td><td>£3,480</td></tr>
+          <tr><td>Wren &amp; Moss</td><td class="hide-s">9 Oct</td><td><span class="status"><i class="dot"></i>Sent</span></td><td>£640</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<script>
+  // Running totals by day. November (accent) leads, October (muted) for comparison.
+  const nov = [0,1.2,1.2,4.8,4.8,6.1,9.4,9.4,12.3,15.0,15.0,18.2,21.6,21.6,24.9,27.7,27.7,31.2,34.1,34.1,37.5,40.2,40.2,43.9,45.6,45.6,47.0,48.2];
+  const oct = [0,0.9,1.4,3.6,4.0,5.2,8.0,8.1,10.5,13.1,13.4,16.0,19.2,19.5,22.4,24.8,25.0,28.1,30.6,31.0,33.4,36.0,36.3,39.1,40.8,41.0,42.2,43.0];
+  const W = 640, H = 280, L = 40, B = 24, T = 8, max = 50;
+  const x = (i) => L + (i / (nov.length - 1)) * (W - L - 8);
+  const y = (v) => T + (1 - v / max) * (H - T - B);
+  const path = (d) => d.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+  let out = '';
+  for (const g of [0, 10, 20, 30, 40, 50]) out += `<line class="grid" x1="${L}" x2="${W - 8}" y1="${y(g)}" y2="${y(g)}"/><text x="${L - 8}" y="${y(g) + 4}" text-anchor="end">£${g}k</text>`;
+  for (const d of [1, 8, 15, 22, 28]) out += `<text x="${x(d - 1)}" y="${H - 4}" text-anchor="middle">${d}</text>`;
+  out += `<path d="${path(oct)}" fill="none" stroke="#85858b" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`;
+  out += `<path d="${path(nov)}" fill="none" stroke="#5fbf8f" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+  document.getElementById('chart').innerHTML = out;
+</script>
+</body>
+</html>
