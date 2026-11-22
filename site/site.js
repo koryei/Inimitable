@@ -59,6 +59,31 @@
     }
   }
 
+  // The receipt: count what this page actually uses, with the same probe drift.mjs runs, and write the
+  // numbers back. The markup already carries them, so this only keeps them true as the page changes.
+  const receipt = document.querySelector('[data-receipt]');
+  if (receipt && window.__countPage) {
+    const write = () => {
+      const raw = window.__countPage();
+      const found = {
+        sizes: Object.keys(raw.fontSizes).length,
+        colours: Object.keys(raw.textColors).length,
+        radii: Object.keys(raw.radii).length,
+        spacing: Object.keys(raw.spacing).length,
+      };
+      for (const el of receipt.querySelectorAll('[data-count]')) {
+        const value = found[el.dataset.count];
+        if (!value) continue;
+        el.textContent = String(value);
+        // Kept so the test can compare what the markup claims against what the page actually uses.
+        el.dataset.measured = String(value);
+      }
+    };
+    // After the fonts land, or the counts include the fallback face's metrics.
+    if (document.fonts?.ready) document.fonts.ready.then(write);
+    else write();
+  }
+
   // Scroll reveals: once, and never hidden if the script does not run.
   const items = document.querySelectorAll('[data-reveal]');
   if (!('IntersectionObserver' in window) || reduce) {

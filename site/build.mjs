@@ -6,6 +6,7 @@
 import { copyFileSync, cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { DRIFT } from '../scripts/lib/probe.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'site', 'dist');
@@ -18,6 +19,10 @@ copyFileSync(join(root, 'site', 'index.html'), join(dist, 'index.html'));
 copyFileSync(join(root, 'site', 'site.js'), join(dist, 'site.js'));
 copyFileSync(join(root, 'site', 'site.css'), join(dist, 'styles.css'));
 writeFileSync(join(dist, '.nojekyll'), '');
+
+// The page counts itself with the same probe drift.mjs runs, so the receipt and the tool cannot
+// disagree. Written from the one copy in scripts/lib/probe.mjs rather than retyped here.
+writeFileSync(join(dist, 'count.js'), `window.__countPage = () => (${DRIFT});\n`);
 
 // Fonts, with their licence.
 for (const file of ['instrument-serif.woff2', 'instrument-serif-italic.woff2', 'OFL.txt']) {

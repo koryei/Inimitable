@@ -387,6 +387,20 @@ b, strong { font-weight: 500; }
 .stat b { display: block; font: 400 1.5rem/1 var(--serif); letter-spacing: -0.01em; }
 .stat span { display: block; margin-top: 0.5rem; font: 400 0.75rem/1.4 var(--mono); color: var(--ink-3); }
 
+/* The page measures itself and prints the receipt. The numbers are in the markup so they are right without
+   JavaScript, and site.js recounts them on load so they cannot go stale. Hierarchy is colour, not size. */
+.receipt {
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  min-height: 1.5rem;
+  font: 400 0.75rem/1.6 var(--mono);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.receipt b { font-weight: 500; color: var(--ink); }
+.receipt-how { color: var(--ink-3); }
+.receipt code { font: inherit; color: var(--ink-2); }
+
 /* ---------- Sections ---------- */
 .section { padding: clamp(4.5rem, 9vw, 8rem) 0 0; }
 .section-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: end; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
