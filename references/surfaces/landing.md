@@ -11,7 +11,7 @@ Write it in one line before designing: *who arrives, what they must believe, wha
 - **A headline that says what the product does for whom.** Two lines or fewer on desktop, three at most on a small phone (320 to 390 px). Specific, plain, in this product's own nouns. Shorten the words before you shrink the type.
 - **One subhead** of at most about 25 words, in secondary colour, at most 36rem wide.
 - **One primary action** and at most one secondary. Nothing stacked underneath.
-- **One visual that shows something true**: the product itself, its output, or one concrete metaphor. Never filler.
+- **One visual that shows something true**: the product itself, its output, or one concrete metaphor drawn from the product's world (`visual-craft.md`). Never filler. A page that is only clean and accurate loses to one that also draws something memorable.
 - **A quiet navigation**: logo, the existing links, one button. On phones, one menu button.
 - It composes as a whole at 1440 and 390: no dead band, the next section hinting below the fold.
 
