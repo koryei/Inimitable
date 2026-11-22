@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+The skill taught rules but not reasons, and the site was clean and static. Both were rebuilt around why a screen feels made rather than assembled.
+
+- `references/hover.md`: why a control has to answer the pointer, the mechanics of hover and press with exact values, the cheap-hover table, and how to test it.
+- `references/materials.md`: surface, light and grain. The grainient recipe (radial stops, grain, mask) rebuilt in CSS rather than copied, plus glass, paper and metal, and what each costs to render.
+- `references/surfaces/landing.md` rewritten around the argument a landing page has to make: the five-second test, the first screen, one thing, rhythm, proof, motion, material, the close.
+- `references/motion.md`: landing and showpiece choreography, scroll reveals, marquee, parallax, and the one moment a page is allowed.
+- `references/libraries.md`: how to take from a library (the mechanism, not the file), with Grainient and Construct as worked examples.
+- `references/anti-slop.md`: licensed devices (a hue gradient, a radial wash, glass, parallax) and a hover-and-press section.
+- `scripts/craft.mjs`: hovers every control with a real pointer and diffs the computed style, so a control that ignores the pointer fails rather than being missed. Also flags transitions on layout properties and motion that survives the reduced-motion setting. `--shots` writes a rest and hover crop per control.
+- `scripts/lib/backdrop.mjs`: an icon beside the text is no longer sampled as the text's backdrop.
+- `scripts/lib/chrome.mjs`: `screenshot()` honours a clip region.
+- `scripts/lib/probe.mjs`: italic emphasis is only a tell below 24px, and `[data-loop]` licenses an infinite animation.
+- The site is rebuilt as an editorial page: a lit ground, Instrument Serif for the statements, one accent, a choreographed entrance, scroll reveals, and a designed hover and press state on every control. It is published only after passing `signs`, `check` and `craft`.
+
 ## 0.5.0
 
 - Published to the skills directory: `npx skills add koryei/Inimitable` works, and the skill is listed on skills.sh. The `SKILL.md` description is now a YAML block scalar, because the skills CLI parses frontmatter strictly and rejected the old one. A test keeps it parseable.
