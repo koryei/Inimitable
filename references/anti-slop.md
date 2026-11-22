@@ -10,14 +10,14 @@ Two cautions. First, removing a tell leaves space: never fill that space with a 
 
 ## Surfaces and colour
 
-- `[scan]` Violet-to-blue, violet-to-pink or any hue-to-hue gradient on backgrounds, cards, buttons or the active nav item → one neutral surface, accent only where it means something.
+- `[scan]` Violet-to-blue, violet-to-pink or any hue-to-hue gradient on backgrounds, cards, buttons or the active nav item → one neutral surface, accent only where it means something. **Exception:** a lit ground in one temperature family with grain, licensed by the direction (`materials.md`), is a material, not a tell. A rainbow is still a rainbow.
 - `[scan]` Gradient text in headings, figures or the logo → solid primary text colour.
 - `[scan]` Coloured glows (`box-shadow: 0 0 20px rgba(139,92,246,.5)`, `drop-shadow` on emoji, glowing pills) → remove; depth from surface steps and hairlines.
-- Radial colour washes or blurred blobs behind content → remove.
+- Radial colour washes or blurred blobs behind content → remove. A ground with a light direction, one family and grain is not a wash (`materials.md`); a blob with no direction is.
 - `[scan]` Neon or high-contrast coloured borders → hairline at 6 to 10% opacity.
 - Five near-identical tints of one hue for text → three text roles from one neutral ramp.
 - Everything highlighted, so nothing stands out → one accent, once or twice per screen.
-- Glass cards: translucent fill, blur, white inner highlight, coloured shadow → a plain raised surface with a hairline.
+- Glass cards: translucent fill, blur, white inner highlight, coloured shadow → a plain raised surface with a hairline. Glass over a real image or a lit ground is depth (`materials.md`); glass over a flat fill is a tell.
 - A background that reads as brown, orange, blue or green on an app screen → neutral surfaces; the world shows in the accent, the charts, the moments.
 
 ## Type
@@ -28,7 +28,7 @@ Two cautions. First, removing a tell leaves space: never fill that space with a 
 - `[scan]` Text under 12 px (or under 11 px on mobile) → raise it.
 - Numbers in mixed formats (`$48,210` beside `$124,860.40`, `07`) → one format, tabular figures.
 - Negative letter spacing on small text → zero or slightly positive.
-- Italic as emphasis → colour or size.
+- Italic as emphasis in UI text → colour or size. Italic in a display face at 24 px or more is typography, not emphasis.
 - A headline broken to three or more lines at desktop width → cut words, then widen the measure, then reduce size.
 
 ## Icons
@@ -79,7 +79,7 @@ Two cautions. First, removing a tell leaves space: never fill that space with a 
 - Floating blobs, orbs, glowing grids or lines behind the hero → a plain background or one real product visual.
 - Everything stacked and centred (headline, subhead, buttons, picture) → an asymmetric split, or text over a large product view.
 - Three or more buttons, or chips and avatars stacked under the buttons → one primary action, at most one secondary.
-- Parallax and floating elements on scroll → static layout.
+- Parallax and floating elements on scroll → static layout. One element at 8 to 12% travel is depth (`motion.md`); every section drifting is a theme-park ride.
 - A visual in every section → one visual where it helps, usually the hero.
 - Stock robots, glowing brains, circuit lines, holograms for anything AI → show what the AI actually produces.
 - Text, fake buttons or a fake logo baked into an image → real text in the page.
@@ -92,6 +92,18 @@ Two cautions. First, removing a tell leaves space: never fill that space with a 
 - Everything flying in on load from different directions → one short fade and rise with a small stagger.
 - Animating width, height, top, left or margins → transform and opacity.
 - Infinite shimmer on headings or decorative elements → remove.
+- A marquee or drifting ground that cannot be paused → mark it `data-loop`, pause it on hover and focus, and stop it under reduced motion (`motion.md`).
+
+## Hover and press
+
+- A control whose hover is a colour change and nothing else → add one movement: fill sweep, arrow travel or underline draw (`hover.md`).
+- A hover that takes 300 ms to appear → 160 to 220 ms in, 120 to 160 ms out.
+- A card that scales up on hover → lift 3 px; scaling blurs text and shifts neighbours.
+- Hover rules that move the layout → animate transform, never size.
+- No press state → `:active` scale 0.98, 100 to 120 ms.
+- Hover rules outside `@media (hover: hover)` → the first tap on a phone is eaten.
+- `outline: none` with no replacement → a 2 px focus ring, offset 3 px.
+- Every control doing the same hover → weight by importance: primary fills, secondary underlines, tertiary steps colour.
 
 ## Terminal UI
 
