@@ -56,7 +56,7 @@ Inimitable changes what happens between your request and the result. The agent r
   <img src="examples/instrument-chip/with-skill-1440.jpg" width="49%" alt="An AI accelerator page: a halftone M.2 card with callouts and a ruler">
 </p>
 
-**A dashboard.** 75 tells (9 kinds) down to none. Spacing values off the 4 px grid 15 → 0, weights 3 → 2, colour hues 6 → 2, and it no longer scrolls sideways on a phone. The first attempt failed three of the skill's own checks; the look step caught and fixed them. [Open the example.](examples/dashboard)
+**A dashboard.** 92 tells (9 kinds) down to none. Spacing values off the 4 px grid 17 → 0, weights 3 → 2, colour hues 8 → 2, and it no longer scrolls sideways on a phone. The first attempt failed three of the skill's own checks; the look step caught and fixed them. [Open the example.](examples/dashboard)
 
 <p align="center">
   <img src="examples/dashboard/before-1440.jpg" width="49%" alt="A dashboard with glowing gradient cards, emoji navigation and rainbow bars">

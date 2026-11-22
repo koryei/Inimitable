@@ -3,7 +3,7 @@
 An app screen (Operate mode): the same product and the same data before and after an Inimitable run. The first version of `after.html` failed three of the skill's own checks and was fixed in the look step; the numbers below are for the final version.
 
 ```bash
-node scripts/signs.mjs   examples/dashboard/before.html     # 9 kinds of tell, 75 in all
+node scripts/signs.mjs   examples/dashboard/before.html     # 9 kinds of tell, 92 in all
 node scripts/signs.mjs   examples/dashboard/after.html      # none
 node scripts/drift.mjs   examples/dashboard/before.html --save before.json
 node scripts/drift.mjs   examples/dashboard/after.html  --against before.json
@@ -30,12 +30,12 @@ node scripts/shoot.mjs   examples/dashboard/after.html
 
 | | Before | After |
 | --- | --- | --- |
-| Machine-made tells found by `signs.mjs` | 75 (9 kinds) | 0 |
+| Machine-made tells found by `signs.mjs` | 92 (9 kinds) | 0 |
 | Font sizes in use | 7 | 5 |
 | Font weights in use | 3 (400, 800, 900) | 2 (400, 500) |
-| Spacing values off the 4 px grid | 15 | 0 |
+| Spacing values off the 4 px grid | 17 | 0 |
 | Text colours | 7 | 4 |
-| Colour hues in use | 6 | 2 (green accent, red for overdue) |
+| Colour hues in use | 8 | 2 (green accent, red for overdue) |
 | Drift flags | 6 | 0 |
 | Scrolls sideways at 390 px | yes | no |
 | Contrast, targets and names (`check.mjs`) at 320, 390, 1440, 2560 | not run | no problems |
