@@ -481,7 +481,9 @@ b, strong { font-weight: 500; }
 .install-box .install-line { background: var(--bg); }
 
 /* ---------- FAQ ---------- */
-.faq details { border-top: 1px solid var(--line); }
+/* The first answer is open in the markup. A section called "Short answers" that shows five closed rows
+   has not answered anything yet. */
+.faq details { border-top: 1px solid var(--line); interpolate-size: allow-keywords; }
 .faq details:last-child { border-bottom: 1px solid var(--line); }
 .faq summary {
   display: flex;
@@ -501,11 +503,24 @@ b, strong { font-weight: 500; }
   color: var(--ink-3);
   transition: transform var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
 }
-.faq details[open] summary::after { content: "\2212"; }
-/* The whole row answers, not just the plus: the question takes the accent and the mark turns a quarter. */
+.faq details[open] summary::after { content: "\2212"; color: var(--accent); }
+/* The whole row answers, not just the mark. A plus turned a quarter is still a plus, so the mark grows
+   instead: the reply is visible, and it does not pretend the row has opened. */
 .faq summary:hover { color: var(--accent); }
-.faq summary:hover::after { color: var(--accent); transform: rotate(90deg); }
+.faq summary:hover::after { color: var(--accent); transform: scale(1.25); }
 .faq p { max-width: 46rem; margin: 0 0 1.5rem; color: var(--ink-2); }
+/* The answer opens at its own height instead of snapping, where the browser can interpolate it. */
+@supports selector(::details-content) {
+  .faq details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 280ms var(--ease), content-visibility 280ms var(--ease);
+    transition-behavior: allow-discrete;
+  }
+  .faq details[open]::details-content { block-size: auto; }
+}
+.faq details[open] > p { animation: faq-in 320ms var(--ease) both; }
+@keyframes faq-in { from { opacity: 0; transform: translateY(-0.4rem); } }
 
 /* ---------- Footer ---------- */
 .foot { margin-top: clamp(5rem, 10vw, 8rem); padding: 2rem 0 3rem; border-top: 1px solid var(--line); }
