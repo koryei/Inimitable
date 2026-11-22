@@ -9,7 +9,9 @@
 //            a message or a logo, put it in a small HTML file and pass that: it is rendered, then dotted.
 //            Leave a margin of the background colour around the subject if you want exact framing.
 //   --dots   how many dots across (default 140); --cell is each dot's size in the output (default 6)
-//   --invert flips light and dark: use it when the subject should be light dots on a dark page
+//   --invert draws the LIGHT parts of the picture instead of the dark ones. By default the dark parts become
+//            dots (a dark object on a light page); use --invert when the subject is the bright part, for
+//            example white text or a lit shape on a dark picture. Choose --fill and --bg for the page you place it on.
 //   --no-trim keeps the empty space around the subject (by default it is cropped away)
 //   ascii    writes the characters as text instead of an SVG
 //
@@ -56,16 +58,17 @@ export async function dotify(input, options = {}) {
   const { mode = 'fs', dots = 140, cell = 6, fill = '#e8e6e1', bg, invert = false, contrast = 1, gamma = 1, threshold = 0 } = options;
   const png = extname(input).toLowerCase() === '.png' ? readFileSync(input) : await render(input, Math.max(dots * 4, 640));
   const image = decodePng(png);
-  let field0 = fieldFromImage(image, { invert: false, contrast, gamma });
-  if (options.trim !== false) field0 = crop(field0, contentBox(field0));
-  if (invert) field0 = { ...field0, data: field0.data.map((v) => 1 - v) };
-  const factor = Math.max(1, Math.floor(field0.width / dots));
-  const field = factor > 1 ? downsample(field0, factor) : field0;
-  if (mode === 'ascii') return { text: asciiLines(field, { cell: 1, aspect: 2, invert }).join('\n') };
-  if (mode === 'halftone' || mode === 'hex') return { svg: halftoneSvg(field, { cell, fill, background: bg, hex: mode === 'hex', maxRadius: cell * 0.5, invert, scale: cell }) };
+  const bright = fieldFromImage(image, { invert: false, contrast, gamma });
+  let picture = bright;
+  if (options.trim !== false) picture = crop(picture, contentBox(picture));
+  // The "ink" field is high where something is drawn: the dark parts of the picture by default, the light parts with --invert.
+  const ink = { ...picture, data: picture.data.map((v) => (invert ? v : 1 - v)) };
+  const factor = Math.max(1, Math.floor(ink.width / dots));
+  const field = factor > 1 ? downsample(ink, factor) : ink;
+  if (mode === 'ascii') return { text: asciiLines(field, { cell: 1, aspect: 2, invert: true }).join('\n') };
+  if (mode === 'halftone' || mode === 'hex') return { svg: halftoneSvg(field, { cell, fill, background: bg, hex: mode === 'hex', maxRadius: cell * 0.5, invert: true, scale: cell }) };
   const grid = mode === 'ordered' ? orderedDither(field, { threshold }) : mode === 'stipple' ? stipple(field, { seed: 3 }) : floydSteinberg(field, { threshold: 0.5 - threshold });
-  // Without --invert the dark parts of the picture become dots; with it the light parts do (light on dark).
-  return { svg: ditherSvg(grid, { cell, fill, background: bg, lit: invert ? 1 : 0 }), cols: grid.width, rows: grid.height };
+  return { svg: ditherSvg(grid, { cell, fill, background: bg, lit: 1 }), cols: grid.width, rows: grid.height };
 }
 
 if (isMain(import.meta.url)) {
