@@ -103,7 +103,7 @@ Plain Node scripts, no dependencies. The agent runs them for you, and you can ru
 | `scripts/check.mjs <url or file>` | WCAG contrast, touch-target size, small text, missing names and document basics, at phone and desktop widths. |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal program at a set width in a real pseudo-terminal and captures text and an image. |
 
-Every script exits non-zero when it finds a problem, so they also work as gates in CI.
+`shoot`, `signs`, `check` and `term-shot` exit non-zero when they find a problem, so they also work as gates in CI.
 
 ## What is in the box
 
