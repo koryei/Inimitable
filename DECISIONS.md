@@ -49,7 +49,8 @@ Nothing here is a draft.
 | 39 | Scripts are written in Node: a drift counter (font sizes, radii, colours, spacing in use), a contrast and tap-size check, and a screenshot at the four widths. | owner | 2026-11-22 |
 | 40 | Structure on disk: a short `SKILL.md` holding the nine-step run, plus reference files (each surface, the anti-slop list, house rules) loaded only when needed. | owner | 2026-11-22 |
 | 41 | Proof the skill works: before and after on real screens (Remy's Activity screen and one landing page) against a no-skill agent, judged side by side by the owner. The best cases are saved as a test set afterward. | owner | 2026-11-22 |
-| 42 | Inimitable is its own project at `~/Documents/Active Projects/Inimitable`, local git only for now, with the history carried over from Remy.plus. `~/.claude/skills/inimitable` links to it. Publishing is decided after the skill is proven and the source licences are settled. | owner | 2026-11-22 |
+| 42 | Inimitable is its own project at `~/Documents/Active Projects/Inimitable`, local git first, with the history carried over from Remy.plus. `~/.claude/skills/inimitable` links to it. (Superseded on hosting by decision 43.) | owner | 2026-11-22 |
+| 43 | Hosting and pace: the repo is public at github.com/koryei/Inimitable under Apache-2.0, and the owner told me to push. The owner authorised drafting the content in bulk (anti-slop items, house rules, surface rules, scripts, `SKILL.md`, README) with a commit per piece; every draft is marked `draft` until the owner reviews it, and review can change or cut anything. Wording from impeccable and tasteskill is restated, never copied; unslop material is adapted with credit (`NOTICE.md`). | owner | 2026-11-22 |
 
 ## Licences (facts, not decisions)
 
