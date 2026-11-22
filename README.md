@@ -7,6 +7,7 @@ A skill for coding agents that builds and repairs interfaces until they look rig
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-24292f?style=flat" alt="Apache 2.0"></a>
   <img src="https://img.shields.io/badge/node-22%2B-24292f?style=flat" alt="Node 22+">
   <img src="https://img.shields.io/badge/dependencies-none-24292f?style=flat" alt="No dependencies">
+  <a href="https://skills.sh/koryei/inimitable"><img src="https://skills.sh/b/koryei/Inimitable" alt="skills.sh installs"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/changelog-view-24292f?style=flat" alt="Changelog"></a>
 </p>
 
@@ -73,11 +74,19 @@ Inimitable changes what happens between your request and the result. The agent r
 ## Install
 
 ```bash
+npx skills add koryei/Inimitable
+```
+
+That uses the [skills CLI](https://skills.sh) and installs into Claude Code, Codex, Cursor and the other agents you have (add `-g` to install for every project, `-a claude-code` to pick one agent). It is listed on [skills.sh](https://skills.sh/koryei/inimitable).
+
+Prefer a clone you can `git pull`?
+
+```bash
 git clone https://github.com/koryei/Inimitable.git
 cd Inimitable && ./install.sh
 ```
 
-`install.sh` links the folder into `~/.claude/skills/inimitable`, so `git pull` updates it in place. Use `--codex` for Codex, `--dir <path>` for any agent that reads `SKILL.md` folders, `--check` to test your setup, `--uninstall` to remove it.
+`install.sh` links the folder into `~/.claude/skills/inimitable`. Use `--codex` for Codex, `--dir <path>` for any agent that reads `SKILL.md` folders, `--check` to test your setup, `--uninstall` to remove it.
 
 **Needs** Node 22 or newer and an installed Chrome, Edge or Chromium (set `CHROME_PATH` if it is somewhere unusual). Terminal screenshots also use Python 3, which macOS and most Linux already have. No packages to install and no API keys.
 
