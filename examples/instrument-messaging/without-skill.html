@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cipherline: private messaging for journalists and activists</title>
+<meta name="description" content="Cipherline is an end-to-end encrypted messaging app for journalists and activists. Messages are encrypted on the device and the service cannot read them.">
+<meta name="color-scheme" content="light">
+<style>
+:root{
+  --paper:#f2efe7;
+  --paper-2:#e9e5da;
+  --paper-3:#dfdace;
+  --ink:#121210;
+  --ink-2:#26251f;
+  --muted:#5b584d;
+  --line:#cdc8b9;
+  --accent:#c8321a;
+  --accent-ink:#a82812;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --pad:20px;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{width:100%;max-width:1200px;margin:0 auto;padding-inline:var(--pad)}
+.skip{position:absolute;left:12px;top:-60px;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:8px;z-index:100;text-decoration:none}
+.skip:focus{top:12px}
+
+/* grain */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.35;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;font:600 17px/1 var(--sans);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background .15s ease,box-shadow .15s ease;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 10px 24px -10px rgba(200,50,26,.7)}
+.btn-primary:hover{background:var(--accent-ink);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(1px)}
+.btn svg{width:18px;height:18px}
+.btn-sm{min-height:42px;padding:0 18px;font-size:15px}
+
+/* nav */
+header.nav{position:sticky;top:0;z-index:40;background:rgba(242,239,231,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+header.nav.scrolled{border-bottom-color:var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:700 21px/1 var(--serif);letter-spacing:-.01em}
+.brand svg{width:30px;height:30px}
+.nav-links{display:none;gap:30px;font-size:15px}
+.nav-links a{text-decoration:none;color:var(--muted)}
+.nav-links a:hover{color:var(--ink)}
+
+/* hero */
+.hero{padding:36px 0 64px}
+.hero-grid{display:grid;gap:40px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 13px/1 var(--mono);color:var(--muted);letter-spacing:.02em;padding:9px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.35)}
+.eyebrow i{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+h1{font:600 clamp(46px,12.2vw,104px)/.98 var(--serif);letter-spacing:-.035em;margin:22px 0 0;text-wrap:balance}
+h1 em{font-style:italic;font-weight:500;position:relative;white-space:nowrap}
+.lede{font-size:clamp(18px,2.4vw,21px);line-height:1.5;color:var(--ink-2);max-width:34em;margin:26px 0 0}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:18px 22px;margin-top:34px}
+.cta-note{font-size:14.5px;color:var(--muted);max-width:18em;line-height:1.4}
+
+/* demo card */
+.demo{position:relative;border-radius:22px;background:var(--paper-2);border:1px solid var(--line);padding:14px;box-shadow:0 40px 60px -40px rgba(18,18,16,.35)}
+.demo-tag{position:absolute;top:-13px;right:18px;background:var(--ink);color:var(--paper);font:500 12px/1 var(--mono);padding:8px 11px;border-radius:999px;letter-spacing:.02em}
+.pane{border-radius:14px;padding:18px}
+.pane-device{background:#fbfaf6;border:1px solid var(--line)}
+.pane-server{background:var(--ink);color:var(--paper);position:relative;overflow:hidden}
+.pane-head{display:flex;justify-content:space-between;align-items:center;gap:12px;font:500 12.5px/1.2 var(--mono);letter-spacing:.04em;text-transform:none;color:var(--muted);margin-bottom:12px}
+.pane-server .pane-head{color:#b9b5a6}
+.pane-head b{font-weight:600;color:var(--ink)}
+.pane-server .pane-head b{color:var(--paper)}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px/1 var(--mono);padding:6px 9px;border-radius:999px;background:var(--paper-2);color:var(--ink-2)}
+.pane-server .chip{background:#2a2924;color:#dcd8c9}
+label.field{display:block;font:500 13px/1 var(--mono);color:var(--muted);margin-bottom:8px}
+textarea{width:100%;min-height:92px;resize:none;border:1px solid var(--line);border-radius:12px;background:#fff;font:400 18px/1.45 var(--serif);color:var(--ink);padding:12px 14px}
+textarea:focus-visible{outline-offset:1px}
+.wire{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 0;font:500 12.5px/1.2 var(--mono);color:var(--muted)}
+.wire svg{width:16px;height:30px}
+.wire span{flex:0 1 auto;text-align:center}
+.cipher{font:500 15px/1.65 var(--mono);color:var(--paper);word-break:break-all;letter-spacing:.04em;min-height:5.6em;margin:0}
+.cipher .g{display:inline-block;margin-right:.7em}
+.server-facts{display:grid;gap:0;margin-top:16px;border-top:1px solid #3a3931}
+.server-facts div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #3a3931;font-size:14.5px}
+.server-facts dt{color:#b9b5a6;margin:0}
+.server-facts dd{margin:0;font-weight:600;display:flex;align-items:center;gap:10px}
+.bar{display:inline-block;height:1em;width:5.5em;background:var(--paper);border-radius:2px;vertical-align:-.12em}
+.server-facts .bar{width:3.2em;height:.85em;background:#d9d5c6}
+
+/* sections */
+section{position:relative}
+.sec{padding:84px 0}
+.sec-head{max-width:760px;margin-bottom:44px}
+.kicker{font:500 13px/1 var(--mono);color:var(--accent-ink);letter-spacing:.04em;margin:0 0 16px;display:block}
+h2{font:600 clamp(34px,7.4vw,60px)/1.03 var(--serif);letter-spacing:-.028em;margin:0;text-wrap:balance}
+.sec-head p{font-size:18.5px;color:var(--ink-2);margin:20px 0 0;max-width:36em}
+
+/* ledger */
+.ledger{border-top:2px solid var(--ink);margin:0;padding:0;list-style:none}
+.ledger li{display:grid;grid-template-columns:1fr;gap:10px;padding:22px 0;border-bottom:1px solid var(--line);align-items:center}
+.ledger .what{font:600 clamp(24px,5vw,34px)/1.1 var(--serif);letter-spacing:-.02em}
+.ledger .detail{color:var(--muted);font-size:16px;margin-top:6px;font-family:var(--sans);font-weight:400;letter-spacing:0;display:block}
+.ledger .verdict{display:flex;align-items:center;gap:14px}
+.redact{position:relative;flex:1;max-width:260px;height:26px}
+.redact::before{content:"";position:absolute;inset:0;background:var(--ink);border-radius:2px;transform-origin:left;transform:scaleX(1);transition:transform .9s cubic-bezier(.7,0,.2,1)}
+.js .ledger li:not(.in) .redact::before{transform:scaleX(0)}
+.ledger li:nth-child(2) .redact::before{transition-delay:.12s}
+.ledger li:nth-child(3) .redact::before{transition-delay:.24s}
+.verdict strong{font:600 14px/1 var(--mono);letter-spacing:.03em;white-space:nowrap}
+
+/* disappearing */
+.dark{background:var(--ink);color:var(--paper)}
+.dark .kicker{color:#f0866f}
+.dark .sec-head p{color:#cfcbbd}
+.split{display:grid;gap:40px;align-items:center}
+.phone{width:100%;max-width:380px;margin-inline:auto;border-radius:38px;background:#1d1c18;border:1px solid #3a3931;padding:12px;box-shadow:0 50px 80px -40px rgba(0,0,0,.8)}
+.screen{border-radius:28px;background:#f6f4ec;color:var(--ink);min-height:400px;display:flex;flex-direction:column;overflow:hidden}
+.screen-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);font:600 16px/1 var(--serif)}
+.screen-top small{font:500 11.5px/1 var(--mono);color:var(--muted);font-weight:500}
+.thread{flex:1;padding:18px;display:flex;flex-direction:column;gap:10px;justify-content:flex-end}
+.msg{max-width:84%;padding:11px 14px;border-radius:18px;font:400 17px/1.35 var(--serif)}
+.msg.in{background:var(--paper-3);border-bottom-left-radius:6px;align-self:flex-start}
+.msg.out{background:var(--ink);color:var(--paper);border-bottom-right-radius:6px;align-self:flex-end;position:relative;overflow:hidden;transition:opacity .5s ease}
+.msg.out .life{display:block;height:3px;background:var(--accent);margin:9px -14px -11px;width:calc(100% + 28px);transform-origin:left}
+.msg.out.going .life{animation:drain var(--dur,6s) linear forwards}
+@keyframes drain{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.gone{align-self:flex-end;font:500 12.5px/1.2 var(--mono);color:var(--muted);padding:10px 0}
+.msg.out.gone-anim{opacity:0}
+.composer{border-top:1px solid var(--line);padding:14px 18px 18px;display:grid;gap:12px}
+.timers{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.timers legend{font:500 12px/1 var(--mono);color:var(--muted);margin-bottom:8px;padding:0}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.timers label{position:relative}
+.timers input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.timers span{display:inline-flex;align-items:center;min-height:40px;padding:0 15px;border:1.5px solid var(--line);border-radius:999px;font:500 14px/1 var(--mono);background:#fff;cursor:pointer}
+.timers input:checked+span{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.timers input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+.send{min-height:46px;border-radius:12px;border:0;background:var(--accent);color:#fff;font:600 16px/1 var(--sans);cursor:pointer}
+.send:hover{background:var(--accent-ink)}
+.send:disabled{background:var(--paper-3);color:var(--muted);cursor:default}
+.note{font:500 12.5px/1.45 var(--mono);color:#b9b5a6;margin-top:18px;max-width:34em}
+
+/* platforms */
+.plat{display:grid;gap:14px}
+.tile{border:1px solid var(--line);border-radius:var(--radius);padding:26px;background:rgba(255,255,255,.4);display:flex;gap:20px;align-items:center}
+.tile svg{width:46px;height:46px;flex:none;color:var(--ink)}
+.tile h3{font:600 26px/1.1 var(--serif);margin:0;letter-spacing:-.015em}
+.tile p{margin:4px 0 0;color:var(--muted);font-size:15.5px}
+
+/* pricing */
+.plans{display:grid;gap:16px}
+.plan{border-radius:20px;padding:30px 26px;border:1px solid var(--line);background:rgba(255,255,255,.4);display:flex;flex-direction:column}
+.plan.team{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.plan h3{font:500 14px/1 var(--mono);letter-spacing:.04em;margin:0;color:var(--muted)}
+.plan.team h3{color:#b9b5a6}
+.price{font:600 clamp(56px,9vw,76px)/1 var(--serif);letter-spacing:-.04em;margin:18px 0 4px}
+.price{display:flex;align-items:baseline;gap:12px}
+.price small{font:500 15px/1.3 var(--sans);letter-spacing:0;color:var(--muted)}
+.plan.team .price small{color:#b9b5a6}
+.plan ul{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px}
+.plan li{display:flex;gap:12px;align-items:flex-start;font-size:16.5px}
+.plan li svg{width:20px;height:20px;flex:none;margin-top:3px;color:var(--accent)}
+.plan.team li svg{color:#f0866f}
+.plan .foot{margin-top:auto;padding-top:26px;font-size:15px}
+.plan .foot a{font-weight:600;text-underline-offset:4px}
+
+/* honesty */
+.honest{display:grid;gap:16px}
+.card{border-radius:var(--radius);border:1px solid var(--line);padding:28px 26px;background:rgba(255,255,255,.4)}
+.card.dashed{border:2px dashed var(--ink);background:transparent}
+.status{display:inline-flex;align-items:center;gap:8px;font:600 12.5px/1 var(--mono);letter-spacing:.03em;padding:7px 11px;border-radius:999px;background:var(--ink);color:var(--paper)}
+.status.plan-s{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.card h3{font:600 28px/1.1 var(--serif);letter-spacing:-.02em;margin:18px 0 10px}
+.card p{margin:0;color:var(--ink-2)}
+
+/* final */
+.final{padding:96px 0 84px;text-align:left}
+.final h2{font-size:clamp(40px,10vw,92px);max-width:11em}
+.final p{color:#cfcbbd;font-size:19px;margin:22px 0 0;max-width:30em}
+.stores{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.store{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 20px;border-radius:14px;border:1.5px solid #4a483f;color:var(--paper);text-decoration:none;font:600 16px/1 var(--sans);background:#1d1c18;transition:border-color .15s,background .15s}
+.store:hover{border-color:var(--paper);background:#26251f}
+.store svg{width:22px;height:22px}
+.final .btn-primary{margin-top:38px}
+footer{background:var(--ink);color:#a8a496;border-top:1px solid #2f2e28;padding:28px 0 40px;font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 30px;justify-content:space-between}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+
+@media (min-width:720px){
+  :root{--pad:32px}
+  .nav-links{display:flex}
+  .plat{grid-template-columns:repeat(3,1fr)}
+  .tile{flex-direction:column;align-items:flex-start;gap:30px;padding:30px}
+  .plans{grid-template-columns:1fr 1fr}
+  .honest{grid-template-columns:1fr 1fr}
+  .ledger li{grid-template-columns:1.25fr 1fr;gap:40px;padding:30px 0}
+}
+@media (min-width:1000px){
+  :root{--pad:48px}
+  .hero{padding:64px 0 110px}
+  .hero-grid{grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+  .split{grid-template-columns:1fr 1fr;gap:96px}
+  .sec{padding:128px 0}
+  .final{padding:140px 0 120px}
+}
+@media (max-width:420px){
+  .brand{font-size:20px}
+  .btn-sm{padding:0 15px}
+  .pane{padding:15px}
+  .cta-row .btn{width:100%}
+  .cta-note{max-width:none}
+  .pane-head .chip{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .js .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Cipherline, home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#121210"/><circle cx="16" cy="16" r="7" fill="none" stroke="#f2efe7" stroke-width="2.6" stroke-dasharray="34 10" transform="rotate(35 16 16)"/><rect x="3.5" y="14.7" width="25" height="2.6" fill="#c8321a"/></svg>
+      Cipherline
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#keeps">What we keep</a>
+      <a href="#timer">Disappearing</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#trust">Trust</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#get">Get the app</a>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><i></i>Private messaging for journalists and activists</span>
+      <h1>Say it to them. <em>Not to us.</em></h1>
+      <p class="lede">Cipherline is an end-to-end encrypted messaging app. Messages are encrypted on your device, and the service cannot read them.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#get">Get the app
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 17h12"/></svg>
+        </a>
+        <span class="cta-note">iPhone, Android and desktop. Free for individuals.</span>
+      </div>
+    </div>
+
+    <div class="demo rv" aria-labelledby="demo-title">
+      <span class="demo-tag">Example, not real encryption</span>
+      <h2 id="demo-title" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">What the device sees and what the service sees</h2>
+      <div class="pane pane-device">
+        <div class="pane-head"><b>On your device</b><span class="chip">readable</span></div>
+        <label class="field" for="plain">Type a message</label>
+        <textarea id="plain" maxlength="240" spellcheck="false">Meet at the usual place. Bring nothing.</textarea>
+      </div>
+      <div class="wire" aria-hidden="true">
+        <svg viewBox="0 0 16 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 1v26M3 22l5 5 5-5"/></svg>
+        <span>Encrypted before it leaves</span>
+      </div>
+      <div class="pane pane-server">
+        <div class="pane-head"><b>What the service handles</b><span class="chip">unreadable</span></div>
+        <p class="cipher" id="cipher" aria-live="off"></p>
+        <dl class="server-facts">
+          <div><dt>Can the service read it?</dt><dd>No</dd></div>
+          <div><dt>Message content kept</dt><dd><span class="bar" aria-hidden="true"></span><span class="sr">None</span></dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="keeps" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="kicker">What the servers hold</span>
+      <h2>There is very little to hand over.</h2>
+      <p>Cipherline keeps no message content and no contact lists on its servers. What was never stored cannot be read, leaked or requested.</p>
+    </div>
+    <ul class="ledger">
+      <li>
+        <div class="what">Message content<span class="detail">Encrypted on the device. The service cannot read it.</span></div>
+        <div class="verdict"><span class="redact" aria-hidden="true"></span><strong>Not kept</strong></div>
+      </li>
+      <li>
+        <div class="what">Contact lists<span class="detail">Who you talk to stays with you, not on a server.</span></div>
+        <div class="verdict"><span class="redact" aria-hidden="true"></span><strong>Not kept</strong></div>
+      </li>
+      <li>
+        <div class="what">Readable messages<span class="detail">There is no plaintext on our side to produce.</span></div>
+        <div class="verdict"><span class="redact" aria-hidden="true"></span><strong>Not available</strong></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec dark" id="timer">
+  <div class="wrap split">
+    <div>
+      <div class="sec-head" style="margin-bottom:0">
+        <span class="kicker">Disappearing messages</span>
+        <h2>You decide how long it lasts.</h2>
+        <p>Messages can disappear after a time the sender chooses. Say what needs saying, then let it go.</p>
+      </div>
+      <p class="note">Try it. The timers here are short demo values so you can watch one finish. In the app, the sender sets the time.</p>
+    </div>
+
+    <div class="phone rv">
+      <div class="screen">
+        <div class="screen-top"><span>Example chat</span><small>demo</small></div>
+        <div class="thread" id="thread" aria-live="polite">
+          <div class="msg in">Are we still on for tonight?</div>
+        </div>
+        <form class="composer" id="timerForm">
+          <fieldset class="timers">
+            <legend>Disappear after (demo)</legend>
+            <label><input type="radio" name="t" value="3" checked><span>3 sec</span></label>
+            <label><input type="radio" name="t" value="6"><span>6 sec</span></label>
+            <label><input type="radio" name="t" value="10"><span>10 sec</span></label>
+          </fieldset>
+          <button class="send" type="submit" id="sendBtn">Send “Yes. Same place.”</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="devices">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="kicker">Where it works</span>
+      <h2>On the phone in your pocket and the laptop on your desk.</h2>
+    </div>
+    <div class="plat">
+      <div class="tile rv">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="5" width="20" height="38" rx="5"/><path d="M21 38h6"/></svg>
+        <div><h3>iPhone</h3><p>Message from your phone.</p></div>
+      </div>
+      <div class="tile rv">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="5" width="20" height="38" rx="3"/><path d="M21 38h6M20 10h8"/></svg>
+        <div><h3>Android</h3><p>Message from your phone.</p></div>
+      </div>
+      <div class="tile rv">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="8" width="38" height="25" rx="3"/><path d="M16 40h16M24 33v7"/></svg>
+        <div><h3>Desktop</h3><p>Message from your computer.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="pricing" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="kicker">Pricing</span>
+      <h2>Free for you. Paid only for teams.</h2>
+    </div>
+    <div class="plans">
+      <article class="plan rv">
+        <h3>INDIVIDUALS</h3>
+        <div class="price">Free</div>
+        <ul>
+          <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10.5 4 4 8-9"/></svg>End-to-end encrypted messages</li>
+          <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10.5 4 4 8-9"/></svg>Disappearing messages</li>
+          <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10.5 4 4 8-9"/></svg>iPhone, Android and desktop</li>
+        </ul>
+        <div class="foot"><a href="#get">Get the app</a></div>
+      </article>
+      <article class="plan team rv">
+        <h3>TEAM</h3>
+        <div class="price">£5<small>per person per month</small></div>
+        <ul>
+          <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10.5 4 4 8-9"/></svg>Everything in the free plan</li>
+          <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10.5 4 4 8-9"/></svg>Shared channels</li>
+          <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10.5 4 4 8-9"/></svg>Admin console</li>
+        </ul>
+        <div class="foot"><a href="#get">Get the app</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="trust">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="kicker">Trust, stated plainly</span>
+      <h2>Check our work. We have not been audited yet.</h2>
+      <p>You should not have to take our word for it. The protocol is open, so others can read how it works. Independent security audits are planned, and none have been published yet.</p>
+    </div>
+    <div class="honest">
+      <article class="card rv">
+        <span class="status">Open</span>
+        <h3>Open protocol</h3>
+        <p>How Cipherline encrypts and delivers messages is open for anyone to inspect.</p>
+      </article>
+      <article class="card dashed rv">
+        <span class="status plan-s">Planned</span>
+        <h3>Independent audits</h3>
+        <p>Planned, not yet done. No audit results have been published, and we will not claim one before it exists.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec dark final" id="get">
+  <div class="wrap">
+    <span class="kicker">Get started</span>
+    <h2>Start a conversation only you can read.</h2>
+    <p>Free for individuals. Available for iPhone, Android and desktop.</p>
+    <a class="btn btn-primary" href="#get">Get the app
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 17h12"/></svg>
+    </a>
+    <div class="stores" role="group" aria-label="Choose your device">
+      <a class="store" href="#get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M11 18.5h2"/></svg>iPhone</a>
+      <a class="store" href="#get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="1.6"/><path d="M11 18.5h2"/></svg>Android</a>
+      <a class="store" href="#get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.8"/><path d="M8 20h8M12 16v4"/></svg>Desktop</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Cipherline. End-to-end encrypted messaging.</span>
+    <span>The readouts on this page are examples.</span>
+  </div>
+</footer>
+
+<style>.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+
+  /* nav shadow line */
+  var nav=document.getElementById('nav');
+  function onScroll(){nav.classList.toggle('scrolled',window.scrollY>8)}
+  onScroll();addEventListener('scroll',onScroll,{passive:true});
+
+  /* reveal on scroll */
+  var targets=document.querySelectorAll('.rv,.ledger li');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+    },{threshold:.15,rootMargin:'0px 0px -6% 0px'});
+    targets.forEach(function(t){io.observe(t)});
+  }else{targets.forEach(function(t){t.classList.add('in')})}
+  /* failsafe: never leave content hidden */
+  setTimeout(function(){targets.forEach(function(t){t.classList.add('in')})},2500);
+
+  /* illustrative scramble: NOT real encryption */
+  var ALPHA='abcdefghjkmnpqrstuvwxyz23456789';
+  function h(str){var x=2166136261;for(var i=0;i<str.length;i++){x^=str.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0}
+  function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  function scramble(s){
+    var out='',n=Math.max(s.length,0)+16;
+    for(var i=0;i<n;i++){
+      var r=rng(h(s.slice(0,Math.min(i+1,s.length))+'|'+i))();
+      out+=ALPHA[Math.floor(r*ALPHA.length)];
+    }
+    return out;
+  }
+  var plain=document.getElementById('plain'),cipher=document.getElementById('cipher');
+  function render(){
+    var c=scramble(plain.value),html='';
+    for(var i=0;i<c.length;i+=4){html+='<span class="g">'+c.slice(i,i+4)+'</span>'}
+    cipher.innerHTML=html;
+  }
+  plain.addEventListener('input',render);render();
+
+  /* disappearing demo */
+  var form=document.getElementById('timerForm'),thread=document.getElementById('thread'),btn=document.getElementById('sendBtn');
+  var label='Send “Yes. Same place.”',timer=null;
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(timer)return;
+    var secs=+form.t.value;
+    var old=thread.querySelectorAll('.msg.out,.gone');old.forEach(function(n){n.remove()});
+    var m=document.createElement('div');m.className='msg out';
+    m.style.setProperty('--dur',secs+'s');
+    m.innerHTML='Yes. Same place.<span class="life"></span>';
+    thread.appendChild(m);
+    void m.offsetWidth;m.classList.add('going');
+    btn.disabled=true;btn.textContent='Disappears in '+secs+' sec';
+    var left=secs;
+    var tick=setInterval(function(){left--;if(left>0)btn.textContent='Disappears in '+left+' sec'},1000);
+    timer=setTimeout(function(){
+      clearInterval(tick);
+      m.classList.add('gone-anim');
+      setTimeout(function(){
+        m.remove();
+        var g=document.createElement('div');g.className='gone';g.textContent='The message has disappeared.';
+        thread.appendChild(g);
+        btn.disabled=false;btn.textContent='Send it again';timer=null;
+      },520);
+    },secs*1000);
+  });
+})();
+</script>
+</body>
+</html>
