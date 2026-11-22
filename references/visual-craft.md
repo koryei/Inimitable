@@ -26,6 +26,12 @@ Avoid the generic: globes, abstract blobs, gradient orbs, floating cubes, circui
 | **Grain and light** | Fine noise to take flatness off a large field, soft light from one direction | any large colour area | `assets/recipes/grain.css` |
 | **The product itself** | A true fragment of the real interface with plausible data, or the real output the product makes | software, tools, anything that produces a result | build in HTML with the project's components |
 
+| **Dotted and dithered pictures** | Any image or drawing processed into dots, halftone, hex cells, dither or ASCII | the subject of technical, AI, data and hardware products | `scripts/dotify.mjs`, `assets/recipes/dither.mjs`, `fields.mjs` |
+| **HUD annotation** | Callouts, corner brackets, crosshairs, rulers, tags, readout panels | making a hero object look measured | `assets/recipes/hud.mjs`, `instrument.css` |
+| **Isometric line art** | Boxes, plates, exploded stacks and grids as calm line illustration | engineering, hardware, B2B explanation | `assets/recipes/iso.mjs` |
+
+For whole committed looks that combine these (the instrument look, blueprint, horizon), see `directions.md`.
+
 A sixth, quieter option is **type as the visual**: a headline or a single number set at a scale only this product can justify.
 
 ## Using the recipes
