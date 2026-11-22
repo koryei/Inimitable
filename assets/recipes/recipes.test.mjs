@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { contourPaths, contourSvg, smoothPath, stitch } from './contours.mjs';
 import { dotField, fadeRight } from './dots.mjs';
 import { rng, valueNoise } from './noise.mjs';
-import { blobPath, stoneStack } from './shapes.mjs';
+import { blobPath, speckles, stoneStack } from './shapes.mjs';
 
 test('the same seed gives the same noise and a different seed differs', () => {
   assert.equal(valueNoise(5)(3.2, 4.1), valueNoise(5)(3.2, 4.1));
@@ -88,4 +88,16 @@ test('a vessel silhouette follows the profile and stays inside its box', () => {
   assert.ok(Math.min(...xs) >= 0 && Math.max(...xs) <= view[1], `${Math.min(...xs)} to ${Math.max(...xs)} in ${view[1]}`);
   assert.ok(Math.max(...xs) - Math.min(...xs) > 150, 'the widest point is about the full width');
   assert.ok(new Set(xs.map((x) => x.toFixed(0))).size > 20, 'the sides curve, they are not straight');
+});
+
+test('speckles stay inside the ellipse and are deterministic', () => {
+  const a = speckles({ cx: 0, cy: 0, rx: 40, ry: 12, count: 20, seed: 4 });
+  assert.deepEqual(a, speckles({ cx: 0, cy: 0, rx: 40, ry: 12, count: 20, seed: 4 }));
+  for (const s of a) assert.ok((s.x / 40) ** 2 + (s.y / 12) ** 2 <= 1, JSON.stringify(s));
+});
+
+test('a flat base squashes the underside', () => {
+  const round = blobPath({ rx: 40, ry: 20, seed: 2, wobble: 0 });
+  const flat = blobPath({ rx: 40, ry: 20, seed: 2, wobble: 0, flatBase: 0.5 });
+  assert.notEqual(round, flat);
 });

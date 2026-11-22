@@ -9,12 +9,14 @@
 import { rng } from './noise.mjs';
 
 // A closed, smooth path through `points` random-radius points around an ellipse (Catmull-Rom to Bezier).
-export function blobPath({ cx = 0, cy = 0, rx = 50, ry = 30, points = 9, wobble = 0.12, seed = 1 } = {}) {
+export function blobPath({ cx = 0, cy = 0, rx = 50, ry = 30, points = 9, wobble = 0.12, seed = 1, flatBase = 1 } = {}) {
   const rand = rng(seed);
   const pts = Array.from({ length: points }, (_, i) => {
     const a = (i / points) * Math.PI * 2;
     const k = 1 + (rand() - 0.5) * 2 * wobble;
-    return [cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k];
+    const sin = Math.sin(a);
+    // flatBase below 1 squashes the lower half, so a stone sits on a flatter underside
+    return [cx + Math.cos(a) * rx * k, cy + sin * ry * k * (sin > 0 ? flatBase : 1)];
   });
   const n = pts.length;
   const p = (i) => pts[(i + n) % n];
@@ -43,7 +45,18 @@ export function stoneStack({ count = 5, width = 260, seed = 3, centerX = 0, base
     const h = w * (0.26 + rand() * 0.06);
     const x = centerX + (rand() - 0.5) * width * 0.06;
     y -= h * 0.82;
-    stones.push({ d: blobPath({ cx: x, cy: y, rx: w / 2, ry: h / 2, points: 10, wobble: 0.07, seed: seed * 31 + i }), cx: x, cy: y, w, h });
+    stones.push({ d: blobPath({ cx: x, cy: y, rx: w / 2, ry: h / 2, points: 10, wobble: 0.07, seed: seed * 31 + i, flatBase: 0.62 }), cx: x, cy: y, w, h });
   }
   return stones;
+}
+
+// Small speckles (lichen, grit, flecks) scattered inside a stone's ellipse. Returns [{ x, y, r }].
+// Draw them as tiny circles in a slightly darker or lighter tone of the stone, at 20 to 45% opacity.
+export function speckles({ cx, cy, rx, ry, count = 12, seed = 1, maxR = 2.2 }) {
+  const rand = rng(seed);
+  return Array.from({ length: count }, () => {
+    const a = rand() * Math.PI * 2;
+    const d = Math.sqrt(rand()) * 0.78;
+    return { x: cx + Math.cos(a) * rx * d, y: cy + Math.sin(a) * ry * d, r: 0.5 + rand() * maxR };
+  });
 }
