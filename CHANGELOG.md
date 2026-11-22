@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0
+
+- Published to the skills directory: `npx skills add koryei/Inimitable` works, and the skill is listed on skills.sh. The `SKILL.md` description is now a YAML block scalar, because the skills CLI parses frontmatter strictly and rejected the old one. A test keeps it parseable.
+- A website at koryei.github.io/Inimitable, built with the skill's own instrument kit and recipes and published only after it passes the skill's own checks (`site/`, `.github/workflows/pages.yml`).
+- `dotify.mjs --invert` now draws the light parts of the picture; by default the dark parts become dots (it was effectively a no-op before).
+- `check.mjs` hides text without transitions while sampling backgrounds, and skips pixel sampling on a page that scrolls sideways instead of adding false contrast flags.
+
 ## 0.4.1
 
 From round 3 (`evals/results/2026-11-22-r3.md`).
