@@ -36,6 +36,23 @@ Building well is mostly choosing well. This file says where good parts and good 
 | A landing-page effect | Aceternity or ObsidianUI, for the mechanism only, and only in Persuade or Experience modes |
 | Figma-first kits or templates | HorizonX, only if the person already has it |
 
+## Grounds, textures and material
+
+| Library | What it is | Best for | Take it with | Licence and cost |
+| --- | --- | --- | --- | --- |
+| **[Grainient](https://grainient.supply/collections)** | A large library of grain and mesh gradient backgrounds, organised by family: noisy and grainy, smooth blends, dither, hero, light and dark, glass and metal | The ground of a hero or showpiece page, and the study of how a material is lit | Study the families and rebuild the mechanism in CSS (`materials.md`); download a texture only when the project can carry a bitmap | The site mixes free and paid collections: check the collection's page before shipping a file, and never subscribe on the person's behalf |
+| **[Construct · Material](https://www.tobiadonadon.com/projects/construct/material)** | A free guide to the basics of interface material, done properly | Learning why surfaces need light and texture before you build one | Read it, then build from `materials.md` | Free to read; do not copy its wording |
+
+## How to take from a library
+
+The point of a library is not its look. It is the **mechanism** and the **judgement** behind it. Copying the look is how a page ends up as a collage of other people's decisions.
+
+1. **Name what you are taking.** "The fill sweep from Transitions.dev", "the light logic from Grainient's hero family", "the press weight from Bencho's toggle". If you cannot name it in one line, you are copying.
+2. **Take the mechanism, rebuild the skin.** The mechanism is the timing, the origin, the state model, the light direction. The skin is the colour, the radius, the font, the exact gradient. The skin is always the project's.
+3. **Take one thing per library.** A page that borrows a button from one, a card from another and a ground from a third has three voices.
+4. **Check the licence before the file, not after.** Free to use is not the same as free to redistribute. Read the collection or component page.
+5. **Say what you took, in the report.** Library, piece, licence, credit.
+
 ## Where to look for how real products do it
 
 | Source | What it is | Use it for | Notes |
@@ -50,4 +67,6 @@ Building well is mostly choosing well. This file says where good parts and good 
 - **Bencho:** the difference between a control and a *good* control is a few specific behaviours: weight, anticipation, a reply to every press. See `components.md`.
 - **BoardUI and Astryx:** a system is tokens plus components that agree with each other, with every state designed. See `components.md`.
 - **Aceternity and ObsidianUI:** effects sell a landing page and wreck a working screen. Use them where the mode allows.
+- **Grainient:** a ground is light, not colour. One temperature family, one counterpoint, grain on top, and it reads as a material. See `materials.md`.
+- **Construct:** the basics done properly beat the advanced done carelessly. Material, spacing and type compound; effects do not.
 - **Mobbin:** look at five real apps before inventing a flow.
