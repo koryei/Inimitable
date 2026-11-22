@@ -5,7 +5,9 @@
 //                           [--fill '#e8e6e1'] [--bg '#0f0f10'] [--invert] [--contrast 1.2] [--gamma 1]
 //                           [--threshold 0] [--out result.svg]
 //
-//   input    .png (read directly), or .svg .html .jpg .webp (rendered in Chrome first)
+//   input    .png (read directly), or .svg .html .jpg .webp (rendered in Chrome first). To dot a headline,
+//            a message or a logo, put it in a small HTML file and pass that: it is rendered, then dotted.
+//            Leave a margin of the background colour around the subject if you want exact framing.
 //   --dots   how many dots across (default 140); --cell is each dot's size in the output (default 6)
 //   --invert flips light and dark: use it when the subject should be light dots on a dark page
 //   --no-trim keeps the empty space around the subject (by default it is cropped away)
@@ -14,8 +16,9 @@
 // This is how a subject becomes a "computational" hero object: one picture, one texture, one or two colours.
 // Use only images you have the right to use.
 
-import { readFileSync, writeFileSync } from 'node:fs';
-import { basename, extname, resolve } from 'node:path';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, extname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { asciiLines, contentBox, crop, downsample, ditherSvg, fieldFromImage, floydSteinberg, halftoneSvg, orderedDither, stipple } from '../assets/recipes/dither.mjs';
 import { isMain, parseArgs } from './lib/args.mjs';
@@ -24,22 +27,28 @@ import { decodePng } from './lib/png.mjs';
 
 async function render(input, width) {
   const ext = extname(input).toLowerCase();
+  let wrapperDir;
   let url = pathToFileURL(resolve(input)).href;
-  if (['.jpg', '.jpeg', '.webp', '.gif', '.avif'].includes(ext)) {
-    // Wrap a photo in a page so it fills the width with no margin.
+  if (['.jpg', '.jpeg', '.webp', '.gif', '.avif', '.svg'].includes(ext)) {
+    // Wrap a picture or a bare SVG in a page so it fills the width with no margin.
+    // The wrapper must be a real file next to nothing else: a data: page cannot open file:// images.
+    wrapperDir = mkdtempSync(join(tmpdir(), 'inimitable-dotify-'));
     const html = `<!doctype html><body style="margin:0;background:#fff"><img src="${url}" style="display:block;width:100%">`;
-    url = `data:text/html;base64,${Buffer.from(html).toString('base64')}`;
+    const wrapper = join(wrapperDir, 'wrap.html');
+    writeFileSync(wrapper, html);
+    url = pathToFileURL(wrapper).href;
   }
   const chrome = await launch();
   try {
-    const page = await openPage(chrome.browser, { width, height: 800, deviceScaleFactor: 1 });
+    const page = await openPage(chrome.browser, { width, height: 200, deviceScaleFactor: 1 });
     await page.goto(url, 300);
-    const height = Math.min(4000, Math.max(100, Math.ceil(await page.evaluate('Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)'))));
+    const height = Math.min(4000, Math.max(50, Math.ceil(await page.evaluate('Math.max(document.documentElement.scrollHeight, document.body ? document.body.scrollHeight : 0)'))));
     await page.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });
     await new Promise((r) => setTimeout(r, 200));
     return await page.screenshot();
   } finally {
     await chrome.close();
+    if (wrapperDir) rmSync(wrapperDir, { recursive: true, force: true });
   }
 }
 
