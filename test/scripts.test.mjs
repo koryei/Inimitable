@@ -13,7 +13,7 @@ const skip = findChrome() ? false : 'no Chrome installed';
 test('signs finds the tells planted in the fixture', { skip }, async () => {
   const found = await scan(fixture);
   const tells = new Set(found.map((f) => f.tell));
-  for (const expected of ['Gradient text', 'Hue-to-hue gradient', 'Coloured glow', 'Emoji in the interface', 'Hype word', 'Unverified claim', 'Heavy heading', 'Looping animation', 'transition: all', 'Exclamation mark']) {
+  for (const expected of ['Gradient text', 'Hue-to-hue gradient', 'Coloured glow', 'Emoji in the interface', 'Hype word', 'Unverified claim', 'Heavy heading', 'Looping animation', 'transition: all', 'Exclamation mark', 'Vague button label', 'Vague error message']) {
     assert.ok(tells.has(expected), `missing: ${expected}`);
   }
 });
@@ -31,6 +31,8 @@ test('check finds low contrast, a small target and sideways scroll on a phone', 
   assert.ok(kinds.has('contrast'));
   assert.ok(kinds.has('touch target'));
   assert.ok(kinds.has('layout'));
+  assert.ok(kinds.has('focus'), 'a button with outline:none and no replacement');
+  assert.ok(kinds.has('layout shift'), 'an image with no reserved size');
 });
 
 const clean = fileURLToPath(new URL('./fixtures/clean.html', import.meta.url));
