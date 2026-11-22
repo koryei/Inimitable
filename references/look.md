@@ -32,6 +32,17 @@ A screen has more than one picture. Look at each state it can be in, not only th
 
 A single page that shows several states for review (sign-up, error, first step) needs a **preview switcher**: a small control kept clear of the real interface (a strip at the top or a dock at a corner that does not overlap the form at any width), labelled as a preview, and easy to delete. Never let it cover content, and say in the report that it is scaffolding.
 
+## Hover, with your eyes
+
+A screenshot of the resting page cannot tell you whether the page feels alive. Run `scripts/craft.mjs <url> --shots shots/hover` and look at the pairs it writes: every control, at rest and under the pointer. Then judge them, because the script only proves something changed:
+
+- Does the change suit the control? A link takes the accent and thickens its rule; a button fills; a card lifts a little. A control that changes colour for no reason reads as a bug.
+- Is it quick enough to feel like a reply? Around 150 to 250 ms. Slower feels sticky, instant feels dead.
+- Does anything jump? Text that reflows, a box that grows, a neighbour that shifts. Hover must not move the layout.
+- Is it too loud? A whole row turning red on hover is a shout. If five of them are on screen, it is five shouts.
+
+If a control has no hover state, that is a defect, not a preference: the page stops feeling like software.
+
 ## Rounds
 
 Look, fix, look again until nothing is wrong, **at most three rounds** of the whole-screen look. This is separate from the quick render-and-check after each section in the Build step, which is free: build one section, glance at it, move on. Rounds count only the full looks at the finished screen. After the third, show the screen and list honestly what is left over. Do not pretend a known flaw is fine, and do not keep polishing past three rounds: the person's taste feedback is worth more than a fourth pass.
