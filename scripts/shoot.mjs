@@ -6,7 +6,7 @@
 //
 //   --wait ms     settle time after load, for entrance animations and drawn charts (default 400)
 //   --eval js     run this JavaScript in the page after load and before the shot, to set a state
-//                 (open a menu, click a tab, add ?state= by editing the page's own hash)
+//                 (click a tab, open a menu). It may be async: --eval "(async () => { ... })()"
 //   --slices      instead of one image per width, save one image per screenful while scrolling,
 //                 so scroll-triggered content shows and tall pages stay legible
 //   --full        one tall image of the whole page (very tall pages are capped at 16,000 px)
