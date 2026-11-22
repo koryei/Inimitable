@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- `references/feels-cheap.md`: a six-area checklist for what makes an app feel cheap (guidance and trust, feedback and errors, loading, data and retention, consistency, permissions and navigation).
+- `references/components.md`: what a finished component does, state by state, for inputs, overlays, navigation, data display, feedback, chat and settings.
+- `references/motion.md`: motion recipes with origin, timing, tokens and reduced-motion rules.
+- `references/libraries.md`: a catalogue of component and motion sources and of places to study real products, with the rules for taking from them.
+- `signs.mjs` now finds vague button labels and vague error messages. `check.mjs` now finds controls with no visible focus style and images that reserve no space.
+- The Build and Look steps load the new references.
+
 ## 0.1.0
 
 First release.
