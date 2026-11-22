@@ -29,7 +29,7 @@ npm test                      # unit tests; browser tests are skipped when no Ch
 ./install.sh --check            # Node, Chrome, Python
 ```
 
-Scripts must stay dependency-free and work on Node 22+. Keep `SKILL.md` short: detail belongs in `references/`.
+Shell snippets must work on macOS and Linux (`sed -i ''` differs between them: prefer a small Node or Python script). Scripts must stay dependency-free and work on Node 22+. Keep `SKILL.md` short: detail belongs in `references/`.
 
 ## Licence
 
