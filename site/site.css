@@ -341,7 +341,10 @@ b, strong { font-weight: 500; }
 .frame-url { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 0.75rem/1 var(--mono); color: var(--ink-3); }
 .frame-tag { flex: none; margin-left: auto; white-space: nowrap; font: 400 0.75rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 
-.compare { position: relative; aspect-ratio: 1440 / 900; overflow: hidden; --pos: 50%; touch-action: pan-y; cursor: ew-resize; }
+/* The dashboard screenshot is 1440x900 and its invoice table runs past the fold, so a 1440x900 frame cuts
+   the fourth row through the middle of its text. The frame is 24 px shorter: the crop lands in the gap
+   between two rows, which reads as the screen continuing rather than as a mistake. */
+.compare { position: relative; aspect-ratio: 1440 / 876; overflow: hidden; --pos: 50%; touch-action: pan-y; cursor: ew-resize; }
 .compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 .compare .c-before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
 .c-line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 1px; background: var(--accent); pointer-events: none; }
