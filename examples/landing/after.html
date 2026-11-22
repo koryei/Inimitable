@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledgerly: invoices that get paid</title>
+<meta name="description" content="Send an invoice, and Ledgerly follows up and matches the payment to your bank feed.">
+<style>
+  /* Direction: calm and exact, like a good ledger. Never glowing or decorated.
+     Warm ramp (paper), one accent (ledger green) used for "paid" and the primary action. */
+  :root {
+    --page: #f7f4ee; --card: #fdfbf7; --raised: #efe9df;
+    --ink: #1f1b16; --ink-2: #5e554a; --ink-3: #6f665b;
+    --line: rgba(31, 27, 22, 0.1);
+    --accent: #2c6b4a; --on-accent: #fdfbf7;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 400 16px/1.5 var(--sans); }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { display: inline-flex; align-items: center; height: 44px; font: 500 20px/1 var(--sans); text-decoration: none; }
+  .links { display: flex; align-items: center; gap: 8px; }
+  .links a { display: inline-flex; align-items: center; height: 44px; padding: 0 12px; font-size: 14px; color: var(--ink-2); text-decoration: none; transition: color 160ms var(--ease); }
+  .links a:hover { color: var(--ink); }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 64px; padding: 96px 0 112px; }
+  h1 { margin: 0 0 24px; font: 400 56px/1.05 var(--serif); letter-spacing: -0.03em; max-width: 12ch; }
+  .sub { margin: 0 0 32px; max-width: 32rem; color: var(--ink-2); font-size: 20px; line-height: 1.4; }
+  .actions { display: flex; align-items: center; gap: 24px; }
+  .button { display: inline-flex; align-items: center; height: 48px; padding: 0 24px; border-radius: 10px; background: var(--accent); color: var(--on-accent); font-weight: 500; text-decoration: none; transition: background-color 160ms var(--ease), transform 120ms var(--ease); }
+  .button:hover { background: #245a3e; }
+  .button:active { transform: scale(0.98); }
+  .text-link { display: inline-flex; align-items: center; height: 44px; color: var(--ink-2); font-size: 16px; }
+
+  /* The star: the invoice itself, with real-looking content. */
+  .invoice { background: var(--card); border-radius: 16px; padding: 32px; box-shadow: 0 8px 24px rgba(31, 27, 22, 0.06); border: 1px solid var(--line); }
+  .invoice header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
+  .invoice h2 { margin: 0; font-size: 16px; font-weight: 500; }
+  .meta { color: var(--ink-3); font-size: 13px; }
+  .row { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .row span:last-child { color: var(--ink-2); }
+  .total { display: flex; align-items: baseline; justify-content: space-between; margin-top: 16px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .total strong { font: 500 28px/1 var(--sans); font-variant-numeric: tabular-nums; }
+  .status { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; padding: 4px 12px; border-radius: 6px; background: var(--raised); font-size: 13px; color: var(--ink); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+  .points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; padding: 80px 0 96px; border-top: 1px solid var(--line); }
+  .points h3 { margin: 0 0 8px; font-size: 16px; font-weight: 500; }
+  .points p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 20px; max-width: 24rem; }
+  footer { padding: 32px 0 48px; color: var(--ink-3); font-size: 13px; }
+
+  @media (max-width: 860px) {
+    .wrap { padding: 0 20px; }
+    .hero { grid-template-columns: 1fr; gap: 48px; padding: 48px 0 64px; }
+    h1 { font-size: 40px; max-width: none; }
+    .sub { font-size: 18px; }
+    .points { grid-template-columns: 1fr; gap: 32px; padding: 48px 0; }
+    .links a:not(.keep) { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <nav aria-label="Main">
+      <a class="logo" href="#">Ledgerly</a>
+      <div class="links"><a href="#">Product</a><a href="#">Pricing</a><a href="#">Docs</a><a href="#" class="keep">Sign in</a></div>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <div>
+          <h1>Invoices that get paid on time</h1>
+          <p class="sub">Send an invoice in minutes. Ledgerly follows up for you and matches each payment to your bank feed.</p>
+          <div class="actions"><a class="button" href="#">Start free</a><a class="text-link" href="#">See how it works</a></div>
+        </div>
+        <article class="invoice" aria-label="Example invoice">
+          <header><h2>Invoice 0042</h2><span class="meta">Harbour &amp; Finch Studio</span></header>
+          <div class="row"><span>Brand identity, phase 2</span><span>£1,800.00</span></div>
+          <div class="row"><span>Illustration set (6)</span><span>£600.00</span></div>
+          <div class="row"><span>Expenses</span><span>£80.00</span></div>
+          <div class="total"><span class="meta">Total</span><strong>£2,480.00</strong></div>
+          <span class="status"><span class="dot" aria-hidden="true"></span>Paid 14 November, matched to your bank feed</span>
+        </article>
+      </section>
+
+      <section class="points" aria-label="What it does">
+        <div><h3>Reminders on your schedule</h3><p>Choose when a nudge goes out and what it says. Ledgerly stops the moment the invoice is paid.</p></div>
+        <div><h3>One link to pay</h3><p>Every invoice has a single page your client can pay from, by card or bank transfer.</p></div>
+        <div><h3>Payments match themselves</h3><p>Connect your bank and each payment is attached to the right invoice, so your books stay in step.</p></div>
+      </section>
+    </main>
+    <footer>Ledgerly</footer>
+  </div>
+</body>
+</html>
