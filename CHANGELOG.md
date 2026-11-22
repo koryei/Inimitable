@@ -11,11 +11,12 @@ The skill taught rules but not reasons, and the site was clean and static. Both 
 - `references/motion.md`: landing and showpiece choreography, scroll reveals, marquee, parallax, and the one moment a page is allowed.
 - `references/libraries.md`: how to take from a library (the mechanism, not the file), with Grainient and Construct as worked examples.
 - `references/anti-slop.md`: licensed devices (a hue gradient, a radial wash, glass, parallax) and a hover-and-press section.
-- `scripts/craft.mjs`: hovers every control with a real pointer and diffs the computed style, so a control that ignores the pointer fails rather than being missed. Also flags transitions on layout properties and motion that survives the reduced-motion setting. `--shots` writes a rest and hover crop per control.
+- `scripts/craft.mjs`: hovers every control with a real pointer and diffs the computed style, so a control that ignores the pointer fails rather than being missed. It also diffs the pixels, so a hover that changes a style nobody can see fails too. Also flags transitions on layout properties and motion that survives the reduced-motion setting. `--shots` writes a rest and hover crop per control.
 - `scripts/lib/backdrop.mjs`: an icon beside the text is no longer sampled as the text's backdrop.
 - `scripts/lib/chrome.mjs`: `screenshot()` honours a clip region.
 - `scripts/lib/probe.mjs`: italic emphasis is only a tell below 24px, and `[data-loop]` licenses an infinite animation.
 - The site is rebuilt as an editorial page: a lit ground, Instrument Serif for the statements, one accent, a choreographed entrance, scroll reveals, and a designed hover and press state on every control. It is published only after passing `signs`, `check` and `craft`.
+- The site counts itself and prints the receipt under the hero: font sizes, text colours, radii and spacing values, measured with the same probe `drift.mjs` runs, so the page and the tool cannot disagree. The numbers are authored in the markup so they are right without JavaScript, and a test fails if either the markup or the probe drifts.
 
 ## 0.5.0
 
