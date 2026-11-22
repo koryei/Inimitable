@@ -123,12 +123,14 @@ references/
   house-rules.md         default numbers for projects with no rules of their own
   anti-slop.md           the tells, each with its fix
   principles.md          why design works: perception, grouping, type, colour, feedback, trust
+  visual-craft.md        finding and drawing the one memorable moment in code
   feels-cheap.md         trust, feedback, loading, retention, consistency, permissions
   components.md          what a finished component does, state by state
   motion.md              recipes for menus, modals, toasts, tabs and state changes
   libraries.md           where to take parts from, and the rules for taking them
   layers/                spacing, colour, icons, copy, type, layout, details, motion
   surfaces/              web app, landing, reading, showpiece, terminal, iOS, Android
+assets/recipes/          contour lines, stones, dot fields and grain, as tested generators
 scripts/                 the measuring tools above, plus score.mjs
 evals/                   briefs, scoring and the protocol used to test and improve the skill
 examples/                real before and after runs
