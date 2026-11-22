@@ -84,7 +84,7 @@ return out;
 })()`;
 
 // Machine-made tells found in the rendered page. Returns [{ tell, where, detail }].
-import { CLAIM_PATTERNS, GREETING_PATTERN, HYPE_WORDS, PLACEHOLDER_PATTERNS } from './signs-data.mjs';
+import { CLAIM_PATTERNS, GREETING_PATTERN, HYPE_WORDS, PLACEHOLDER_PATTERNS, VAGUE_BUTTON_PATTERN, VAGUE_ERROR_PATTERN } from './signs-data.mjs';
 
 export const SIGNS = `(() => {
 ${HELPERS}
@@ -92,6 +92,8 @@ const HYPE = new RegExp('\\\\b(' + ${JSON.stringify(HYPE_WORDS.join('|'))} + ')'
 const CLAIM = new RegExp(${JSON.stringify(CLAIM_PATTERNS.join('|'))}, 'i');
 const PLACEHOLDER = new RegExp(${JSON.stringify(PLACEHOLDER_PATTERNS.join('|'))}, 'i');
 const GREETING = new RegExp(${JSON.stringify(GREETING_PATTERN)}, 'i');
+const VAGUE_BUTTON = new RegExp(${JSON.stringify(VAGUE_BUTTON_PATTERN)}, 'i');
+const VAGUE_ERROR = new RegExp(${JSON.stringify(VAGUE_ERROR_PATTERN)}, 'i');
 const EMOJI = /\\p{Extended_Pictographic}/u;
 const found = [];
 const add = (tell, el, detail) => found.push({ tell, where: describe(el), detail: String(detail).slice(0, 90) });
@@ -154,6 +156,8 @@ for (const el of document.querySelectorAll('body, body *')) {
     if (CLAIM.test(text)) add('Unverified claim', el, text);
     if (PLACEHOLDER.test(text)) add('Placeholder content', el, text);
     if (heading && GREETING.test(text)) add('Greeting headline', el, text);
+    if ((el.tagName === 'BUTTON' || el.getAttribute('role') === 'button' || el.matches('a.button, a.btn')) && VAGUE_BUTTON.test(text.replace(/[.!]+$/, ''))) add('Vague button label', el, text);
+    if (VAGUE_ERROR.test(text)) add('Vague error message', el, text);
     if ((heading || el.tagName === 'BUTTON' || el.tagName === 'LABEL') && /\\.$/.test(text) && text.split(/\\s+/).length <= 12 && !/\\.\\s+\\S/.test(text)) add('Trailing period on a label', el, text);
     if (/^(new|beta|pro|introducing)\\b/i.test(text.replace(/^[^\\p{L}]+/u, '')) && text.length < 40 && (px(s.borderTopLeftRadius) >= 8 || EMOJI.test(text))) add('Badge above or beside content', el, text);
     if (s.fontStyle === 'italic' && /^(EM|I)$/.test(el.tagName) && !el.closest('blockquote, cite, q')) add('Italic emphasis', el, text);
@@ -191,6 +195,7 @@ function opacityOf(el) {
 const text = [];
 const targets = [];
 const names = [];
+const images = [];
 const interactive = 'a[href], button, input:not([type=hidden]), select, textarea, summary, [role=button], [role=link], [role=tab], [role=switch], [role=checkbox], [tabindex]:not([tabindex="-1"])';
 for (const el of document.querySelectorAll('body, body *')) {
   if (el.closest('script, style, svg') || !visible(el)) continue;
@@ -210,9 +215,21 @@ for (const el of document.querySelectorAll('body, body *')) {
     if (!hasName) names.push({ where: describe(el), problem: 'interactive element has no accessible name' });
   }
   if (el.tagName === 'IMG' && !el.hasAttribute('alt')) names.push({ where: describe(el), problem: 'image has no alt attribute' });
+  if (el.tagName === 'IMG' && !(el.hasAttribute('width') && el.hasAttribute('height')) && (s.aspectRatio === 'auto' || s.aspectRatio.startsWith('auto'))) images.push({ where: describe(el) });
+}
+// Focus: does focusing an interactive element change how it looks?
+const focus = [];
+const ring = (el) => { const s = getComputedStyle(el); return [s.outlineStyle, s.outlineWidth, s.outlineColor, s.boxShadow, s.borderTopColor, s.backgroundColor, s.textDecorationLine].join('|'); };
+for (const el of [...document.querySelectorAll(interactive)].filter((e) => visible(e) && !e.disabled).slice(0, 40)) {
+  const before = ring(el);
+  try { el.focus({ focusVisible: true }); } catch { el.focus(); }
+  const changed = document.activeElement === el && ring(el) !== before;
+  const focused = document.activeElement === el;
+  el.blur();
+  if (focused && !changed) focus.push({ where: describe(el), label: (el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 30) });
 }
 return {
-  text, targets, names,
+  text, targets, names, images, focus,
   lang: !!root.getAttribute('lang'),
   h1: document.querySelectorAll('h1').length,
   viewport: !!document.querySelector('meta[name=viewport]'),

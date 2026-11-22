@@ -28,6 +28,8 @@ export function judge(raw, { width }) {
     }
   }
   for (const n of raw.names) problems.push({ kind: 'name', where: n.where, detail: n.problem });
+  for (const f of raw.focus || []) problems.push({ kind: 'focus', where: f.where, detail: `no visible focus style${f.label ? ` ("${f.label}")` : ''}` });
+  for (const i of raw.images || []) problems.push({ kind: 'layout shift', where: i.where, detail: 'image has no width and height or aspect-ratio, so the page will jump as it loads' });
   if (!raw.lang) problems.push({ kind: 'document', where: 'html', detail: 'no lang attribute' });
   if (!raw.viewport) problems.push({ kind: 'document', where: 'head', detail: 'no viewport meta tag' });
   if (raw.h1 !== 1) problems.push({ kind: 'document', where: 'h1', detail: `${raw.h1} h1 elements (expected 1)` });
