@@ -294,6 +294,9 @@ b, strong { font-weight: 500; }
   gap: 0.75rem;
   max-width: 100%;
   min-width: 0;
+  /* Two cards, two commands of different lengths. Without a floor the one that wraps pushes its Copy
+     button and its description 6px lower than its neighbour, and the pair reads as a mistake. */
+  min-height: 3.75rem;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   background: color-mix(in srgb, var(--surface) 70%, transparent);
   border: 1px solid var(--line);
