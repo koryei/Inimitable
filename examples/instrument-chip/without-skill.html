@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tessel: an AI accelerator on an M.2 card</title>
+<meta name="description" content="Tessel is a small AI accelerator on an M.2 card for edge devices. 8 TOPS of INT8 inference at about 2 W. Development kit £199, shipping in the second quarter of 2027.">
+<style>
+:root{
+  --paper:#EFECE4;
+  --paper-2:#E5E1D5;
+  --ink:#121410;
+  --ink-2:#1C1F19;
+  --muted:#5B5A50;
+  --line:rgba(18,20,16,.15);
+  --line-strong:rgba(18,20,16,.32);
+  --accent:#FF5A2B;
+  --gold:#D2AE58;
+  --board:#0F2B24;
+  --panel:#0B1512;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --pad:clamp(20px,4vw,40px);
+  --maxw:1280px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.mono{font-family:var(--mono)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--paper);padding:8px 12px;border-radius:8px;z-index:100}
+.skip:focus{left:8px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;border:0;background:var(--accent);color:var(--ink);font-weight:650;font-size:16px;letter-spacing:-.005em;text-decoration:none;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,background .2s}
+.btn svg{width:18px;height:18px;transition:transform .2s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(255,90,43,.7)}
+.btn:hover svg{transform:translateX(3px)}
+.btn:active{transform:translateY(0)}
+.btn.sm{min-height:40px;padding:0 18px;font-size:14px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:20;background:rgba(239,236,228,.82);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid transparent;transition:border-color .2s}
+.nav.stuck{border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em}
+.brand svg{width:26px;height:26px}
+.nav ul{display:flex;gap:30px;list-style:none;margin:0;padding:0;font-size:15px}
+.nav ul a{text-decoration:none;color:var(--muted);transition:color .15s}
+.nav ul a:hover{color:var(--ink)}
+@media (max-width:760px){.nav ul{display:none}}
+
+/* hero */
+.hero{position:relative;padding:clamp(40px,7vw,96px) 0 clamp(40px,6vw,72px)}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:640px;pointer-events:none;
+  background:
+    linear-gradient(var(--line) 1px,transparent 1px) 0 0/64px 64px,
+    linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/64px 64px;
+  -webkit-mask-image:radial-gradient(70% 90% at 85% 0%,#000 0,transparent 72%);
+  mask-image:radial-gradient(70% 90% at 85% 0%,#000 0,transparent 72%);opacity:.7}
+.hero .wrap{position:relative}
+.hero-top{display:grid;grid-template-columns:minmax(0,1fr);gap:32px;align-items:end}
+@media (min-width:1000px){.hero-top{grid-template-columns:minmax(0,8fr) minmax(0,4fr);gap:56px}}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(42px,11.4vw,124px);line-height:.96;letter-spacing:-.035em;margin:20px 0 0}
+h1 span{display:block}
+h1 i{font-style:normal;color:var(--accent)}
+.lede{font-size:clamp(17px,1.5vw,19px);color:#34332C;margin:0 0 28px;max-width:44ch}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
+.cta-meta{font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.4}
+.cta-meta b{color:var(--ink);font-weight:600}
+
+/* card explorer */
+.stage{margin-top:clamp(40px,6vw,72px);background:var(--ink);color:var(--paper);border-radius:clamp(18px,2.4vw,32px);padding:clamp(14px,3vw,40px);position:relative;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(60% 80% at 50% 0%,rgba(168,196,154,.0),transparent),
+  linear-gradient(rgba(239,236,228,.05) 1px,transparent 1px) 0 0/32px 32px,
+  linear-gradient(90deg,rgba(239,236,228,.05) 1px,transparent 1px) 0 0/32px 32px;
+  -webkit-mask-image:radial-gradient(80% 90% at 50% 40%,#000,transparent);mask-image:radial-gradient(80% 90% at 50% 40%,#000,transparent);pointer-events:none}
+.stage > *{position:relative}
+.card-svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 30px 40px rgba(0,0,0,.45))}
+.card-svg .region{cursor:pointer}
+.card-svg .hl{fill:rgba(255,90,43,.07);stroke:var(--accent);stroke-width:1.5;stroke-dasharray:5 5;opacity:0;transition:opacity .25s}
+.card-svg .badge{opacity:0;transition:opacity .25s}
+.card-svg .region.on .hl,.card-svg .region.on .badge{opacity:1}
+.card-svg .tilewave{fill:var(--accent);opacity:.0;animation:wave 3.2s ease-in-out infinite}
+.card-svg .trace{fill:none;stroke:#2B6E5B;stroke-width:1.6;stroke-linecap:round}
+.card-svg .pulse{fill:none;stroke:#8FE0BE;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:2 22;animation:flow 1.6s linear infinite;opacity:.9}
+@keyframes flow{to{stroke-dashoffset:-48}}
+@keyframes wave{0%,100%{opacity:0}45%{opacity:.95}70%{opacity:.1}}
+.stage-cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:rgba(239,236,228,.55);margin:18px 0 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag-ex{display:inline-block;border:1px solid rgba(239,236,228,.4);border-radius:999px;padding:1px 8px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(239,236,228,.8)}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:clamp(18px,2.4vw,28px)}
+.tab{background:transparent;border:1px solid rgba(239,236,228,.18);border-radius:16px;padding:14px 14px 14px;text-align:left;cursor:pointer;color:var(--paper);transition:border-color .2s,background .2s;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tab:hover{border-color:rgba(239,236,228,.45)}
+.tab[aria-pressed="true"]{border-color:var(--accent);background:rgba(255,90,43,.09)}
+.tab .n{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:rgba(239,236,228,.6);text-transform:uppercase;display:flex;gap:8px;align-items:center}
+.tab .n em{font-style:normal;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:rgba(239,236,228,.14);font-size:10px;color:var(--paper)}
+.tab[aria-pressed="true"] .n em{background:var(--accent);color:var(--ink)}
+.tab .v{font-family:var(--serif);font-size:clamp(20px,2.8vw,38px);line-height:1;letter-spacing:-.02em}
+.readout{margin:18px 0 0;display:flex;gap:16px;align-items:baseline;border-top:1px solid rgba(239,236,228,.14);padding-top:18px;min-height:3.4em}
+.readout .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);flex:none}
+.readout p{margin:0;font-size:clamp(17px,2vw,22px);line-height:1.35;color:var(--paper)}
+@media (max-width:560px){
+  .tabs{gap:6px}
+  .tab{padding:10px 9px;border-radius:12px}
+  .tab .n{font-size:9.5px;letter-spacing:.04em;gap:5px}
+  .tab .n em{width:15px;height:15px;font-size:9px}
+  .readout{flex-direction:column;gap:6px}
+}
+
+/* stats */
+.stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line-strong)}
+@media (min-width:900px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{padding:26px 0 30px;border-bottom:1px solid var(--line);position:relative}
+@media (min-width:900px){.stat{padding:34px 28px 40px;border-bottom:0;border-left:1px solid var(--line)}.stat:first-child{border-left:0;padding-left:0}}
+@media (max-width:899px){.stat:nth-child(odd){padding-right:16px}.stat:nth-child(even){padding-left:16px;border-left:1px solid var(--line)}}
+.pic{height:34px;margin-bottom:22px}
+.pic svg{height:100%;width:auto;overflow:visible}
+.val{font-family:var(--serif);font-size:clamp(40px,5.4vw,76px);line-height:.95;letter-spacing:-.03em;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.val small{font-family:var(--mono);font-size:.2em;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;align-self:flex-start;margin-right:-2px;padding-top:.4em}
+.val .u{font-size:.4em;letter-spacing:-.01em;color:var(--muted)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+.sq{fill:var(--ink)}
+.sq.lit{fill:var(--accent);animation:lit 2.8s ease-in-out infinite}
+@keyframes lit{0%,100%{fill:var(--ink)}30%,60%{fill:var(--accent)}}
+
+/* statement */
+.statement{padding:clamp(72px,11vw,150px) 0}
+.statement-grid{display:grid;gap:36px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:1000px){.statement-grid{grid-template-columns:minmax(0,8fr) minmax(0,4fr);gap:56px;align-items:end}}
+.statement h2{font-family:var(--serif);font-weight:500;font-size:clamp(32px,5.4vw,72px);line-height:1.04;letter-spacing:-.03em;margin:18px 0 0}
+.statement h2 em{font-style:italic;color:var(--accent)}
+.statement p.side{margin:0;color:#34332C;max-width:40ch}
+
+/* models */
+.models{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(64px,9vw,120px) 0}
+.models-head{display:grid;gap:20px;grid-template-columns:minmax(0,1fr);margin-bottom:clamp(36px,5vw,64px)}
+@media (min-width:1000px){.models-head{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;align-items:end}}
+.models h2{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4.8vw,60px);line-height:1.04;letter-spacing:-.03em;margin:16px 0 0}
+.models-head p{margin:0;color:#34332C;max-width:44ch}
+.flow{display:grid;grid-template-columns:minmax(0,1fr);gap:0;counter-reset:s}
+@media (min-width:900px){.flow{grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr) 64px minmax(0,1fr)}}
+.node{background:var(--paper);border:1px solid var(--line-strong);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px;min-height:210px}
+.node .step{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.node h3{font-family:var(--serif);font-weight:500;font-size:30px;letter-spacing:-.02em;line-height:1.05;margin:0}
+.node p{margin:0;color:#34332C;font-size:15.5px}
+.node.core{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.node.core p,.node.core .step{color:rgba(239,236,228,.7)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.pill{font-family:var(--mono);font-size:13px;border:1px solid var(--line-strong);border-radius:999px;padding:5px 14px}
+.core .pill{border-color:rgba(239,236,228,.35)}
+.link{display:grid;place-items:center;height:48px;color:var(--ink)}
+.link svg{width:36px;height:36px}
+.link svg path{stroke:var(--ink)}
+.link .h{display:none}
+@media (min-width:900px){.link{height:auto}.link .v{display:none}.link .h{display:block}}
+
+/* order */
+.order{padding:clamp(56px,8vw,110px) 0 clamp(56px,8vw,100px)}
+.order-box{background:var(--ink);color:var(--paper);border-radius:clamp(22px,3vw,40px);padding:clamp(28px,5vw,72px);display:grid;gap:40px;grid-template-columns:minmax(0,1fr);position:relative;overflow:hidden}
+@media (min-width:1000px){.order-box{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:72px;align-items:end}}
+.order-box::after{content:"";position:absolute;right:-60px;top:-60px;width:360px;height:360px;opacity:.55;pointer-events:none;
+  background:
+   linear-gradient(rgba(239,236,228,.09) 1px,transparent 1px) 0 0/40px 40px,
+   linear-gradient(90deg,rgba(239,236,228,.09) 1px,transparent 1px) 0 0/40px 40px;
+  -webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent)}
+.order-box > *{position:relative;z-index:1}
+.order .eyebrow{color:rgba(239,236,228,.6)}
+.price{font-family:var(--serif);font-size:clamp(80px,17vw,200px);line-height:.88;letter-spacing:-.05em;margin:18px 0 0;font-weight:500}
+.price span{color:var(--accent)}
+.ship{font-size:clamp(18px,2vw,24px);margin:20px 0 0;color:rgba(239,236,228,.85);max-width:28ch}
+.ship b{color:var(--paper);font-weight:600}
+form{display:flex;flex-direction:column;gap:12px}
+label{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:rgba(239,236,228,.65)}
+.field{width:100%;height:56px;border-radius:14px;border:1px solid rgba(239,236,228,.28);background:rgba(239,236,228,.05);padding:0 18px;color:var(--paper);font-size:17px;transition:border-color .2s,background .2s}
+.field::placeholder{color:rgba(239,236,228,.4)}
+.field:hover{border-color:rgba(239,236,228,.5)}
+.field:focus-visible{outline:2px solid var(--paper);outline-offset:2px;background:rgba(239,236,228,.09)}
+form .btn{width:100%;justify-content:center;min-height:58px;font-size:17px;margin-top:6px}
+.note{font-size:14px;color:rgba(239,236,228,.6);margin:6px 0 0;min-height:1.5em}
+.note.ok{color:#B9E3A8}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:32px 0 44px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 24px;align-items:center}
+footer .brand{font-size:20px;color:var(--ink)}
+footer .brand svg{width:20px;height:20px}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--ink)}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .rv{opacity:1;transform:none;transition:none}
+  .card-svg .pulse,.card-svg .tilewave,.sq.lit{animation:none}
+  .card-svg .tilewave{opacity:.35}
+  .sq.lit{fill:var(--accent)}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#order">Skip to order</a>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Tessel, home">
+      <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="11" height="11" rx="2" fill="#121410"/><rect x="14" y="1" width="11" height="11" rx="2" fill="#FF5A2B"/><rect x="1" y="14" width="11" height="11" rx="2" fill="#FF5A2B" opacity=".0"/><rect x="7.5" y="14" width="11" height="11" rx="2" fill="#121410"/></svg>
+      Tessel
+    </a>
+    <ul>
+      <li><a href="#card">The card</a></li>
+      <li><a href="#models">Models</a></li>
+      <li><a href="#order">Dev kit</a></li>
+    </ul>
+    <a class="btn sm" href="#order">Order the dev kit</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <p class="eyebrow rv">AI accelerator for edge devices</p>
+        <h1 class="rv"><span>Eight TOPS<i>.</i></span><span>Two watts<i>.</i></span><span>One M.2 slot<i>.</i></span></h1>
+      </div>
+      <div class="rv">
+        <p class="lede">Tessel is a small AI accelerator on an M.2 card. Export your model from PyTorch or ONNX and run INT8 inference on the card.</p>
+        <div class="cta-row">
+          <a class="btn" href="#order">Order the dev kit
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+          </a>
+          <div class="cta-meta"><b>£199</b><br>Ships Q2 2027</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage rv" id="card">
+      <svg class="card-svg" id="cardsvg" viewBox="0 0 900 260" role="img" aria-label="Illustration of the Tessel M.2 card, seen from above, with the accelerator, memory and PCIe connector marked."></svg>
+      <p class="stage-cap"><span class="tag-ex">Example</span> Illustration, not to scale. Component layout is an example.</p>
+      <div class="tabs" role="group" aria-label="Parts of the card">
+        <button class="tab" data-k="chip" aria-pressed="true"><span class="n"><em>1</em>Accelerator</span><span class="v">8 TOPS</span></button>
+        <button class="tab" data-k="mem" aria-pressed="false"><span class="n"><em>2</em>Memory</span><span class="v">4 GB</span></button>
+        <button class="tab" data-k="conn" aria-pressed="false"><span class="n"><em>3</em>Interface</span><span class="v">M.2 2280</span></button>
+      </div>
+      <div class="readout" aria-live="polite"><span class="k" id="rk">Accelerator</span><p id="rp">8 TOPS of INT8 inference at about 2 W.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" aria-label="Key figures">
+  <ul class="stats">
+    <li class="stat rv">
+      <div class="pic" aria-hidden="true"><svg viewBox="0 0 132 34" width="132" height="34" id="pic-tops"></svg></div>
+      <div class="val">8<span class="u">TOPS</span></div>
+      <div class="lab">INT8 inference</div>
+    </li>
+    <li class="stat rv">
+      <div class="pic" aria-hidden="true"><svg viewBox="0 0 58 34" width="58" height="34"><rect class="sq lit" x="0" y="2" width="26" height="30" rx="4"/><rect class="sq lit" style="animation-delay:.5s" x="32" y="2" width="26" height="30" rx="4"/></svg></div>
+      <div class="val"><small>About</small>2<span class="u">W</span></div>
+      <div class="lab">At 8 TOPS of INT8</div>
+    </li>
+    <li class="stat rv">
+      <div class="pic" aria-hidden="true"><svg viewBox="0 0 132 34" width="132" height="34" id="pic-mem"></svg></div>
+      <div class="val">4<span class="u">GB</span></div>
+      <div class="lab">On-card memory</div>
+    </li>
+    <li class="stat rv">
+      <div class="pic" aria-hidden="true"><svg viewBox="0 0 132 34" width="132" height="34"><rect x="1" y="3" width="130" height="28" rx="4" fill="none" stroke="#121410" stroke-width="2"/><rect x="1" y="12" width="10" height="10" fill="#EFECE4"/><path d="M1 12h10v10H1" fill="none" stroke="#121410" stroke-width="2"/><g fill="#121410"><rect x="22" y="9" width="3" height="16"/><rect x="29" y="9" width="3" height="16"/><rect x="36" y="9" width="3" height="16"/><rect x="43" y="9" width="3" height="16"/><rect x="50" y="9" width="3" height="16"/></g></svg></div>
+      <div class="val" style="font-size:clamp(34px,4.4vw,62px)">M.2 2280</div>
+      <div class="lab">PCIe interface</div>
+    </li>
+  </ul>
+</section>
+
+<section class="statement" aria-labelledby="why">
+  <div class="wrap statement-grid">
+    <div class="rv">
+      <p class="eyebrow" id="why">Why Tessel</p>
+      <h2>A small card for devices at the edge, where space and power are <em>the budget.</em></h2>
+    </div>
+    <p class="side rv">Tessel puts 8 TOPS of INT8 inference and 4 GB of memory on a single M.2 2280 card, at about 2 W. If your device has the slot, it has room for the accelerator.</p>
+  </div>
+</section>
+
+<section class="models" id="models" aria-labelledby="mh">
+  <div class="wrap">
+    <div class="models-head">
+      <div class="rv">
+        <p class="eyebrow">Models</p>
+        <h2 id="mh">Bring the model you already have.</h2>
+      </div>
+      <p class="rv">Tessel runs models exported from PyTorch and ONNX. Export, then run inference on the card.</p>
+    </div>
+    <div class="flow">
+      <div class="node rv">
+        <span class="step">1 · Your model</span>
+        <h3>Export</h3>
+        <p>Start from a model in PyTorch or in ONNX.</p>
+        <div class="pills"><span class="pill">PyTorch</span><span class="pill">ONNX</span></div>
+      </div>
+      <div class="link" aria-hidden="true">
+        <svg class="h" viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h26M22 10l8 8-8 8"/></svg>
+        <svg class="v" viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4v26M10 22l8 8 8-8"/></svg>
+      </div>
+      <div class="node core rv">
+        <span class="step">2 · The card</span>
+        <h3>Run</h3>
+        <p>8 TOPS of INT8 inference at about 2 W, with 4 GB of memory on the card.</p>
+        <div class="pills"><span class="pill">INT8</span><span class="pill">4 GB</span></div>
+      </div>
+      <div class="link" aria-hidden="true">
+        <svg class="h" viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h26M22 10l8 8-8 8"/></svg>
+        <svg class="v" viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4v26M10 22l8 8 8-8"/></svg>
+      </div>
+      <div class="node rv">
+        <span class="step">3 · Your device</span>
+        <h3>Install</h3>
+        <p>The card is M.2 2280 and talks to the host over PCIe.</p>
+        <div class="pills"><span class="pill">M.2 2280</span><span class="pill">PCIe</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="order" id="order" aria-labelledby="oh">
+  <div class="wrap">
+    <div class="order-box rv">
+      <div>
+        <p class="eyebrow" id="oh">Development kit</p>
+        <p class="price"><span>£</span>199</p>
+        <p class="ship">Ships in the <b>second quarter of 2027</b>.</p>
+      </div>
+      <form id="orderform" novalidate>
+        <label for="email">Email address</label>
+        <input class="field" id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" required>
+        <button class="btn" type="submit">Order the dev kit
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+        </button>
+        <p class="note" id="note" role="status" aria-live="polite">Made by Tessel Labs, Edinburgh.</p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="11" height="11" rx="2" fill="#121410"/><rect x="14" y="1" width="11" height="11" rx="2" fill="#FF5A2B"/><rect x="7.5" y="14" width="11" height="11" rx="2" fill="#121410"/></svg>
+      Tessel
+    </a>
+    <span>Made by Tessel Labs, Edinburgh.</span>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var NS='http://www.w3.org/2000/svg';
+  function el(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+
+  /* ---- the card illustration ---- */
+  var svg=document.getElementById('cardsvg');
+  var defs=el('defs',{},svg);
+  var cp=el('clipPath',{id:'bc'},defs);el('rect',{x:20,y:20,width:860,height:220,rx:12},cp);
+  var lg=el('linearGradient',{id:'bg',x1:0,y1:0,x2:1,y2:1},defs);
+  el('stop',{offset:0,'stop-color':'#14382F'},lg);el('stop',{offset:1,'stop-color':'#0C241E'},lg);
+  var lg2=el('linearGradient',{id:'lid',x1:0,y1:0,x2:0,y2:1},defs);
+  el('stop',{offset:0,'stop-color':'#2A2D27'},lg2);el('stop',{offset:1,'stop-color':'#171914'},lg2);
+
+  el('rect',{x:20,y:20,width:860,height:220,rx:12,fill:'url(#bg)',stroke:'#2A6A58','stroke-width':1.5},svg);
+  el('rect',{x:26,y:26,width:848,height:208,rx:8,fill:'none',stroke:'#1E5646','stroke-width':1,'stroke-dasharray':'2 6'},svg);
+
+  var g=el('g',{'clip-path':'url(#bc)'},svg);
+  /* connector pads */
+  var padsG=el('g',{},g);
+  for(var y=34;y<=226;y+=9){ if(y>112&&y<148) continue; el('rect',{x:20,y:y,width:26,height:5,rx:1,fill:'#D2AE58'},padsG); }
+  el('rect',{x:16,y:114,width:36,height:32,fill:'#0B1512'},g);
+  el('path',{d:'M52 114v32',stroke:'#2A6A58','stroke-width':1.5},g);
+  /* mounting notch */
+  el('circle',{cx:880,cy:130,r:22,fill:'none',stroke:'#D2AE58','stroke-width':2},g);
+  el('circle',{cx:880,cy:130,r:14,fill:'#0B1512'},g);
+
+  /* traces: connector to chip */
+  var tr=el('g',{},svg);
+  var ys=[40,58,76,94,166,184,202,220], ty=[84,100,116,132,128,144,160,176];
+  ys.forEach(function(y,i){
+    var d='M46 '+(y+2.5)+'H84L'+(112+i*2)+' '+(ty[i])+'H200';
+    el('path',{d:d,class:'trace'},tr);
+    if(i%2===0){var p=el('path',{d:d,class:'pulse'},tr);p.style.animationDelay=(i*0.17)+'s'}
+  });
+  /* traces: chip to memory */
+  [74,86,98,110,150,162,174,186].forEach(function(y,i){
+    var d='M350 '+y+'H412';
+    el('path',{d:d,class:'trace'},tr);
+    var p=el('path',{d:d,class:'pulse'},tr);p.style.animationDelay=(i*0.12)+'s';
+  });
+
+  /* regions */
+  function region(k,rx,ry,rw,rh,bx,by,n){
+    var r=el('g',{class:'region','data-k':k,tabindex:'-1'},svg);
+    el('rect',{class:'hl',x:rx,y:ry,width:rw,height:rh,rx:10},r);
+    var b=el('g',{class:'badge'},r);
+    el('circle',{cx:bx,cy:by,r:12,fill:'#FF5A2B'},b);
+    var t=el('text',{x:bx,y:by+4.5,'text-anchor':'middle','font-size':13,'font-weight':700,'font-family':'ui-monospace,Menlo,monospace',fill:'#121410'},b);t.textContent=n;
+    return r;
+  }
+  /* chip */
+  var chip=el('g',{},svg);
+  el('rect',{x:200,y:55,width:150,height:150,rx:8,fill:'url(#lid)',stroke:'#4A4D44','stroke-width':1.5},chip);
+  el('rect',{x:206,y:61,width:138,height:138,rx:5,fill:'none',stroke:'#3A3D35','stroke-width':1},chip);
+  for(var r=0;r<4;r++)for(var c=0;c<4;c++){
+    var x=218+c*30,y=73+r*30;
+    el('rect',{x:x,y:y,width:24,height:24,rx:3,fill:'#33362E'},chip);
+    var w=el('rect',{x:x,y:y,width:24,height:24,rx:3,class:'tilewave'},chip);
+    w.style.animationDelay=((r+c)*0.28)+'s';
+  }
+  /* memory */
+  var mem=el('g',{},svg);
+  [62,142].forEach(function(y){
+    el('rect',{x:420,y:y,width:104,height:56,rx:5,fill:'url(#lid)',stroke:'#4A4D44','stroke-width':1.2},mem);
+    el('circle',{cx:430,cy:y+10,r:2.5,fill:'#6D7067'},mem);
+    for(var i=0;i<6;i++)el('rect',{x:436+i*13,y:y+22,width:8,height:20,rx:1.5,fill:'#2C2F28'},mem);
+    [0,1,2,3,4,5,6,7].forEach(function(i){});
+  });
+  /* regulator and passives */
+  var ps=el('g',{},svg);
+  el('rect',{x:566,y:150,width:56,height:44,rx:4,fill:'#1A1C17',stroke:'#4A4D44','stroke-width':1.2},ps);
+  el('rect',{x:630,y:150,width:56,height:44,rx:4,fill:'#1A1C17',stroke:'#4A4D44','stroke-width':1.2},ps);
+  el('rect',{x:704,y:158,width:36,height:28,rx:3,fill:'#272A23',stroke:'#4A4D44','stroke-width':1},ps);
+  for(var i=0;i<8;i++){el('rect',{x:566+i*14,y:206,width:8,height:14,rx:1.5,fill:'#C9B98A'},ps);}
+  for(var j=0;j<5;j++){el('rect',{x:566+j*14,y:36,width:8,height:14,rx:1.5,fill:'#C9B98A',opacity:.9},ps);}
+  /* silkscreen */
+  var sk=el('g',{fill:'#CFE0D6'},svg);
+  var s1=el('text',{x:566,y:108,'font-size':40,'font-family':'ui-monospace,Menlo,monospace','font-weight':700,'letter-spacing':'0.08em'},sk);s1.textContent='TESSEL';
+  var s2=el('text',{x:568,y:132,'font-size':13,'font-family':'ui-monospace,Menlo,monospace',opacity:.75,'letter-spacing':'0.14em'},sk);s2.textContent='M.2 2280 / PCIe';
+  var m=el('g',{transform:'translate(780 40)'},sk);
+  el('rect',{x:0,y:0,width:18,height:18,rx:3,fill:'#CFE0D6'},m);el('rect',{x:22,y:0,width:18,height:18,rx:3,fill:'#CFE0D6',opacity:.45},m);el('rect',{x:11,y:22,width:18,height:18,rx:3,fill:'#CFE0D6'},m);
+
+  var regs={
+    chip:region('chip',192,47,166,166,354,51,'1'),
+    mem:region('mem',408,50,128,160,532,54,'2'),
+    conn:region('conn',12,26,50,208,62,32,'3')
+  };
+
+  /* ---- explorer interaction ---- */
+  var data={
+    chip:['Accelerator','8 TOPS of INT8 inference at about 2 W.'],
+    mem:['Memory','4 GB of on-card memory.'],
+    conn:['Interface','M.2 2280 form factor with a PCIe interface.']
+  };
+  var order=['chip','mem','conn'],cur='chip',auto=null,userTouched=false;
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  var rk=document.getElementById('rk'),rp=document.getElementById('rp');
+  function show(k){
+    cur=k;
+    tabs.forEach(function(t){t.setAttribute('aria-pressed',String(t.dataset.k===k))});
+    for(var n in regs)regs[n].classList.toggle('on',n===k);
+    rk.textContent=data[k][0];rp.textContent=data[k][1];
+  }
+  function stop(){userTouched=true;if(auto){clearInterval(auto);auto=null}}
+  tabs.forEach(function(t){t.addEventListener('click',function(){stop();show(t.dataset.k)});});
+  Object.keys(regs).forEach(function(k){
+    regs[k].addEventListener('mouseenter',function(){stop();show(k)});
+    regs[k].addEventListener('click',function(){stop();show(k)});
+  });
+  show('chip');
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!rm){auto=setInterval(function(){show(order[(order.indexOf(cur)+1)%3])},4600)}
+  document.getElementById('card').addEventListener('focusin',stop);
+
+  /* ---- pictograms ---- */
+  var pt=document.getElementById('pic-tops');
+  for(var i=0;i<8;i++){
+    var q=el('rect',{x:i*17,y:2,width:13,height:30,rx:3,class:'sq lit'},pt);
+    q.style.animationDelay=(i*.22)+'s';
+  }
+  var pm=document.getElementById('pic-mem');
+  for(var i=0;i<4;i++){el('rect',{x:i*34,y:2,width:30,height:30,rx:4,class:'sq'},pm);el('rect',{x:i*34+6,y:8,width:18,height:6,rx:1.5,fill:'#EFECE4',opacity:.9},pm);el('rect',{x:i*34+6,y:18,width:18,height:6,rx:1.5,fill:'#EFECE4',opacity:.45},pm);}
+
+  /* ---- nav border, reveal ---- */
+  var nav=document.getElementById('nav');
+  function onS(){nav.classList.toggle('stuck',window.scrollY>8)}
+  window.addEventListener('scroll',onS,{passive:true});onS();
+  var rv=[].slice.call(document.querySelectorAll('.rv'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -6% 0px'});
+    rv.forEach(function(n,i){n.style.transitionDelay=(i%4)*60+'ms';io.observe(n)});
+  } else rv.forEach(function(n){n.classList.add('in')});
+
+  /* ---- order form (prototype: nothing leaves the page) ---- */
+  var f=document.getElementById('orderform'),note=document.getElementById('note'),em=document.getElementById('email');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=em.value.trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){note.className='note';note.textContent='Enter a valid email address so we can reach you about the kit.';em.focus();return}
+    note.className='note ok';
+    note.textContent='Thanks. This page is a prototype, so nothing was sent.';
+  });
+})();
+</script>
+</body>
+</html>
