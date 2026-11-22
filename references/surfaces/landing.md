@@ -8,7 +8,7 @@ Write it in one line before designing: *who arrives, what they must believe, wha
 
 ## The first screen
 
-- **A headline that says what the product does for whom.** Two lines or fewer at every width. Specific, plain, in this product's own nouns.
+- **A headline that says what the product does for whom.** Two lines or fewer on desktop, three at most on a small phone (320 to 390 px). Specific, plain, in this product's own nouns. Shorten the words before you shrink the type.
 - **One subhead** of at most about 25 words, in secondary colour, at most 36rem wide.
 - **One primary action** and at most one secondary. Nothing stacked underneath.
 - **One visual that shows something true**: the product itself, its output, or one concrete metaphor. Never filler.
