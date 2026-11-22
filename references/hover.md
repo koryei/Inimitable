@@ -97,4 +97,4 @@ Under reduced motion, keep the colour and surface change (it carries the informa
 2. **Tab through the page.** Every control must show a focus ring that is as considered as its hover.
 3. **Hover every control in one pass.** They should feel like one family: same speed, same curve, different weight by importance.
 4. **Turn on reduced motion.** Nothing should travel or scale; everything should still change state.
-5. **Run `node scripts/craft.mjs <page>`.** It reports interactive elements with no hover rule, transitions on layout properties, and a missing reduced-motion block.
+5. **Run `node scripts/craft.mjs <page>`.** It reports interactive elements with no hover rule, hovers that change a style but not a single pixel, transitions on layout properties, and a missing reduced-motion block.

@@ -60,7 +60,7 @@ Plain Node 22+ scripts in `scripts/`, no installs, using the Chrome on the machi
 | `scripts/drift.mjs <url or file> --save before.json` | Counts font sizes, weights, radii, colours, spacing in use; later `--against before.json` |
 | `scripts/signs.mjs <url or file> [--allow "Tell"]` | Finds machine-made tells in the rendered page; `--allow` licenses devices a committed direction uses on purpose |
 | `scripts/check.mjs <url or file>` | Contrast, touch-target size, small text, missing names |
-| `scripts/craft.mjs <url or file> [--shots dir]` | Hovers every control with a real pointer and diffs the result, so a control that ignores the pointer is caught; also flags transitions on layout properties and motion that ignores the reduced-motion setting |
+| `scripts/craft.mjs <url or file> [--shots dir]` | Hovers every control with a real pointer and diffs both the computed style and the pixels, so a control that ignores the pointer, or answers it invisibly, is caught; also flags transitions on layout properties and motion that ignores the reduced-motion setting |
 | `scripts/dotify.mjs <image or svg> --mode hex` | Turns any picture or drawn SVG into dithered, halftone, hex-dot or ASCII art for a hero object |
 | `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100 |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal command at a given width and captures text and image (needs Python 3) |
