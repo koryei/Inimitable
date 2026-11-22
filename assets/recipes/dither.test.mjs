@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { asciiLines, bayer, downsample, ditherPath, ditherSvg, fieldFromImage, floydSteinberg, halftoneSvg, lit, orderedDither, stipple } from './dither.mjs';
+import { asciiLines, bayer, contentBox, crop, downsample, ditherPath, ditherSvg, fieldFromImage, floydSteinberg, halftoneSvg, lit, orderedDither, stipple } from './dither.mjs';
 import { bars, disc, gradient, makeField, mul, terrain } from './fields.mjs';
 
 const flat = (v, w = 16, h = 16) => makeField(w, h, () => v);
@@ -69,4 +69,13 @@ test('fields are in 0..1 and combine', () => {
   assert.ok(t.data.every((v) => v >= 0 && v <= 1));
   assert.ok(mul(disc(20, 20), t).data.every((v) => v >= 0 && v <= 1));
   assert.equal(bars(10, 10, [1, 0, 1]).data[9 * 10], 1);
+});
+
+test('the content box finds the subject and crop cuts it out', () => {
+  const f = makeField(20, 20, (_u, _v, x, y) => (x >= 5 && x < 12 && y >= 8 && y < 15 ? 0 : 1));
+  const box = contentBox(f, { margin: 0 });
+  assert.deepEqual(box, { x: 5, y: 8, w: 7, h: 7 });
+  const c = crop(f, box);
+  assert.equal(c.width, 7);
+  assert.ok(c.data.every((v) => v === 0));
 });

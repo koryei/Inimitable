@@ -31,6 +31,36 @@ export function fieldFromImage(image, { invert = false, contrast = 1, gamma = 1,
   return { width: w, height: h, data: out };
 }
 
+// The box around everything that differs from the background (taken from the top-left pixel).
+// Use it to crop a subject out of empty space before dotting it.
+export function contentBox(field, { tolerance = 0.04, margin = 2 } = {}) {
+  const bg = field.data[0];
+  let x0 = field.width;
+  let y0 = field.height;
+  let x1 = -1;
+  let y1 = -1;
+  for (let y = 0; y < field.height; y++) {
+    for (let x = 0; x < field.width; x++) {
+      if (Math.abs(field.data[y * field.width + x] - bg) > tolerance) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      }
+    }
+  }
+  if (x1 < 0) return { x: 0, y: 0, w: field.width, h: field.height };
+  const x = Math.max(0, x0 - margin);
+  const y = Math.max(0, y0 - margin);
+  return { x, y, w: Math.min(field.width, x1 + margin + 1) - x, h: Math.min(field.height, y1 + margin + 1) - y };
+}
+
+export function crop(field, box) {
+  const out = new Float32Array(box.w * box.h);
+  for (let y = 0; y < box.h; y++) for (let x = 0; x < box.w; x++) out[y * box.w + x] = field.data[(box.y + y) * field.width + box.x + x];
+  return { width: box.w, height: box.h, data: out };
+}
+
 // Box-average a field down to fewer cells, so a big picture becomes a coarse grid of values.
 export function downsample(field, cell) {
   const w = Math.max(1, Math.floor(field.width / cell));
@@ -145,14 +175,18 @@ export function ditherSvg(grid, { cell = 6, gap = 0, fill = 'currentColor', back
 }
 
 // Dots whose size follows brightness, on a straight or rotated grid: a classic halftone screen.
-export function halftoneSvg(field, { cell = 8, maxRadius, angle = 0, fill = 'currentColor', background, hex = false, invert = false, minRadius = 0.35 } = {}) {
+export function halftoneSvg(field, { cell = 8, maxRadius, angle = 0, fill = 'currentColor', background, hex = false, invert = false, minRadius = 0.35, scale = 1 } = {}) {
+  // `scale` is how many output pixels one field cell covers: use the downsampling factor's inverse so a
+  // coarse field still draws at full size. `cell` is the dot pitch in output pixels.
   const r = maxRadius ?? cell * 0.5;
-  const w = field.width;
-  const h = field.height;
+  const fw = field.width;
+  const fh = field.height;
+  const w = fw * scale;
+  const h = fh * scale;
   const sample = (x, y) => {
-    const xi = Math.min(w - 1, Math.max(0, Math.round(x)));
-    const yi = Math.min(h - 1, Math.max(0, Math.round(y)));
-    return field.data[yi * w + xi];
+    const xi = Math.min(fw - 1, Math.max(0, Math.floor(x / scale)));
+    const yi = Math.min(fh - 1, Math.max(0, Math.floor(y / scale)));
+    return field.data[yi * fw + xi];
   };
   const cos = Math.cos((angle * Math.PI) / 180);
   const sin = Math.sin((angle * Math.PI) / 180);
