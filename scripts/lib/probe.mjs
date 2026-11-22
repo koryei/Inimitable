@@ -64,7 +64,7 @@ for (const el of document.querySelectorAll('body, body *')) {
   for (const side of ['Top', 'Right', 'Bottom', 'Left']) {
     if (px(s['border' + side + 'Width']) > 0 && s['border' + side + 'Style'] !== 'none') {
       const bc = toRGBA(s['border' + side + 'Color']);
-      if (bc[3] > 0) tally(out.borderColors, toHex(bc));
+      if (bc[3] > 0) tally(out.borderColors, toHex(bc) + (bc[3] < 0.995 ? '@' + Math.round(bc[3] * 100) + '%' : ''));
     }
   }
   for (const corner of ['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft']) {

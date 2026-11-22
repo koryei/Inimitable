@@ -40,6 +40,7 @@ export function analyse(raw, { scale = SCALE } = {}) {
   const offScale = {};
   for (const [value, n] of Object.entries(raw.spacing)) {
     const v = Number(value);
+    if (v === 2) continue; // a 2 px step is allowed for tight rows and nudges inside small controls
     if (v % 4 !== 0) offGrid[v] = n;
     else if (!scale.includes(v)) offScale[v] = n;
   }
