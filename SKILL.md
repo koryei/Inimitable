@@ -28,13 +28,13 @@ One fixed run for every request. Do the steps in order. Each step names the file
 | 2 | **Decide the mode** | Persuade, Operate, Read, Experience or Terminal: what the person is doing here | [references/modes.md](references/modes.md) |
 | 3 | **Fix the direction** | Five lines: product, character, world, moments, signature. From the project's rules if it has them | [references/direction.md](references/direction.md) |
 | 4 | **Branch** | Existing screen: repair layer by layer. New screen: build around one star | [fix.md](references/fix.md) or [build-new.md](references/build-new.md) |
-| 5 | **Build** | One section at a time, from the project's own parts, with every state | [build.md](references/build.md), [components.md](references/components.md), [motion.md](references/motion.md) |
+| 5 | **Build** | One section at a time, from the project's own parts, with every state | [build.md](references/build.md), [components.md](references/components.md), [motion.md](references/motion.md), [hover.md](references/hover.md), [materials.md](references/materials.md) |
 | 6 | **Gate** | The project's checks, then measured design checks | [references/gate.md](references/gate.md) |
-| 7 | **Look** | Render at four widths, fix what shows, up to three rounds | [look.md](references/look.md), [feels-cheap.md](references/feels-cheap.md) |
+| 7 | **Look** | Render at four widths, hover every control, fix what shows, up to three rounds | [look.md](references/look.md), [feels-cheap.md](references/feels-cheap.md), [hover.md](references/hover.md) |
 | 8 | **Report** | Short, plain, honest about what is left | [references/report.md](references/report.md) |
 | 9 | **Log** | Project lessons into the project; skill lessons proposed, never self-applied | [references/lessons.md](references/lessons.md) |
 
-Also load, as the work needs them: the surface file for the mode ([web-app](references/surfaces/web-app.md), [landing](references/surfaces/landing.md), [reading](references/surfaces/reading.md), [showpiece](references/surfaces/showpiece.md), [terminal](references/surfaces/terminal.md), [iOS](references/surfaces/native-ios.md), [Android](references/surfaces/native-android.md)); [house-rules.md](references/house-rules.md) for default numbers; [anti-slop.md](references/anti-slop.md) for the tells to remove; [libraries.md](references/libraries.md) before adding any outside component, kit or library; [principles.md](references/principles.md) for the reason under every rule, when a case is not covered; [visual-craft.md](references/visual-craft.md) for the one rich moment on a new screen; [directions.md](references/directions.md) for committed looks and the hero object pipeline.
+Also load, as the work needs them: the surface file for the mode ([web-app](references/surfaces/web-app.md), [landing](references/surfaces/landing.md), [reading](references/surfaces/reading.md), [showpiece](references/surfaces/showpiece.md), [terminal](references/surfaces/terminal.md), [iOS](references/surfaces/native-ios.md), [Android](references/surfaces/native-android.md)); [house-rules.md](references/house-rules.md) for default numbers; [anti-slop.md](references/anti-slop.md) for the tells to remove; [libraries.md](references/libraries.md) before adding any outside component, kit or library; [principles.md](references/principles.md) for the reason under every rule, when a case is not covered; [visual-craft.md](references/visual-craft.md) for the one rich moment on a new screen; [directions.md](references/directions.md) for committed looks and the hero object pipeline; [materials.md](references/materials.md) for surface, light and grain; [hover.md](references/hover.md) for hover and press states.
 
 ## Rules that always hold
 
@@ -48,6 +48,7 @@ Also load, as the work needs them: the surface file for the mode ([web-app](refe
 8. **Look before you show.** Render the real screen at 320, 390, 1440 and 2560 px (terminal: 60 and 120 columns). Do not claim a width looks fine if you did not render it.
 9. **Measure, do not guess.** Run the scripts. The report's numbers come from them.
 10. **Be honest.** If a check fails, say so with the output. If a step was skipped, say that. If something is left over, list it.
+11. **Every control answers.** Each interactive element gets a designed hover and a press state, and a page gets one entrance. Look at the hover state, not only the resting one.
 
 ## Tools
 
