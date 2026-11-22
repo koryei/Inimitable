@@ -9,7 +9,7 @@ import { decodePng, pixelAt } from './png.mjs';
 const HIDE = `(() => {
   const style = document.createElement('style');
   style.id = '__inim_hide';
-  style.textContent = '*, *::before, *::after { color: transparent !important; -webkit-text-fill-color: transparent !important; text-shadow: none !important; caret-color: transparent !important; } svg text, svg tspan { fill: transparent !important; } ::placeholder { color: transparent !important; } html { scroll-behavior: auto !important; }';
+  style.textContent = '*, *::before, *::after { color: transparent !important; -webkit-text-fill-color: transparent !important; text-shadow: none !important; caret-color: transparent !important; transition: none !important; animation: none !important; } svg text, svg tspan { fill: transparent !important; } ::placeholder { color: transparent !important; } html { scroll-behavior: auto !important; }';
   document.head.appendChild(style);
 })()`;
 
@@ -44,7 +44,8 @@ export async function sampleBackdrops(page, { maxSlices = 14 } = {}) {
   try {
     for (let y = 0, n = 0; y < total && n < maxSlices; y += height, n++) {
       await page.evaluate(`window.scrollTo({ top: ${y}, behavior: 'instant' })`);
-      await new Promise((r) => setTimeout(r, 120));
+      await new Promise((r) => setTimeout(r, 160));
+      await page.evaluate('new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))');
       const found = await page.evaluate(POINTS);
       if (!found.length) continue;
       const image = decodePng(await page.screenshot());

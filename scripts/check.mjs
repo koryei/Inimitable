@@ -20,10 +20,13 @@ export async function check(target, widths = [390, 1440]) {
       await page.goto(toUrl(target));
       const raw = await page.evaluate(CHECK);
       try {
+        // A page that scrolls sideways is scaled to fit by mobile browsers, so screenshot pixels no longer line up with
+        // the page. That problem is reported on its own; do not add false contrast flags on top of it.
+        if (raw.sideways) throw new Error('the page scrolls sideways');
         const samples = await sampleBackdrops(page);
         for (const t of raw.text) t.samples = samples.get(t.idx);
       } catch (error) {
-        console.error(`Could not sample rendered backgrounds (${error.message}); using element-based backgrounds.`);
+        if (!raw.sideways) console.error(`Could not sample rendered backgrounds (${error.message}); using element-based backgrounds.`);
       }
       results.push({ width, ...judge(raw, { width }) });
       await page.close();
