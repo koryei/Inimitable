@@ -11,6 +11,28 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
+  // The menu: one control on a phone. It closes on a link, on Escape, and on a click outside, so the
+  // panel never strands the reader with the page dimmed behind it.
+  const menuBtn = document.querySelector('[data-menu-btn]');
+  if (menuBtn && bar) {
+    const setMenu = (open) => {
+      bar.toggleAttribute('data-open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+    };
+    menuBtn.addEventListener('click', () => setMenu(!bar.hasAttribute('data-open')));
+    bar.addEventListener('click', (event) => {
+      if (event.target.closest('.links a')) setMenu(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !bar.hasAttribute('data-open')) return;
+      setMenu(false);
+      menuBtn.focus();
+    });
+    document.addEventListener('click', (event) => {
+      if (!bar.contains(event.target)) setMenu(false);
+    });
+  }
+
   // Copy buttons.
   for (const button of document.querySelectorAll('[data-copy]')) {
     button.addEventListener('click', async () => {

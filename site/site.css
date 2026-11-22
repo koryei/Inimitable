@@ -141,6 +141,10 @@ b, strong { font-weight: 500; }
 /* The mark blinks: the hole closes and opens. Small, and it makes the logo feel alive rather than printed. */
 .brand:hover .mark::after { transform: scale(0.45); }
 .links { display: flex; gap: 0.25rem; margin: 0 auto 0 0; padding: 0; list-style: none; }
+/* The nav is a map, not a message, and on a phone it is one control. Above the split the five links
+   are the map; below it they fold into a panel behind this button, so the bar stays one row and no
+   section becomes unreachable. */
+.menu-btn { display: none; }
 .links a {
   position: relative;
   display: inline-flex;
@@ -549,8 +553,41 @@ b, strong { font-weight: 500; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 62rem) {
-  .links { display: none; }
-  .bar-in { justify-content: space-between; }
+  .bar-in { gap: 0.75rem; }
+  .brand { margin-right: auto; }
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 0.6rem;
+    font: 400 0.75rem/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    cursor: pointer;
+    transition: color var(--dur-hover) var(--ease), border-color var(--dur-hover) var(--ease);
+  }
+  .menu-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .menu-btn[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
+  .links {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0 var(--gutter) 0.5rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar[data-open] .links { display: flex; }
+  .links li { border-top: 1px solid var(--line); }
+  .links a { display: flex; width: 100%; padding: 0 0; font-size: 1rem; }
+  .links a::after { left: 0; right: 0; bottom: 0.85rem; }
   .split { grid-template-columns: 1fr; gap: 2.5rem; }
   .split-head { position: static; }
   .section-head { grid-template-columns: 1fr; align-items: start; }
