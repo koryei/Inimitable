@@ -26,9 +26,15 @@ Go through the images in this order and write down every problem:
 
 For Operate screens and anything with state, also walk `feels-cheap.md` against the running screen: trust, feedback and errors, loading, retention, consistency, permissions and navigation. Break the screen on purpose (bad input, no network, empty account) and see what it says.
 
+## States and interaction
+
+A screen has more than one picture. Look at each state it can be in, not only the one it loads in: a menu open, a tab or toggle switched, an empty list, an error, a long name, a selected item. Use `shoot.mjs --eval 'js'` to put the page in a state before the shot (wrap anything that waits in an async function: `--eval "(async () => { document.querySelector('#yearly').click(); })()"`), or give the page a `#hash` or `?state=` that sets it and shoot that URL.
+
+A single page that shows several states for review (sign-up, error, first step) needs a **preview switcher**: a small control kept clear of the real interface (a strip at the top or a dock at a corner that does not overlap the form at any width), labelled as a preview, and easy to delete. Never let it cover content, and say in the report that it is scaffolding.
+
 ## Rounds
 
-Look, fix, look again until nothing is wrong, **at most three rounds**. After the third, show the screen and list honestly what is left over. Do not pretend a known flaw is fine, and do not keep polishing past three rounds: the person's taste feedback is worth more than a fourth pass.
+Look, fix, look again until nothing is wrong, **at most three rounds** of the whole-screen look. This is separate from the quick render-and-check after each section in the Build step, which is free: build one section, glance at it, move on. Rounds count only the full looks at the finished screen. After the third, show the screen and list honestly what is left over. Do not pretend a known flaw is fine, and do not keep polishing past three rounds: the person's taste feedback is worth more than a fourth pass.
 
 Checking the screens does not count toward the rounds. Re-run `shoot.mjs` as often as you need.
 
