@@ -75,3 +75,26 @@ test('the receipt agrees with drift.mjs at every width', { skip }, async () => {
     await chrome.close();
   }
 });
+
+// A section headed "Short answers" that shows five closed rows has answered nothing. One answer is open in
+// the markup, and the height animation must not collapse it: the closed state is a zero-height box, so a
+// mistake there hides the only answer on the page.
+test('the questions section shows an answer before it is clicked', { skip }, async () => {
+  execFileSync(process.execPath, [join(root, 'site', 'build.mjs')], { stdio: 'ignore' });
+
+  const chrome = await launch();
+  try {
+    const tab = await openPage(chrome.browser, { width: 1440, height: 900 });
+    await tab.goto(toUrl(page));
+    const shown = await tab.evaluate(`(() => [...document.querySelectorAll('.faq details[open]')].map((d) => {
+      const p = d.querySelector('p');
+      return { words: p.textContent.trim().split(/\\s+/).length, height: Math.round(p.getBoundingClientRect().height) };
+    }))()`);
+    await tab.close();
+    assert.ok(shown.length >= 1, 'every answer is closed, so the section answers nothing');
+    assert.ok(shown[0].words > 5, 'the open answer is empty');
+    assert.ok(shown[0].height > 20, 'the open answer is rendered at no height');
+  } finally {
+    await chrome.close();
+  }
+});
