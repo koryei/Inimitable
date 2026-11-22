@@ -1,12 +1,22 @@
-// Small behaviours: copy buttons, and the before/after compare with its tabs. The page reads fine without it.
+// The page's behaviours: the sticky header, copy buttons, the before/after compare with its
+// one sweep on load, and the scroll reveals. The page reads fine without any of it.
 (() => {
-  const copyButtons = document.querySelectorAll('[data-copy]');
-  for (const button of copyButtons) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Header: solid once the page has moved.
+  const bar = document.querySelector('[data-bar]');
+  if (bar) {
+    const onScroll = () => bar.classList.toggle('is-stuck', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // Copy buttons.
+  for (const button of document.querySelectorAll('[data-copy]')) {
     button.addEventListener('click', async () => {
       const text = button.getAttribute('data-copy');
       try {
         await navigator.clipboard.writeText(text);
-        button.textContent = 'Copied';
       } catch {
         const area = document.createElement('textarea');
         area.value = text;
@@ -14,40 +24,53 @@
         area.select();
         document.execCommand('copy');
         area.remove();
-        button.textContent = 'Copied';
       }
-      setTimeout(() => { button.textContent = 'Copy'; }, 1800);
+      const label = button.textContent;
+      button.textContent = 'Copied';
+      setTimeout(() => { button.textContent = label; }, 1600);
     });
   }
 
-  const examples = {
-    dashboard: { before: 'img/dashboard-before.jpg', after: 'img/dashboard-after.jpg', note: 'An operations dashboard. 75 machine-made tells (9 kinds) down to none; spacing values off the 4 px grid 15 down to 0; colour hues 6 down to 2; no more sideways scroll on a phone.', link: 'dashboard' },
-    landing: { before: 'img/landing-before.jpg', after: 'img/landing-after.jpg', note: 'A landing page. 36 tells (12 kinds) down to none; font sizes 9 down to 6; heavy weights gone; every claim the page could not support removed.', link: 'landing' },
-    messaging: { before: 'img/messaging-before.jpg', after: 'img/messaging-after.jpg', note: 'An encrypted messaging page from a six-fact brief. Mechanical score 68 up to 100. The hero is the product&rsquo;s own idea: an example message that dissolves into noise, every label marked as an example.', link: 'instrument-messaging' },
-    chip: { before: 'img/chip-before.jpg', after: 'img/chip-after.jpg', note: 'An AI accelerator page. Score 43 up to 94. A halftone card at true proportions with callouts, each marked &ldquo;Example placement&rdquo;. The page without the skill drew a richer circuit board: an honest point to the other side.', link: 'instrument-chip' },
-    terminal: { before: 'img/terminal-before.jpg', after: 'img/terminal-after.jpg', note: 'A deploy command at 60 columns. Result first: 13 lines down to 7, 14 emoji to none, no wrapped lines, readable with colour switched off.', link: 'terminal' },
-  };
-  const frame = document.querySelector('.compare-frame');
-  if (!frame) return;
-  const range = document.getElementById('c-range');
-  const before = frame.querySelector('.c-before');
-  const after = frame.querySelector('.c-after');
-  const note = document.getElementById('c-note');
-  const set = (value) => frame.style.setProperty('--pos', `${value}%`);
-  range.addEventListener('input', () => set(range.value));
-  set(range.value);
-  for (const tab of document.querySelectorAll('.tab')) {
-    tab.addEventListener('click', () => {
-      const example = examples[tab.dataset.key];
-      for (const other of document.querySelectorAll('.tab')) other.setAttribute('aria-selected', String(other === tab));
-      before.src = example.before;
-      after.src = example.after;
-      before.alt = 'Without the skill';
-      after.alt = 'With the skill';
-      note.innerHTML = `${example.note} <a href="https://github.com/koryei/Inimitable/tree/main/examples/${example.link}">See this example</a>`;
-      range.value = 50;
-      set(50);
-    });
+  // Before and after: drag to compare, and one sweep on load so the idea lands without a caption.
+  const frame = document.getElementById('compare');
+  if (frame) {
+    const range = document.getElementById('c-range');
+    const set = (value) => frame.style.setProperty('--pos', `${value}%`);
+    let grabbed = false;
+    range.addEventListener('input', () => { grabbed = true; set(range.value); });
+    range.addEventListener('pointerdown', () => { grabbed = true; });
+    set(range.value);
+
+    if (!reduce) {
+      const start = performance.now() + 1500;
+      const from = 8;
+      const to = 42;
+      const duration = 1100;
+      const tick = (now) => {
+        if (grabbed) return;
+        const t = Math.min(1, Math.max(0, (now - start) / duration));
+        const eased = 1 - Math.pow(1 - t, 3);
+        const value = from + (to - from) * eased;
+        range.value = value;
+        set(value);
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
   }
-  note.innerHTML = `${examples.dashboard.note} <a href="https://github.com/koryei/Inimitable/tree/main/examples/dashboard">See this example</a>`;
+
+  // Scroll reveals: once, and never hidden if the script does not run.
+  const items = document.querySelectorAll('[data-reveal]');
+  if (!('IntersectionObserver' in window) || reduce) {
+    for (const el of items) el.classList.add('in');
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    for (const el of items) io.observe(el);
+  }
 })();

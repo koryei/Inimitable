@@ -5,17 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inimitable: design that looks decided</title>
 <meta name="description" content="A skill for coding agents that builds and repairs interfaces until they look made on purpose, then checks them in a real browser before showing you.">
+<meta name="theme-color" content="#f2f0ea">
 <meta property="og:title" content="Inimitable: design that looks decided">
 <meta property="og:description" content="A skill for coding agents. It reads your project, decides what the screen is for, builds it, measures it in a real browser and fixes what it finds.">
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js')</script>
 </head>
-<body class="inst inst-light" id="top">
+<body id="top">
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="bar">
-  <nav class="bar-in" aria-label="Main">
+<header class="bar" data-bar>
+  <nav class="bar-in wrap" aria-label="Main">
     <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>Inimitable</a>
     <ul class="links">
       <li><a href="#what">What it does</a></li>
@@ -24,147 +27,200 @@
       <li><a href="#results">Results</a></li>
       <li><a href="#install">Install</a></li>
     </ul>
-    <a class="btn" href="https://github.com/koryei/Inimitable">GitHub</a>
+    <a class="btn btn-small" href="https://github.com/koryei/Inimitable">GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a>
   </nav>
 </header>
 
 <main id="main">
-  <section class="hero wrap" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <p class="micro micro-caps slash">A design skill for coding agents</p>
-      <h1 id="hero-title" class="display">Design that looks <span class="br-word">decided</span>.</h1>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="ground" data-loop aria-hidden="true"></div>
+    <div class="hero-in wrap">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>A design skill for coding agents</p>
+      <h1 id="hero-title" class="display">
+        <span class="line"><span>Design that</span></span>
+        <span class="line"><span>looks <em>decided</em>.</span></span>
+      </h1>
       <p class="lede">Inimitable builds and repairs interfaces until they look made on purpose. Then it opens them in a real browser at four sizes, measures them, and fixes what it finds before showing you.</p>
-      <div class="install-line">
-        <code id="cmd-hero">npx skills add koryei/Inimitable</code>
-        <button class="btn copy" type="button" data-copy="npx skills add koryei/Inimitable">Copy</button>
-      </div>
       <div class="actions">
-        <a class="btn btn-accent" href="#install">Install the skill</a>
-        <a class="btn" href="#examples">See it work</a>
+        <a class="btn btn-primary" href="#install">Install the skill <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn-quiet" href="#examples">See it work <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+      <div class="install-line">
+        <code>npx skills add koryei/Inimitable</code>
+        <button class="copy" type="button" data-copy="npx skills add koryei/Inimitable" aria-label="Copy the install command">Copy</button>
       </div>
     </div>
-    <figure class="stage" aria-label="The same dashboard screen before and after an Inimitable run: dotted on the left, clean on the right">
-      <img class="clean" src="img/dashboard-after.jpg" width="1440" height="900" alt="The dashboard after a run: graphite surfaces, one main chart, numbers with their comparisons">
-      <img class="dots" src="hero-dots.svg" width="900" height="560" alt="">
-      <img class="overlay" src="hero-overlay.svg" width="960" height="600" alt="">
-      <figcaption class="micro">The same screen, before and after. Measured, not described.</figcaption>
-    </figure>
-  </section>
 
-  <div class="wrap">
-    <div class="stats" role="list">
+    <figure class="frame-wrap wrap">
+      <div class="frame">
+        <div class="frame-top">
+          <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="frame-url">inimitable &middot; dashboard</span>
+          <span class="frame-tag">Before / after</span>
+        </div>
+        <div class="compare" id="compare">
+          <img class="c-after" src="img/dashboard-after.jpg" width="1440" height="900" alt="The dashboard after a run: graphite surfaces, one main chart, numbers with their comparisons">
+          <img class="c-before" src="img/dashboard-before.jpg" width="1440" height="900" alt="The same dashboard before a run: dotted, crowded, six hues and no clear first thing">
+          <span class="c-line" aria-hidden="true"><span class="c-knob">&harr;</span></span>
+          <label class="sr" for="c-range">Drag to compare the dashboard before and after</label>
+          <input id="c-range" type="range" min="0" max="100" value="42">
+          <span class="tag tag-l">Before</span>
+          <span class="tag tag-r">After</span>
+        </div>
+      </div>
+      <figcaption>The same dashboard, before and after. Drag the handle. Every number on this page was measured by the skill&rsquo;s own scripts.</figcaption>
+    </figure>
+
+    <div class="stats wrap" role="list">
       <div class="stat" role="listitem"><b>9 steps</b><span>one fixed run</span></div>
       <div class="stat" role="listitem"><b>7 tools</b><span>measure and capture</span></div>
       <div class="stat" role="listitem"><b>0 packages</b><span>just Node and a browser</span></div>
       <div class="stat" role="listitem"><b>Apache 2.0</b><span>free to use</span></div>
     </div>
-  </div>
+  </section>
 
-  <section class="wrap section" id="what" aria-labelledby="what-title">
-    <p class="micro micro-caps slash">What it does</p>
-    <h2 id="what-title" class="h2">Agents make screens that work and look like everything else. This changes what happens between your request and the result.</h2>
-    <div class="cards">
-      <article class="card brk"><span class="micro">[01]</span><h3>Respects what you already have</h3><p>Your brand guide, tokens and design notes outrank its own taste. It never repaints a product in a style that is not yours.</p></article>
-      <article class="card brk"><span class="micro">[02]</span><h3>Measures instead of guessing</h3><p>Scripts count the font sizes, radii, colours and spacing in use, find the tells of machine-made UI, and read contrast from the rendered pixels.</p></article>
-      <article class="card brk"><span class="micro">[03]</span><h3>Looks before it shows</h3><p>It renders the real screen at 320, 390, 1440 and 2560 px and fixes up to three rounds of problems, so you only give taste feedback.</p></article>
-      <article class="card brk"><span class="micro">[04]</span><h3>Knows why, and how to be memorable</h3><p>It reasons from principles of perception and feedback, and it draws one rich moment in code: contours, vessels, dithered objects, annotation.</p></article>
+  <section class="section wrap" id="what" aria-labelledby="what-title">
+    <div class="split">
+      <div class="split-head" data-reveal>
+        <p class="micro">What it does</p>
+        <h2 id="what-title" class="h2">Agents make screens that work and look like everything else.</h2>
+        <p class="lede">This changes what happens between your request and the result.</p>
+      </div>
+      <div class="rows">
+        <article class="row" data-reveal style="--i:0">
+          <span class="num">01</span>
+          <div><h3>Respects what you already have</h3><p>Your brand guide, tokens and design notes outrank its own taste. It never repaints a product in a style that is not yours.</p></div>
+        </article>
+        <article class="row" data-reveal style="--i:1">
+          <span class="num">02</span>
+          <div><h3>Measures instead of guessing</h3><p>Scripts count the font sizes, radii, colours and spacing in use, find the tells of machine-made UI, and read contrast from the rendered pixels.</p></div>
+        </article>
+        <article class="row" data-reveal style="--i:2">
+          <span class="num">03</span>
+          <div><h3>Looks before it shows</h3><p>It renders the real screen at 320, 390, 1440 and 2560 px and fixes up to three rounds of problems, so you only give taste feedback.</p></div>
+        </article>
+        <article class="row" data-reveal style="--i:3">
+          <span class="num">04</span>
+          <div><h3>Knows why, and how to be memorable</h3><p>It reasons from principles of perception and feedback, and it draws one rich moment in code: contours, vessels, dithered objects, annotation.</p></div>
+        </article>
+      </div>
     </div>
   </section>
 
-  <section class="wrap section" id="how" aria-labelledby="how-title">
-    <p class="micro micro-caps slash">The run</p>
-    <h2 id="how-title" class="h2">One fixed run for every request.</h2>
+  <section class="section wrap" id="how" aria-labelledby="how-title">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="micro">The run</p>
+        <h2 id="how-title" class="h2">One fixed run for every request.</h2>
+      </div>
+      <p class="lede">Nine steps, in order. Each one names the file it reads, so the work is the same whether the screen is new or already shipped.</p>
+    </div>
     <ol class="steps">
-      <li><span class="micro">[01]</span><b>Read</b><span>Finds your design rules, sees the screens running, measures the drift.</span></li>
-      <li><span class="micro">[02]</span><b>Decide the mode</b><span>Persuade, Operate, Read, Experience or Terminal: what the person is doing here.</span></li>
-      <li><span class="micro">[03]</span><b>Fix the direction</b><span>Five lines on what it should feel like and what it must never look like.</span></li>
-      <li><span class="micro">[04]</span><b>Branch</b><span>Repair a screen layer by layer, or build a new one around one star.</span></li>
-      <li><span class="micro">[05]</span><b>Build</b><span>One section at a time, from your own components, with every state designed.</span></li>
-      <li><span class="micro">[06]</span><b>Gate</b><span>Your lint and tests, then measured contrast, targets and tell checks.</span></li>
-      <li><span class="micro">[07]</span><b>Look</b><span>Renders at four widths, fixes what shows, up to three rounds.</span></li>
-      <li><span class="micro">[08]</span><b>Report</b><span>Short and honest, with real before and after numbers.</span></li>
-      <li><span class="micro">[09]</span><b>Log</b><span>Lessons go into your project&rsquo;s notes. The skill never changes itself.</span></li>
+      <li class="step" data-reveal style="--i:0"><span class="num">01</span><b>Read</b><span>Finds your design rules, sees the screens running, measures the drift.</span></li>
+      <li class="step" data-reveal style="--i:1"><span class="num">02</span><b>Decide the mode</b><span>Persuade, Operate, Read, Experience or Terminal: what the person is doing here.</span></li>
+      <li class="step" data-reveal style="--i:2"><span class="num">03</span><b>Fix the direction</b><span>Five lines on what it should feel like and what it must never look like.</span></li>
+      <li class="step" data-reveal style="--i:3"><span class="num">04</span><b>Branch</b><span>Repair a screen layer by layer, or build a new one around one star.</span></li>
+      <li class="step" data-reveal style="--i:4"><span class="num">05</span><b>Build</b><span>One section at a time, from your own components, with every state designed.</span></li>
+      <li class="step" data-reveal style="--i:5"><span class="num">06</span><b>Gate</b><span>Your lint and tests, then measured contrast, targets and tell checks.</span></li>
+      <li class="step" data-reveal style="--i:6"><span class="num">07</span><b>Look</b><span>Renders at four widths, hovers every control, fixes what shows, up to three rounds.</span></li>
+      <li class="step" data-reveal style="--i:7"><span class="num">08</span><b>Report</b><span>Short and honest, with real before and after numbers.</span></li>
+      <li class="step" data-reveal style="--i:8"><span class="num">09</span><b>Log</b><span>Lessons go into your project&rsquo;s notes. The skill never changes itself.</span></li>
     </ol>
   </section>
 
-  <section class="wrap section" id="examples" aria-labelledby="ex-title">
-    <p class="micro micro-caps slash">Examples</p>
-    <h2 id="ex-title" class="h2">The same brief, with and without the skill.</h2>
-    <p class="lede">Drag the handle, or use the arrow keys when it is focused. Every number is measured by the included scripts.</p>
-    <div class="tabs" role="tablist" aria-label="Examples">
-      <button class="tab" role="tab" aria-selected="true" data-key="dashboard">Dashboard</button>
-      <button class="tab" role="tab" aria-selected="false" data-key="landing">Landing page</button>
-      <button class="tab" role="tab" aria-selected="false" data-key="messaging">Encrypted messaging</button>
-      <button class="tab" role="tab" aria-selected="false" data-key="chip">AI chip</button>
-      <button class="tab" role="tab" aria-selected="false" data-key="terminal">Terminal</button>
-    </div>
-    <div class="compare" id="compare">
-      <div class="compare-frame">
-        <img class="c-after" src="img/dashboard-after.jpg" width="1440" height="900" alt="After">
-        <img class="c-before" src="img/dashboard-before.jpg" width="1440" height="900" alt="Before">
-        <span class="c-line" aria-hidden="true"></span>
-        <label class="sr" for="c-range">Drag to compare before and after</label>
-        <input id="c-range" type="range" min="0" max="100" value="50">
-        <span class="tag tag-l micro">Without the skill</span><span class="tag tag-r micro">With the skill</span>
+  <section class="section wrap" id="examples" aria-labelledby="ex-title">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="micro">Examples</p>
+        <h2 id="ex-title" class="h2">The same brief, with and without the skill.</h2>
       </div>
-      <p class="c-note" id="c-note"></p>
+      <p class="lede">Four of the twelve test runs. Every number is measured by the included scripts, and the write-ups are in the repo.</p>
     </div>
-    <noscript><p class="micro">Turn on JavaScript to compare, or see each pair in the <a href="https://github.com/koryei/Inimitable/tree/main/examples">examples folder</a>.</p></noscript>
+    <div class="gallery">
+      <a class="shot" href="https://github.com/koryei/Inimitable/tree/main/examples/dashboard" data-reveal style="--i:0">
+        <span class="pic"><img src="img/dashboard-after.jpg" width="1440" height="900" alt="An operations dashboard after a run" loading="lazy"></span>
+        <span class="shot-meta"><span class="micro">Dashboard</span><b>75 tells to none</b></span>
+        <span class="shot-line">Spacing off the 4 px grid: 15 values to 0. Colour hues: 6 to 2. No sideways scroll on a phone.</span>
+      </a>
+      <a class="shot" href="https://github.com/koryei/Inimitable/tree/main/examples/landing" data-reveal style="--i:1">
+        <span class="pic"><img src="img/landing-after.jpg" width="1440" height="900" alt="A landing page after a run" loading="lazy"></span>
+        <span class="shot-meta"><span class="micro">Landing page</span><b>36 tells to none</b></span>
+        <span class="shot-line">Font sizes: 9 to 6. Heavy weights gone. Every claim the page could not support removed.</span>
+      </a>
+      <a class="shot" href="https://github.com/koryei/Inimitable/tree/main/examples/instrument-messaging" data-reveal style="--i:2">
+        <span class="pic"><img src="img/messaging-after.jpg" width="1440" height="900" alt="An encrypted messaging page after a run" loading="lazy"></span>
+        <span class="shot-meta"><span class="micro">Encrypted messaging</span><b>68 to 100</b></span>
+        <span class="shot-line">The hero is the product&rsquo;s own idea: an example message that dissolves into noise, every label marked as an example.</span>
+      </a>
+      <a class="shot" href="https://github.com/koryei/Inimitable/tree/main/examples/instrument-chip" data-reveal style="--i:3">
+        <span class="pic"><img src="img/chip-after.jpg" width="1440" height="900" alt="An AI accelerator page after a run" loading="lazy"></span>
+        <span class="shot-meta"><span class="micro">AI chip</span><b>43 to 94</b></span>
+        <span class="shot-line">A halftone card at true proportions with callouts, each marked &ldquo;Example placement&rdquo;. The page without the skill drew a richer board: an honest point to the other side.</span>
+      </a>
+    </div>
   </section>
 
-  <section class="wrap section" id="tools" aria-labelledby="tools-title">
-    <p class="micro micro-caps slash">The tools</p>
-    <h2 id="tools-title" class="h2">Plain Node scripts. No dependencies. Run them yourself on any page.</h2>
-    <div class="table-wrap">
-      <table class="tools">
-        <thead><tr><th scope="col">Command</th><th scope="col">What it does</th></tr></thead>
-        <tbody>
-          <tr><th scope="row"><code>shoot.mjs</code></th><td>Screenshots at 320, 390, 1440 and 2560 px. Flags sideways scrolling and console errors. Can set a page state first.</td></tr>
-          <tr><th scope="row"><code>drift.mjs</code></th><td>Counts the font sizes, weights, radii, colours and spacing values in use, and flags drift. Before and after.</td></tr>
-          <tr><th scope="row"><code>signs.mjs</code></th><td>Finds machine-made tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims.</td></tr>
-          <tr><th scope="row"><code>check.mjs</code></th><td>WCAG contrast read from rendered pixels, touch targets, small text, names, focus styles, layout shift.</td></tr>
-          <tr><th scope="row"><code>score.mjs</code></th><td>Runs every check and prints one score out of 100 with what cost points.</td></tr>
-          <tr><th scope="row"><code>dotify.mjs</code></th><td>Turns any image or drawn SVG into dither, halftone, hex dots or ASCII for a hero object.</td></tr>
-          <tr><th scope="row"><code>term-shot.mjs</code></th><td>Runs a terminal program at a set width in a real pseudo-terminal and captures text and an image.</td></tr>
-        </tbody>
-      </table>
+  <section class="section wrap" id="results" aria-labelledby="res-title">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="micro">Results</p>
+        <h2 id="res-title" class="h2">Tested against the same model with no skill, and fixed where it lost.</h2>
+      </div>
+      <p class="lede">Twelve briefs, three rounds, one reviewer. The mechanical score is the skill&rsquo;s own checks; the side-by-side was judged by eye.</p>
     </div>
+    <div class="results">
+      <div class="bars" data-reveal>
+        <div class="bar-row">
+          <span class="bar-label">With the skill</span>
+          <span class="bar-track"><span class="bar-fill" style="--v:0.96"></span></span>
+          <span class="bar-value">96</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Without</span>
+          <span class="bar-track"><span class="bar-fill bar-fill-quiet" style="--v:0.62"></span></span>
+          <span class="bar-value">62</span>
+        </div>
+        <p class="bar-note">Mean mechanical score out of 100, across all twelve runs.</p>
+      </div>
+      <div class="result-stats" data-reveal style="--i:1">
+        <div class="result-stat"><b>9 of 12</b><span>side-by-side comparisons won, judged by eye</span></div>
+        <div class="result-stat"><b>3 rounds</b><span>each one changed the skill</span></div>
+        <div class="result-stat"><b>9 briefs</b><span>landing, dashboard, settings, pricing, sign-up, docs, portfolio, two technical</span></div>
+      </div>
+    </div>
+    <p class="note" data-reveal>The honest limits: one reviewer, the last round was not blind, and both sides were the same model. The skill lost two comparisons in round 1, because it made clean pages where the other side drew something memorable. That is why it now has a guide and recipes for the one rich moment. <a href="https://github.com/koryei/Inimitable/tree/main/evals/results">Read the write-ups.</a></p>
   </section>
 
-  <section class="wrap section" id="results" aria-labelledby="res-title">
-    <p class="micro micro-caps slash">Results</p>
-    <h2 id="res-title" class="h2">Tested against the same model with no skill, and fixed where it lost.</h2>
-    <div class="stats stats-big" role="list">
-      <div class="stat" role="listitem"><b>96 vs 62</b><span>mean mechanical score out of 100, with and without</span></div>
-      <div class="stat" role="listitem"><b>9 of 12</b><span>side-by-side comparisons won, judged by eye</span></div>
-      <div class="stat" role="listitem"><b>3 rounds</b><span>each one changed the skill</span></div>
-      <div class="stat" role="listitem"><b>9 briefs</b><span>landing, dashboard, settings, pricing, sign-up, docs, portfolio, two technical</span></div>
+  <section class="section wrap" id="install" aria-labelledby="inst-title">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="micro">Install</p>
+        <h2 id="inst-title" class="h2">One command.</h2>
+      </div>
+      <p class="lede">Needs Node 22 or newer and an installed Chrome, Edge or Chromium. Terminal screenshots also use Python 3. No packages and no API keys.</p>
     </div>
-    <p class="note">The honest limits: one reviewer, the last round was not blind, and both sides were the same model. The skill lost two comparisons in round 1, because it made clean pages where the other side drew something memorable. That is why it now has a guide and recipes for the one rich moment. <a href="https://github.com/koryei/Inimitable/tree/main/evals/results">Read the write-ups.</a></p>
-  </section>
-
-  <section class="wrap section" id="install" aria-labelledby="inst-title">
-    <p class="micro micro-caps slash">Install</p>
-    <h2 id="inst-title" class="h2">One command.</h2>
     <div class="install-grid">
-      <div class="install-box brk">
+      <div class="install-box" data-reveal style="--i:0">
         <p class="micro">Any agent</p>
-        <div class="install-line"><code>npx skills add koryei/Inimitable</code><button class="btn copy" type="button" data-copy="npx skills add koryei/Inimitable">Copy</button></div>
+        <div class="install-line"><code>npx skills add koryei/Inimitable</code><button class="copy" type="button" data-copy="npx skills add koryei/Inimitable" aria-label="Copy the install command">Copy</button></div>
         <p>Installs into Claude Code, Codex, Cursor and the other agents you have. Add <code>-g</code> for every project. Listed on <a href="https://skills.sh/koryei/inimitable">skills.sh</a>.</p>
       </div>
-      <div class="install-box brk">
+      <div class="install-box" data-reveal style="--i:1">
         <p class="micro">From a clone</p>
-        <div class="install-line"><code>git clone https://github.com/koryei/Inimitable.git &amp;&amp; cd Inimitable &amp;&amp; ./install.sh</code><button class="btn copy" type="button" data-copy="git clone https://github.com/koryei/Inimitable.git && cd Inimitable && ./install.sh">Copy</button></div>
+        <div class="install-line"><code>git clone https://github.com/koryei/Inimitable.git &amp;&amp; cd Inimitable &amp;&amp; ./install.sh</code><button class="copy" type="button" data-copy="git clone https://github.com/koryei/Inimitable.git && cd Inimitable && ./install.sh" aria-label="Copy the clone command">Copy</button></div>
         <p>Links the folder into <code>~/.claude/skills/inimitable</code> so <code>git pull</code> updates it.</p>
       </div>
     </div>
-    <p class="note">Needs Node 22 or newer and an installed Chrome, Edge or Chromium. Terminal screenshots also use Python 3. No packages and no API keys.</p>
   </section>
 
-  <section class="wrap section" id="faq" aria-labelledby="faq-title">
-    <p class="micro micro-caps slash">Questions</p>
-    <h2 id="faq-title" class="h2">Short answers.</h2>
-    <div class="faq">
+  <section class="section wrap" id="faq" aria-labelledby="faq-title">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="micro">Questions</p>
+        <h2 id="faq-title" class="h2">Short answers.</h2>
+      </div>
+    </div>
+    <div class="faq" data-reveal>
       <details><summary>Will it override my brand?</summary><p>No. Your own rules win over everything in the skill. Where a device is part of your brand, say so once and it is kept.</p></details>
       <details><summary>Does it need an image generator?</summary><p>No. It draws visuals in code. Where an image would help it writes the prompt and leaves a labelled slot.</p></details>
       <details><summary>Does it work on existing apps?</summary><p>Yes, that is the main use. It repairs a screen in your own stack and components and leaves your product, content and section order alone.</p></details>
@@ -176,7 +232,7 @@
 
 <footer class="foot wrap">
   <p><b>Inimitable</b> &middot; Apache 2.0 &middot; <a href="https://github.com/koryei/Inimitable">GitHub</a> &middot; <a href="https://skills.sh/koryei/inimitable">skills.sh</a> &middot; <a href="https://github.com/koryei/Inimitable/blob/main/CHANGELOG.md">Changelog</a></p>
-  <p class="micro">Builds on ideas from unslop by Damir Sokolovsky (CC BY 4.0), impeccable and tasteskill. This page was built with Inimitable&rsquo;s own instrument kit.</p>
+  <p class="micro">Builds on ideas from unslop by Damir Sokolovsky (CC BY 4.0), impeccable and tasteskill. Set in Instrument Serif (SIL OFL). This page was built with Inimitable&rsquo;s own rules and tools.</p>
 </footer>
 
 <script src="site.js" defer></script>
