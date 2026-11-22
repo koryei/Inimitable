@@ -56,7 +56,8 @@ Two cautions. First, removing a tell leaves space: never fill that space with a 
 - `[scan]` Claims nobody can check (`Loved by 10,000+ teams`, `10x faster`, five stars with no source) → ask whether they are real; if not, remove.
 - Fake-looking data (`$123,456`, `[X]`, `John Doe`, `Lorem ipsum`) → plausible numbers and names.
 - `[scan]` `PRO`, `New ✨`, `Beta 🚀` badges everywhere → remove, or one quiet text badge.
-- Errors that blame or shrug (`Oops! Something went wrong`) → say what happened and what to do next.
+- `[scan]` Errors that blame or shrug (`Oops! Something went wrong`) → say what happened and what to do next.
+- `[scan]` Buttons that say nothing about what happens (`Submit`, `OK`, `Click here`, `Yes`) → name the action: `Save and continue`, `Add this machine`.
 
 ## Components
 
