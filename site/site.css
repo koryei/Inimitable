@@ -534,7 +534,9 @@ b, strong { font-weight: 500; }
 .foot { margin-top: clamp(5rem, 10vw, 8rem); padding: 2rem 0 3rem; border-top: 1px solid var(--line); }
 .foot p { margin: 0 0 0.5rem; font-size: 0.875rem; color: var(--ink-2); }
 .foot b { color: var(--ink); }
-.foot .micro { max-width: 46rem; line-height: 1.6; }
+/* The credit is a sentence, not a label. Uppercase mono at 12px over three lines is a wall; the same
+   face in sentence case reads at a glance and still sits in the footer's quiet register. */
+.credit { max-width: 46rem; font: 400 0.75rem/1.7 var(--mono); letter-spacing: 0; color: var(--ink-3); }
 
 /* ---------- Reveal ---------- */
 .js [data-reveal] {
