@@ -43,7 +43,7 @@ The look leans on tiny type. Keep micro labels at 12 px or larger, give them 4.5
 
 1. **Choose the subject's visible form.** What does the product act on or produce? The thing in the picture is the one true thing: a planet for Earth observation, a die for a chip, a waveform for audio, a vessel for pottery.
 2. **Get a picture.** In order of preference: the product's own real image or render; a drawing made in code (`assets/recipes/revolve.mjs`, `shapes.mjs`, `iso.mjs`, `fields.mjs` such as `sphere`); an image the person supplies. No stock photography.
-3. **Process it.** `node scripts/dotify.mjs <image or .svg or .html> --mode hex --dots 70 --cell 8 --invert --fill '#e8e6e1' --bg '#0f0f10'`. Modes: `fs` (organic grain), `ordered` (graphic, regular), `stipple` (spray), `halftone` (print dots), `hex` (cells), `ascii`. For a drawn object the recipes in `dither.mjs` can also be called directly.
+3. **Process it.** `node scripts/dotify.mjs <image or .svg or .html> --mode hex --dots 70 --cell 8 --fill '#e8e6e1' --bg '#0f0f10'` (the dark parts of the picture become dots; add `--invert` when the subject is the bright part). Modes: `fs` (organic grain), `ordered` (graphic, regular), `stipple` (spray), `halftone` (print dots), `hex` (cells), `ascii`. For a drawn object the recipes in `dither.mjs` can also be called directly.
 4. **Annotate.** `assets/recipes/hud.mjs`: callouts, brackets, crosshairs, rulers, tags, readouts.
 5. **Frame it.** Corner brackets, a hairline or dashed frame, a ruler on one edge, a caption.
 6. **Colour it.** One tone on one ground. Add the accent to one point of interest.
