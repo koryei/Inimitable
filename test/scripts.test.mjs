@@ -49,3 +49,8 @@ test('contrast is read from the rendered pixels, so siblings and pseudo-elements
   assert.equal(contrast.length, 1, JSON.stringify(contrast));
   assert.match(contrast[0].detail, /Yearly/);
 });
+
+test('text covered by a fixed bar is not judged against the bar', { skip }, async () => {
+  const [desktop] = await check(fileURLToPath(new URL('./fixtures/occluded.html', import.meta.url)), [1440]);
+  assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);
+});
