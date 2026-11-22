@@ -5,9 +5,12 @@
   .toggle { position: relative; display: inline-flex; margin: 24px; background: #efe9df; border-radius: 12px; }
   .thumb { position: absolute; top: 0; bottom: 0; left: 0; width: 50%; background: #1f1b16; border-radius: 12px; }
   .opt { background: none; border: 0; font: inherit; position: relative; display: inline-flex; align-items: center; height: 44px; padding: 0 24px; }
+  .pseudo { position: relative; display: inline-flex; margin: 24px; background: #efe9df; border-radius: 12px; }
+  .pseudo::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 50%; background: #1f1b16; border-radius: 12px; }
   .on { color: #fdfbf7; }     /* light text over the dark thumb behind it: a pass */
   .bad { color: #efe9df; }    /* light text over the light track: a real failure */
 </style></head>
 <body><h1>Sibling backdrop</h1>
 <div class="toggle"><span class="thumb"></span><button class="opt on">Monthly</button><button class="opt bad">Yearly</button></div>
+<div class="pseudo"><button class="opt on">Daily</button><button class="opt">Weekly</button></div>
 </body></html>

@@ -43,7 +43,7 @@ test('a clean page passes signs and check', { skip }, async () => {
   for (const r of results) assert.deepEqual(r.problems, [], JSON.stringify(r.problems));
 });
 
-test('contrast uses what is really behind the text, not only its ancestors', { skip }, async () => {
+test('contrast is read from the rendered pixels, so siblings and pseudo-elements count', { skip }, async () => {
   const [desktop] = await check(fileURLToPath(new URL('./fixtures/sibling-backdrop.html', import.meta.url)), [1440]);
   const contrast = desktop.problems.filter((p) => p.kind === 'contrast');
   assert.equal(contrast.length, 1, JSON.stringify(contrast));
