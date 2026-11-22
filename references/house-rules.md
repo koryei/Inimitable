@@ -8,7 +8,7 @@ Default numbers and rules for when a project has none of its own. If the project
 2. **One neutral ramp.** Background, raised surface, border and text all come from a single tinted grey ramp. Three text roles: primary, secondary, muted.
 3. **One accent, used rarely.** It marks the primary action, the selection, or the one number that matters. If the brand has no accent, the star of a screen is made with size and contrast instead.
 4. **Six type sizes or fewer** per screen, from the scale below. Two weights (400 and 500); 600 only for rare emphasis. Hierarchy comes from size and colour, not boldness.
-5. **One family for the interface**, plus at most one partner (a mono for figures, or a display face for large headlines).
+5. **One family for the interface**, plus at most one partner (a display face for large headlines). A mono for code and tabular figures is extra and does not count. Three proportional families is too many.
 6. **Radius by size, and nested radii add up.** Inner radius = outer radius minus the padding between them, never below 4.
 7. **One icon set, one size, one stroke.** Icons take the colour of their text role and never have colours of their own.
 8. **One easing curve, three durations.** Motion is feedback or explanation, never decoration. Only colour, background, border, opacity and transform animate.
@@ -31,7 +31,7 @@ Space inside a group is always smaller than space between groups.
 
 ## Neutral ramps
 
-For apps and dashboards use graphite or something just as grey; people look at these surfaces for hours, so the content carries the colour. For landing pages and showpieces, tint the ramp slightly toward the product's world (warm for paper, food, craft; ink for night, water, technical). Keep saturation very low so a surface never reads as a colour on its own.
+Apps and dashboards may use any of the three ramps below (graphite, warm, ink): all are low-saturation, so the surface never reads as a colour and the content carries the colour. Choose the tint from the product's world (warm for paper, food, craft; ink for night, water, technical; graphite when neutral is right). Landing pages and showpieces may tint further. What is not allowed anywhere is a surface that reads as a colour on its own: orange, brown, blue or green backgrounds, or a saturated brand colour used as a page fill in an app.
 
 ### Dark
 
@@ -89,6 +89,20 @@ Families by character:
 | Editorial, literary | Inter or Instrument Sans | Newsreader, Instrument Serif, Fraunces for headlines |
 | Playful, bold | Space Grotesk, Bricolage Grotesque | a mono for small labels |
 
+## Fonts when there is no network
+
+A single self-contained file or a project with no web fonts still has good faces on every device. Use stacks that resolve to them, and name the character you want first:
+
+| Character | Stack |
+| --- | --- |
+| Neutral sans | `ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif` |
+| Warm, humanist sans | `"Avenir Next", "Segoe UI", "Helvetica Neue", ui-sans-serif, sans-serif` |
+| Editorial serif (display) | `"Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif` |
+| Modern serif | `Charter, "Bitstream Charter", "Sitka Text", Cambria, serif` |
+| Mono | `ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace` |
+
+Set `font-optical-sizing: auto` and `font-kerning: normal`. Check the render on the machine you have: the first available face wins, so the look differs by platform. Name a web font first only if the project loads it.
+
 ## Radius
 
 | Element | Radius |
@@ -118,6 +132,15 @@ Easing for everything: `cubic-bezier(0.22, 1, 0.36, 1)`.
 | Stagger between items | 40 to 60 ms, at most six items |
 
 Rise on enter 6 to 12 px. Press scale 0.97 to 0.98. At most one entrance on load. Respect `prefers-reduced-motion`.
+
+## Big screens (above about 1800 px)
+
+A fixed-pixel layout floats small in a sea of space at 2560 px. Scale it instead of stretching it:
+
+- Keep the content width capped (apps near 1440 to 1600) and let the **root size grow**: `html { font-size: clamp(16px, 0.62vw + 6px, 24px); }` with sizes, spacing and widths in `rem`, so everything scales together.
+- Prefer `rem` and `lvh` or `svh` for heights. **Do not use CSS `zoom` on the root**: it breaks `vh` and `dvh` minimum heights, so a screen meant to fill the viewport ends up short or long by the zoom factor. If you must use `zoom`, divide viewport-based heights by the factor.
+- Apps still fill the width with their shell; landing pages scale their type and keep generous margins.
+- Always render at 2560 px: it is where unscaled layouts look wrong.
 
 ## Layout
 
