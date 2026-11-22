@@ -25,7 +25,7 @@ If the tell can be detected, add a detector to `scripts/lib/probe.mjs` and a pla
 ## Develop
 
 ```bash
-node --test scripts/ test/      # unit tests; browser tests are skipped when no Chrome is installed
+npm test                      # unit tests; browser tests are skipped when no Chrome is installed
 ./install.sh --check            # Node, Chrome, Python
 ```
 
