@@ -26,6 +26,9 @@ Nothing here is a draft.
 | 16 | Step 1 Read, B2: measure the drift. Count the font sizes, radii, colours and spacing values in use and compare with the project's scale. | owner's Activity test | 2026-11-16 |
 | 17 | Step 1 Read, B3: when a request is vague, state the reading in one line and proceed. Ask only when a missing fact blocks the work. | tasteskill | 2026-11-16 |
 | 18 | Step 1 Read, B4: do not ask the owner about colours, fonts or vibe in this step. Those come from the project's rules and the direction step. | impeccable | 2026-11-16 |
+| 19 | Step 2 Decide the mode: modes go in. A mode is what a person is trying to do on the screen. Four from impeccable: Persuade (landing pages), Operate (apps, dashboards), Read (docs, long text), Experience (showpiece, brand). | impeccable | 2026-11-22 |
+| 20 | The terminal app gets its own fifth mode, with its own rules (text and colour only, narrow width, no images). | owner | 2026-11-22 |
+| 21 | The mode is used to pick rules and nothing else; the report (step 8) says which mode was used, and no more. | owner | 2026-11-22 |
 
 ## Licences (facts, not decisions)
 

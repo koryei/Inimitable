@@ -30,7 +30,7 @@ impeccable and tasteskill have no licence file in the installed copies. Restate 
 | Step of the run | State |
 |---|---|
 | 1 Read | Approved (decisions 11 to 18) |
-| 2 Decide the mode | Open. The owner asked for more explanation of modes (Persuade, Operate, Read, Experience). Open questions: do modes go in, and does the terminal get a mode of its own. If they go in, the report says which mode was used. |
+| 2 Decide the mode | Done (decisions 19 to 21). Five modes: Persuade, Operate, Read, Experience, and Terminal. The report names the mode used. |
 | 3 Fix the direction | Not started |
 | 4 Branch (fix layer by layer, or build around one bright element) | Not started |
 | 5 Build | Not started |
