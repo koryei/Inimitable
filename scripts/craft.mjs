@@ -71,7 +71,10 @@ const fingerprint = (i) => `(() => {
     const hit = document.elementFromPoint(px, py);
     if (hit && (hit === el || el.contains(hit))) { point = { x: px, y: py }; break; }
   }
-  return { rect: r.toJSON(), point, print: nodes.map(readAll).join('\\n') };
+  // rect and point are viewport coordinates (the mouse needs those); page is document coordinates, which is
+  // what a screenshot clip uses.
+  const page = { x: r.left + scrollX, y: r.top + scrollY, width: r.width, height: r.height };
+  return { rect: r.toJSON(), page, point, print: nodes.map(readAll).join('\\n') };
 })()`;
 
 const STATIC = `(() => {
@@ -170,13 +173,15 @@ export async function craft(target, { widths = [390, 1440], shots } = {}) {
 
         if (shots) {
           mkdirSync(shots, { recursive: true });
-          const pad = 14;
+          // A fixed box around the control, big enough to see the state change, at 3x so it is legible.
+          const boxW = Math.max(before.page.width + 80, 280);
+          const boxH = Math.max(before.page.height + 48, 96);
           const clip = {
-            x: Math.max(0, before.rect.x - pad),
-            y: Math.max(0, before.rect.y - pad),
-            width: Math.min(width, before.rect.width + pad * 2),
-            height: before.rect.height + pad * 2,
-            scale: 2,
+            x: Math.max(0, Math.min(width - boxW, before.page.x + before.page.width / 2 - boxW / 2)),
+            y: Math.max(0, before.page.y + before.page.height / 2 - boxH / 2),
+            width: boxW,
+            height: boxH,
+            scale: 3,
           };
           const slug = `${String(c.i).padStart(2, '0')}-${c.where.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}`;
           writeFileSync(join(shots, `${width}-${slug}-rest.png`), await page.screenshot({ clip }));
