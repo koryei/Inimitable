@@ -57,3 +57,35 @@ test('contours come out as few long lines, not thousands of segments', () => {
   assert.ok(first.lines < 60, `lines ${first.lines}`);
   assert.ok(first.d.length < 20000, `size ${first.d.length}`);
 });
+
+import { PROFILES, radiusAt, shade, vesselSvg } from './revolve.mjs';
+
+test('the radius follows the profile at its control points', () => {
+  assert.ok(Math.abs(radiusAt(PROFILES.amphora, 0.5) - 1) < 0.05);
+  assert.ok(radiusAt(PROFILES.amphora, 0.86) < radiusAt(PROFILES.amphora, 0.5));
+});
+
+test('shade lightens and darkens', () => {
+  assert.notEqual(shade('#808080', 0.2), shade('#808080', -0.2));
+  assert.ok(parseInt(shade('#808080', 0.2).slice(1, 3), 16) > 0x80);
+  assert.ok(parseInt(shade('#808080', -0.2).slice(1, 3), 16) < 0x80);
+});
+
+test('a vessel is deterministic, uses one gradient, and is aria-hidden', () => {
+  const a = vesselSvg({ seed: 2, id: 'a' });
+  assert.equal(a, vesselSvg({ seed: 2, id: 'a' }));
+  assert.notEqual(a, vesselSvg({ seed: 3, id: 'a' }));
+  assert.equal((a.match(/<linearGradient/g) || []).length, 1);
+  assert.match(a, /aria-hidden="true"/);
+  assert.doesNotMatch(a, /animate|filter/i);
+});
+
+test('a vessel silhouette follows the profile and stays inside its box', () => {
+  const svg = vesselSvg({ profile: PROFILES.amphora, height: 300, maxRadius: 100, id: 'z' });
+  const view = svg.match(/viewBox="0 0 (\d+) (\d+)"/).map(Number);
+  const d = svg.match(/<path d="(M[^"]+)" fill="url/)[1];
+  const xs = [...d.matchAll(/[ML](-?\d+\.\d) (-?\d+\.\d)/g)].map((m) => Number(m[1]));
+  assert.ok(Math.min(...xs) >= 0 && Math.max(...xs) <= view[1], `${Math.min(...xs)} to ${Math.max(...xs)} in ${view[1]}`);
+  assert.ok(Math.max(...xs) - Math.min(...xs) > 150, 'the widest point is about the full width');
+  assert.ok(new Set(xs.map((x) => x.toFixed(0))).size > 20, 'the sides curve, they are not straight');
+});
