@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0
+
+Driven by two rounds of testing the skill against a no-skill baseline on eight briefs (`evals/results/`).
+
+- `references/principles.md`: the reason under every rule (perception, grouping, type, colour, feedback, trust).
+- `references/visual-craft.md` and `assets/recipes/`: how to find and draw the one rich moment in code. Generators for contour lines (stitched), stones, turned vessels, dot fields and grain, all tested.
+- `scripts/score.mjs` and `evals/`: briefs, a mechanical score, a visual rubric, blind comparison, and the written results of each round.
+- `check.mjs` now reads contrast from rendered pixels, so gradients, images and pseudo-element backgrounds are judged and sticky overlays are not mistaken for backdrops. It counts only visible headings.
+- `shoot.mjs` gains `--eval`, `--wait` and `--slices`. `drift.mjs` allows a mono partner and treats code, accent and semantic colours fairly.
+- Skill changes: a no-stall path when nobody can answer, big-screen scaling, system font stacks, state and preview-switcher guidance, never invent facts the brief omits.
+
 ## 0.2.0
 
 - `references/feels-cheap.md`: a six-area checklist for what makes an app feel cheap (guidance and trust, feedback and errors, loading, data and retention, consistency, permissions and navigation).
