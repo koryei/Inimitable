@@ -12,7 +12,57 @@ import { valueNoise } from './noise.mjs';
 // Segment table for marching squares: for each of 16 cases, which edges join (0 top, 1 right, 2 bottom, 3 left).
 const SEGMENTS = [[], [[3, 2]], [[2, 1]], [[3, 1]], [[0, 1]], [[3, 0], [2, 1]], [[0, 2]], [[3, 0]], [[3, 0]], [[0, 2]], [[0, 1], [3, 2]], [[0, 1]], [[3, 1]], [[2, 1]], [[3, 2]], []];
 
-export function contourPaths({ width = 1440, height = 900, seed = 1, levels = 12, scale = 0.0035, cell = 10, octaves = 3 } = {}) {
+// Join the loose segments of one level into continuous polylines, matching endpoints.
+export function stitch(segments, tolerance = 0.05) {
+  const key = (p) => `${Math.round(p[0] / tolerance)},${Math.round(p[1] / tolerance)}`;
+  const ends = new Map();
+  segments.forEach((seg, i) => {
+    for (const p of seg) {
+      const k = key(p);
+      if (!ends.has(k)) ends.set(k, []);
+      ends.get(k).push(i);
+    }
+  });
+  const used = new Array(segments.length).fill(false);
+  const lines = [];
+  const next = (point, from) => (ends.get(key(point)) || []).find((i) => i !== from && !used[i]);
+  segments.forEach((seg, start) => {
+    if (used[start]) return;
+    used[start] = true;
+    const line = [seg[0], seg[1]];
+    // extend forward, then backward
+    for (const direction of [1, 0]) {
+      for (;;) {
+        const tip = direction ? line[line.length - 1] : line[0];
+        const i = next(tip, -1);
+        if (i === undefined) break;
+        used[i] = true;
+        const [a, b] = segments[i];
+        const other = key(a) === key(tip) ? b : a;
+        if (direction) line.push(other);
+        else line.unshift(other);
+      }
+    }
+    lines.push(line);
+  });
+  return lines;
+}
+
+// A polyline as a smooth SVG path: quadratic curves through the segment midpoints.
+export function smoothPath(line, decimals = 0) {
+  const f = (n) => n.toFixed(decimals);
+  if (line.length < 3) return `M${f(line[0][0])} ${f(line[0][1])}L${f(line[line.length - 1][0])} ${f(line[line.length - 1][1])}`;
+  const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  let d = `M${f(line[0][0])} ${f(line[0][1])}`;
+  for (let i = 1; i < line.length - 1; i++) {
+    const m = mid(line[i], line[i + 1]);
+    d += `Q${f(line[i][0])} ${f(line[i][1])} ${f(m[0])} ${f(m[1])}`;
+  }
+  const last = line[line.length - 1];
+  return `${d}L${f(last[0])} ${f(last[1])}`;
+}
+
+export function contourPaths({ width = 1440, height = 900, seed = 1, levels = 12, scale = 0.0035, cell = 16, octaves = 3, decimals = 0 } = {}) {
   const noise = valueNoise(seed, octaves);
   const cols = Math.ceil(width / cell) + 1;
   const rows = Math.ceil(height / cell) + 1;
@@ -20,7 +70,7 @@ export function contourPaths({ width = 1440, height = 900, seed = 1, levels = 12
   const paths = [];
   for (let l = 1; l <= levels; l++) {
     const level = l / (levels + 1);
-    const d = [];
+    const segs = [];
     for (let j = 0; j < rows - 1; j++) {
       for (let i = 0; i < cols - 1; i++) {
         const tl = field[j][i];
@@ -38,13 +88,14 @@ export function contourPaths({ width = 1440, height = 900, seed = 1, levels = 12
           return [x, y + lerp(tl, bl) * cell];
         };
         for (const [a, b] of SEGMENTS[code]) {
-          const [x1, y1] = edge(a);
-          const [x2, y2] = edge(b);
-          d.push(`M${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}`);
+          segs.push([edge(a), edge(b)]);
         }
       }
     }
-    if (d.length) paths.push({ level, d: d.join('') });
+    if (segs.length) {
+      const lines = stitch(segs);
+      paths.push({ level, lines: lines.length, d: lines.map((l) => smoothPath(l, decimals)).join('') });
+    }
   }
   return paths;
 }
