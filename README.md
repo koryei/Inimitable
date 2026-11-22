@@ -145,6 +145,7 @@ references/
   principles.md          why design works: perception, grouping, type, colour, feedback, trust
   visual-craft.md        finding and drawing the one memorable moment in code
   directions.md          committed looks: instrument dark and light, blueprint, horizon, dithered data
+  devices.md             fifteen structural moves that make a page memorable, each with the reason it works
   feels-cheap.md         trust, feedback, loading, retention, consistency, permissions
   components.md          what a finished component does, state by state
   motion.md              recipes for menus, modals, toasts, tabs and state changes

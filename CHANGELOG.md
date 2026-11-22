@@ -6,6 +6,7 @@ The skill taught rules but not reasons, and the site was clean and static. Both 
 
 - `references/hover.md`: why a control has to answer the pointer, the mechanics of hover and press with exact values, the cheap-hover table, and how to test it.
 - `references/materials.md`: surface, light and grain. The grainient recipe (radial stops, grain, mask) rebuilt in CSS rather than copied, plus glass, paper and metal, and what each costs to render.
+- `references/devices.md`: fifteen structural moves that make a page memorable, each with the reason it works, the CSS to build it, and the way it fails. Read out of real pages and reduced to the mechanism, so they can be rebuilt in any palette.
 - `references/surfaces/landing.md` rewritten around the argument a landing page has to make: the five-second test, the first screen, one thing, rhythm, proof, motion, material, the close.
 - `references/motion.md`: landing and showpiece choreography, scroll reveals, marquee, parallax, and the one moment a page is allowed.
 - `references/libraries.md`: how to take from a library (the mechanism, not the file), with Grainient and Construct as worked examples.
