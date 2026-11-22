@@ -23,14 +23,14 @@
   --line: rgba(237, 237, 237, 0.12); --line-strong: rgba(237, 237, 237, 0.34);
 }
 .inst-light {
-  --bg: #e6e5e1; --surface: #efeeea; --ink: #141414; --ink-2: #4a4a48; --ink-3: #6b6b68;
+  --bg: #e6e5e1; --surface: #efeeea; --ink: #141414; --ink-2: #444442; --ink-3: #5c5c59;
   --line: rgba(20, 20, 20, 0.14); --line-strong: rgba(20, 20, 20, 0.4);
   --on-accent: #ffffff;
 }
 
 /* ---------- Type ---------- */
 .inst .micro {                     /* tiny mono metadata: coordinates, status, version, captions */
-  font: 400 11px/1.4 var(--mono);
+  font: 400 12px/1.4 var(--mono);
   letter-spacing: 0.04em;
   color: var(--ink-3);
 }
@@ -122,10 +122,10 @@
 .inst .stat { padding: 14px 16px; border-left: 1px solid var(--line); }
 .inst .stat:first-child { border-left: 0; }
 .inst .stat b { display: block; font: 400 28px/1 var(--mono); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-.inst .stat span { display: block; margin-top: 8px; font: 400 11px/1.3 var(--mono); color: var(--ink-3); }
+.inst .stat span { display: block; margin-top: 8px; font: 400 12px/1.3 var(--mono); color: var(--ink-3); }
 
 /* ---------- Ticker strip: a line of short facts, static unless motion is welcome ---------- */
-.inst .ticker { display: flex; gap: 28px; overflow: hidden; white-space: nowrap; padding: 8px 0; border-block: 1px solid var(--line); font: 400 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.inst .ticker { display: flex; gap: 28px; overflow: hidden; white-space: nowrap; padding: 8px 0; border-block: 1px solid var(--line); font: 400 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 .inst .ticker > * { flex: none; }
 .inst .ticker > *::before { content: "\25CF"; margin-right: 28px; font-size: 7px; vertical-align: 2px; opacity: 0.7; }
 @media (prefers-reduced-motion: no-preference) {
