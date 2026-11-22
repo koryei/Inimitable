@@ -47,6 +47,13 @@ Inimitable changes what happens between your request and the result. The agent r
 
 ## See it work
 
+**Technical landing pages in the instrument style.** A dotted, annotated hero object, corner brackets, `//` labels, one accent, and every label marked as an example. Two briefs with strict no-invention rules: [encrypted messaging](examples/instrument-messaging) (68 → 100) and [an AI accelerator chip](examples/instrument-chip) (43 → 94).
+
+<p align="center">
+  <img src="examples/instrument-messaging/with-skill-1440.jpg" width="49%" alt="An encrypted messaging page: an example message in dotted letters dissolves into noise, with numbered pins">
+  <img src="examples/instrument-chip/with-skill-1440.jpg" width="49%" alt="An AI accelerator page: a halftone M.2 card with callouts and a ruler">
+</p>
+
 **A dashboard.** 75 tells (9 kinds) down to none. Spacing values off the 4 px grid 15 → 0, weights 3 → 2, colour hues 6 → 2, and it no longer scrolls sideways on a phone. The first attempt failed three of the skill's own checks; the look step caught and fixed them. [Open the example.](examples/dashboard)
 
 <p align="center">
