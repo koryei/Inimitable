@@ -58,6 +58,8 @@ const CONTROLS = `(() => {
       const s = getComputedStyle(el);
       // checkVisibility also sees content hidden inside a closed <details> or by content-visibility, which still has a layout box.
       const shown = typeof el.checkVisibility === 'function' ? el.checkVisibility({ contentVisibilityAuto: true, opacityProperty: true, visibilityProperty: true }) : true;
+      // The link to the page you are on has nowhere to go, so it may stay still.
+      if (el.getAttribute('aria-current') === 'page') return false;
       return shown && r.width > 0 && r.height > 0 && r.bottom > 0 && s.visibility !== 'hidden' && s.display !== 'none' && Number(s.opacity) > 0;
     })
     .map((el, i) => {

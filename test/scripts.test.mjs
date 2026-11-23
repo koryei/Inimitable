@@ -84,6 +84,13 @@ test('craft finds a control that ignores the pointer, a reflowing transition and
   assert.ok(!silent.includes('a.underlined'), 'a hover that only moves a pseudo-element still counts');
 });
 
+test('craft lets the link to the current page stay still, and still catches the others', { skip }, async () => {
+  const [desktop] = await craft(fileURLToPath(new URL('./fixtures/current-page.html', import.meta.url)), { widths: [1440] });
+  const silent = desktop.problems.filter((p) => p.kind === 'silent hover');
+  assert.equal(silent.length, 1, JSON.stringify(silent));
+  assert.match(silent[0].detail, /Settings/);
+});
+
 test('a clean page passes craft', { skip }, async () => {
   const [desktop] = await craft(clean, { widths: [1440] });
   assert.deepEqual(desktop.problems, []);
@@ -129,6 +136,13 @@ test('a pill badge above the headline and a gradient logo tile are tells', { ski
   const kinds = new Set(found.map((f) => f.tell));
   assert.ok(kinds.has('Pill badge above the headline'), [...kinds].join(', '));
   assert.ok(kinds.has('Gradient logo tile'), [...kinds].join(', '));
+});
+
+test('"New" on a button is an action; "New" on a pill is a badge', { skip }, async () => {
+  const found = await scan(fileURLToPath(new URL('./fixtures/new-action.html', import.meta.url)));
+  const badges = found.filter((f) => f.tell === 'Badge above or beside content');
+  assert.equal(badges.length, 1, JSON.stringify(badges));
+  assert.match(badges[0].detail, /faster search/);
 });
 
 test('the browser driver evaluates a function as well as a string', { skip }, async () => {
