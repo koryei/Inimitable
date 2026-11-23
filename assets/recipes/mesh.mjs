@@ -97,7 +97,8 @@ const SHAPES = {
     const spots = [[12, 20], [86, 10], [72, 90], [34, 58], [60, 45]];
     const jitter = () => (rand() - 0.5) * 14;
     const layers = p.family.slice(0, 3).map((c, i) => pool(spots[i][0] + jitter(), spots[i][1] + jitter(), 50 + rand() * 22, 58 + rand() * 20, c, 60 + rand() * 8));
-    layers.push(pool(spots[3][0] + jitter(), spots[3][1] + jitter(), 44, 52, p.counter, 66));
+    // On a light ground the counterpoint is a hint, not a colour: at full strength it reads as paint.
+    layers.push(pool(spots[3][0] + jitter(), spots[3][1] + jitter(), 44, 52, p.dark ? p.counter : mixIn(p.counter, 55), 66));
     layers.push(pool(spots[4][0] + jitter(), spots[4][1] + jitter(), 40, 46, p.family[3], 70));
     return layers;
   },
@@ -134,7 +135,7 @@ const SHAPES = {
     return [
       pool(x, y, 46, 70, p.family[1], 72),
       pool(x - 14, y - 12, 38, 54, p.family[0], 70),
-      pool(x + 4, y + 18, 34, 48, p.counter, 70),
+      pool(x + 4, y + 18, 34, 48, p.dark ? p.counter : mixIn(p.counter, 70), 70),
       pool(x - 24, y + 6, 30, 40, p.family[2], 70),
     ];
   },
