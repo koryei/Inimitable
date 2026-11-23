@@ -166,7 +166,9 @@ export async function openPage(browser, { width, height, deviceScaleFactor = 1, 
       });
       await new Promise((r) => setTimeout(r, settleMs));
     },
-    async evaluate(expression) {
+    // Accepts a string of JavaScript or a function (serialised and called, with optional arguments).
+    async evaluate(expression, ...args) {
+      if (typeof expression === 'function') expression = `(${expression.toString()})(${args.map((a) => JSON.stringify(a)).join(', ')})`;
       const result = await send('Runtime.evaluate', {
         expression,
         returnByValue: true,
