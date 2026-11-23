@@ -41,8 +41,8 @@ a { color: inherit; }
 /* ---------- Hero: one lit frame, type in its calm corner ---------- */
 .hero { position: relative; isolation: isolate; margin: 0.75rem; border-radius: var(--radius); overflow: hidden; min-height: min(100svh - 1.5rem, 64rem); display: flex; align-items: flex-end; background: var(--bg); }
 .hero-in { position: relative; width: min(100% - 3rem, 80rem); margin-inline: auto; padding: 8rem 0 3rem; display: grid; gap: 2.5rem; }
-.chip { display: inline-flex; align-items: center; gap: 0.625rem; width: fit-content; min-height: 2.25rem; padding: 0 1rem 0 0.75rem; border-radius: 999px; border: 1px solid var(--line-strong); background: color-mix(in srgb, var(--bg) 40%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font: 400 0.875rem/1 var(--sans); color: var(--ink-2); text-decoration: none; transition: border-color 180ms var(--m-ease), color 180ms var(--m-ease); }
-a.chip:hover { color: var(--ink); border-color: var(--ink-3); }
+.chip { display: inline-flex; align-items: center; gap: 0.625rem; width: fit-content; min-height: 2.25rem; padding: 0 1rem 0 0.75rem; border-radius: 999px; border: 1px solid var(--line-strong); background: color-mix(in srgb, var(--bg) 40%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font: 400 0.875rem/1 var(--sans); color: var(--ink); text-decoration: none; transition: border-color 180ms var(--m-ease), background-color 180ms var(--m-ease); }
+a.chip:hover { border-color: var(--ink-3); background: color-mix(in srgb, var(--ink) 10%, transparent); }
 .dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--accent); }
 .display { margin: 0; font: 400 clamp(3rem, 8.4vw, 8.25rem)/0.94 var(--sans); letter-spacing: -0.055em; text-wrap: balance; }
 .display .dim { color: var(--ink-3); }
