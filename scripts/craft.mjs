@@ -56,7 +56,9 @@ const CONTROLS = `(() => {
     .filter((el) => {
       const r = el.getBoundingClientRect();
       const s = getComputedStyle(el);
-      return r.width > 0 && r.height > 0 && r.bottom > 0 && s.visibility !== 'hidden' && s.display !== 'none' && Number(s.opacity) > 0;
+      // checkVisibility also sees content hidden inside a closed <details> or by content-visibility, which still has a layout box.
+      const shown = typeof el.checkVisibility === 'function' ? el.checkVisibility({ contentVisibilityAuto: true, opacityProperty: true, visibilityProperty: true }) : true;
+      return shown && r.width > 0 && r.height > 0 && r.bottom > 0 && s.visibility !== 'hidden' && s.display !== 'none' && Number(s.opacity) > 0;
     })
     .map((el, i) => {
       el.setAttribute('data-craft', String(i));
