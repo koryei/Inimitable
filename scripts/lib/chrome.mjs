@@ -128,7 +128,7 @@ export async function launch() {
 }
 
 // Open one page at a given viewport. Returns helpers bound to it.
-export async function openPage(browser, { width, height, deviceScaleFactor = 1, mobile = false, colorScheme }) {
+export async function openPage(browser, { width, height, deviceScaleFactor = 1, mobile = false, colorScheme, reducedMotion = false }) {
   const { targetId } = await browser.send('Target.createTarget', { url: 'about:blank' });
   const { sessionId } = await browser.send('Target.attachToTarget', { targetId, flatten: true });
   const send = (method, params) => browser.send(method, params, sessionId);
@@ -145,11 +145,10 @@ export async function openPage(browser, { width, height, deviceScaleFactor = 1, 
   await send('Page.enable');
   await send('Runtime.enable');
   await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor, mobile });
-  if (colorScheme) {
-    await send('Emulation.setEmulatedMedia', {
-      features: [{ name: 'prefers-color-scheme', value: colorScheme }],
-    });
-  }
+  const features = [];
+  if (colorScheme) features.push({ name: 'prefers-color-scheme', value: colorScheme });
+  if (reducedMotion) features.push({ name: 'prefers-reduced-motion', value: 'reduce' });
+  if (features.length) await send('Emulation.setEmulatedMedia', { features });
   return {
     logs,
     send,
