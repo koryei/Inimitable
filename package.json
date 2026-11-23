@@ -1,6 +1,6 @@
 {
   "name": "inimitable",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A design skill for coding agents: builds and fixes interfaces until they look made on purpose.",
   "type": "module",
   "license": "Apache-2.0",
