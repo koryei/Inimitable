@@ -166,6 +166,7 @@ p a:hover, .note a:hover { color: var(--accent); text-decoration-thickness: 2px;
 
 /* ---------- Small screens ---------- */
 @media (max-width: 62rem) {
+  .c1, .c4, .c5, .c6 { min-height: 0; }
   .results, .install-grid { grid-template-columns: minmax(0, 1fr); }
   .gallery .shot { grid-column: span 12; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
