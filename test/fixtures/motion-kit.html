@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Motion kit</title>
+<script>document.documentElement.classList.add('m-js')</script>
+<link rel="stylesheet" href="../../assets/motion/motion.css">
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; background: #f2efe9; color: #1b1a17; }
+  .hero { min-height: 100vh; padding: 4rem 2rem; }
+  h1 { font-size: 4rem; line-height: 1; margin: 0 0 1rem; }
+  .gap { height: 120vh; }
+  .card { width: 16rem; height: 8rem; background: #fff; border: 1px solid #0002; margin: 1rem; position: relative; }
+  .btn-t { --btn-bg: #1b1a17; --btn-ink: #f2efe9; --btn-fill: #d2481f; --btn-ink-hover: #fff; }
+</style></head>
+<body>
+<section class="hero">
+  <h1 id="h"><span class="m-line"><span style="--d:0">Design that</span></span><span class="m-line"><span style="--d:70">looks decided</span></span></h1>
+  <p id="sub" data-enter style="--d:220">A subhead.</p>
+  <a id="btn" class="m-btn btn-t" href="#x" data-magnet>Get started <span class="m-arrow" aria-hidden="true"></span></a>
+</section>
+<div class="gap"></div>
+<section>
+  <div id="reveal" class="card" data-reveal>Reveal</div>
+  <div id="reveal2" class="card" data-reveal style="--i:2">Reveal 2</div>
+  <p id="count" data-count="120" data-suffix="K+">120K+</p>
+  <p id="count2" data-count="98.5" data-decimals="1" data-suffix="%">98.5%</p>
+  <div id="tilt" class="card" data-tilt data-max="8">Tilt</div>
+  <div id="spot" class="card m-card" data-spot>Spot</div>
+  <p id="split" data-split>Every word rises in turn</p>
+  <div id="marq" class="m-marquee"><div class="m-track"><span>One</span><span>Two</span><span>Three</span></div></div>
+</section>
+<script src="../../assets/motion/motion.js" defer></script>
+</body></html>
