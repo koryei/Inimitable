@@ -98,11 +98,13 @@ const SHAPES = {
   // A glow rising from the bottom edge, dark above: an atmosphere, a planet's limb, a sunrise.
   horizon(p, rand) {
     const x = 42 + rand() * 16;
+    // Pale pastel on pale paper barely differs in lightness, so a light horizon rises further into the frame.
+    const lift = p.dark ? 0 : 16;
     return [
-      pool(x, 112, 85, 62, p.family[2], 88),
-      pool(x - 12, 108, 68, 46, p.family[1], 80),
-      pool(x + 18, 104, 52, 34, p.counter, 74),
-      pool(x, 100, 62, 30, p.family[0], 78),
+      pool(x, 112 - lift, 85, 62 + lift / 2, p.family[2], 88),
+      pool(x - 12, 108 - lift, 68, 46 + lift / 2, p.family[1], 80),
+      pool(x + 18, 104 - lift, 52, 34 + lift / 2, p.counter, 74),
+      pool(x, 100 - lift, 62, 30 + lift / 2, p.family[0], 78),
     ];
   },
   // The inverse: light pours down from the top into the dark, leaving the lower half calm for type.
