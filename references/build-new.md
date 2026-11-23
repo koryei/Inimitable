@@ -16,6 +16,8 @@ The brand decides. It does not have to be a colour. A brand that is black and gr
 
 ## Steps
 
+For a landing page, run `node scripts/scaffold.mjs <folder>` first (`landing-craft.md`), then follow the steps below to replace and push it. The starter already carries the structure, the motion and the hover states; your job is the star, the words, the facts and the one thing only this product has.
+
 1. **Name the star** in one sentence, and say why it belongs to this product (use the subject inventory from Read).
 2. **Write the screen's argument**, one line: who arrives, what they need to leave with, what they do next.
 3. **List the sections** needed to deliver that argument, in order. Fewer is better: each section must earn its place with a different job and a different composition from its neighbours.

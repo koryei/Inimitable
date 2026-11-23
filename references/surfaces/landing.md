@@ -1,5 +1,7 @@
 # Surface: landing and marketing pages (Persuade)
 
+**Start with `node scripts/scaffold.mjs <folder>`** (see `landing-craft.md`). It writes a complete page that already has a lit ground, type anchored in the calm corner, a product frame, an unequal bento, an ordered entrance, scroll reveals, counters and a hover on every control, and passes every check. Then make it the product's own. Starting from a blank file is how a page ends up static and generic.
+
 A landing page is not a brochure. It is an **argument** made in a fixed order, to someone who is deciding whether to keep reading. Design is the product here: the page has to earn attention, then belief, then action, and it has about five seconds to earn the first one.
 
 This file gives the rules and the reason under each. When a case is not covered, reason from `principles.md`.
