@@ -25,6 +25,10 @@ The quick render after each section does not count against the three whole-scree
 
 Before you write a component, read `components.md` for the states and behaviours it needs, and `motion.md` for how it should open, close and swap. Before you add anything from outside the project (a component, a kit, a transition), read `libraries.md`: ask first, check the licence, and re-skin it to the project's tokens.
 
+## A pitfall: a ground behind its own parent
+
+A `z-index: -1` pseudo-element or ground inside an element that makes its own stacking context (`isolation: isolate`, `transform`, `opacity`, `filter`) paints over that element's own background, not behind it, so the colour you put on the parent disappears. Put the ground in a sibling layer inside the section (`.ground` as the first child, section `position: relative`), and give the content `position: relative`.
+
 ## Accessibility is part of building
 
 - Contrast 4.5:1 body, 3:1 large text and UI parts.

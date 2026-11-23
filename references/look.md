@@ -4,6 +4,8 @@ Numbers do not catch everything. Open the real screen and look at it as a person
 
 ## The four widths
 
+`shoot.mjs` captures the first screen of each width by default. Pass `--slices` (every screenful) or `--full` to see the rest of a long page; a hero that looks right says nothing about the footer.
+
 Always render at **320** (small phone), **390** (phone), **1440** (desktop) and **2560** (big screen) with `scripts/shoot.mjs`. A terminal UI is checked at its narrow and wide column counts (60 and 120) with `scripts/term-shot.mjs`. A native screen is checked on the smallest and largest device sizes the project supports.
 
 Also look at: dark and light themes if both exist; the empty, loading and error states; long and short content; the browser at 200% zoom.
