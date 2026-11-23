@@ -97,7 +97,7 @@ const PLACEHOLDER = new RegExp(${JSON.stringify(PLACEHOLDER_PATTERNS.join('|'))}
 const GREETING = new RegExp(${JSON.stringify(GREETING_PATTERN)}, 'i');
 const VAGUE_BUTTON = new RegExp(${JSON.stringify(VAGUE_BUTTON_PATTERN)}, 'i');
 const VAGUE_ERROR = new RegExp(${JSON.stringify(VAGUE_ERROR_PATTERN)}, 'i');
-const EMOJI = /\\p{Extended_Pictographic}/u;
+const EMOJI = /(?![\\u00A9\\u00AE\\u2122])\\p{Extended_Pictographic}/u;
 const found = [];
 const add = (tell, el, detail) => found.push({ tell, where: describe(el), detail: String(detail).slice(0, 90) });
 function hue(rgba) {
@@ -116,11 +116,12 @@ function isHueGradient(value) {
   return hues.some((h) => { const diff = Math.abs(h - hues[0]); return Math.min(diff, 360 - diff) > 25; });
 }
 function skip(el) {
-  return !!el.closest('script, style, code, pre, textarea, [contenteditable], svg, [data-brand]');
+  return !!el.closest('script, style, code, pre, textarea, [contenteditable], svg, [data-brand], .ground, [data-ground]');
 }
 function isLive(el) {
   return !!el.closest('[data-live], [aria-busy="true"], [role="progressbar"], [role="status"]');
 }
+for (const el of document.querySelectorAll('[data-todo]')) add('Unfinished placeholder', el, (el.textContent || '').trim().slice(0, 60) || el.tagName);
 for (const el of document.querySelectorAll('body, body *')) {
   if (skip(el) || !visible(el)) continue;
   const s = getComputedStyle(el);
@@ -217,7 +218,8 @@ for (const el of document.querySelectorAll('body, body *')) {
   if (el.closest('script, style, svg') || !visible(el)) continue;
   const s = getComputedStyle(el);
   const t = ownText(el);
-  if (t && !el.disabled && s.visibility === 'visible') {
+  // Text hidden from assistive technology is decoration (a watermark, an illustration's label), not content to read.
+  if (t && !el.disabled && s.visibility === 'visible' && !el.closest('[aria-hidden="true"]')) {
     const br = el.getBoundingClientRect();
     if (br.bottom < 0 || br.top > innerHeight) { el.scrollIntoView({ block: 'center', inline: 'nearest' }); }
     const bd = backdrop(el);
