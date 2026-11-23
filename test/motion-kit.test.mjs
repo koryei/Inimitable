@@ -92,12 +92,15 @@ test('tilt leans with the pointer and resets', { skip }, async () => {
     await wait(200);
     const c = await centre(page, '#tilt');
     await mouse(page, 'mouseMoved', c.x + c.w / 2 - 2, c.y);
-    await wait(250);
-    const ry = parseFloat(await page.evaluate("document.querySelector('#tilt').style.getPropertyValue('--ry')"));
+    // Poll rather than sleep: on a loaded machine the frame that writes the lean can come late.
+    const read = async () => parseFloat(await page.evaluate("document.querySelector('#tilt').style.getPropertyValue('--ry')"));
+    let ry = 0;
+    for (let i = 0; i < 20 && !(ry > 4); i++) { await wait(150); ry = await read(); }
     assert.ok(ry > 4, `ry ${ry}`);
     await mouse(page, 'mouseMoved', 2, 2);
-    await wait(200);
-    assert.equal(await page.evaluate("document.querySelector('#tilt').style.getPropertyValue('--ry')"), '0deg');
+    let back = '';
+    for (let i = 0; i < 20 && back !== '0deg'; i++) { await wait(150); back = await page.evaluate("document.querySelector('#tilt').style.getPropertyValue('--ry')"); }
+    assert.equal(back, '0deg');
   } finally { await chrome.close(); }
 });
 
