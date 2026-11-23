@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0
+
+Driven by your note that the work was clean but static, with nothing that set it apart, and by a head-to-head on a brief about an AI product (see `evals/results/`).
+
+- **Motion kit** (`assets/motion/`): masked headline entrance, ordered `data-enter`, scroll reveal, split text, count-up, magnetic and tilting elements, a pointer spotlight, marquee, drawn strokes, sweep buttons with a sliding arrow, link underlines that draw, a nav that settles. Every behaviour is proven in a browser, has a reduced-motion path, and a page whose script fails still reads. Two real bugs found by the tests and fixed: an element near the end of a page could never reveal, and a pointer that jumped into an element was ignored.
+- **Grainients in code** (`assets/recipes/mesh.mjs`): six light shapes (pools, horizon, bowl with a luminous rim, blob, sweep, rays), motes, nine palettes, `fromAccent`, and an audit that refuses colour that reads as paint. Every shape is rendered and measured in a browser.
+- **A tested landing starter** (`assets/starters/landing/`, `scripts/scaffold.mjs`): lit ground, floating nav, product frame, unequal bento, steps, one big number, closing call, footer; dark, light and a split hero with a slot for the one object only the product has. Driven end to end in a browser in three variants.
+- **Open fonts** (`assets/fonts/`): Geist, Geist Mono and Instrument Serif under the Open Font Licence.
+- **Real libraries** (`scripts/lib-add.mjs`): pulls Bencho, BoardUI, Aceternity or any shadcn-registry component as real source, files only, with the licence notice and the packages to install. Proven live against Bencho.
+- **`scripts/inline.mjs`**: bundles a page into one self-contained file. **`evals/feel.mjs`**: measures entrance, scroll motion, hover, a lit ground and type scale, which the mechanical score cannot see.
+- **`references/landing-craft.md`**: why the best landing pages work, ten decisions, with the kit piece that builds each and the script that catches each going wrong.
+- Scanner and checker fixes: placeholders (`data-todo`), a pill badge above the headline, a gradient logo tile, aria-hidden decoration exempt from contrast, closed menus ignored by the hover audit; `check` defaults to four widths and `shoot` waits long enough for an entrance to finish.
+
 ## Unreleased
 
 The skill taught rules but not reasons, and the site was clean and static. Both were rebuilt around why a screen feels made rather than assembled.
