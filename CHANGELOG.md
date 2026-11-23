@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.0
+
+Built from using the skill's own starters on real briefs and fixing what the tools found.
+
+- **An app starter** (`scripts/scaffold.mjs <folder> --kind app`): sidebar that becomes a menu on a phone, header with one primary action, four key numbers, one chart with an "example data" label, a table whose status is a word and a dot, an empty state, hover, focus and press on every control. Dark and light, tested at 320, 390, 1440 and 2560.
+- **`--minimal`** for the landing starter: a short brief keeps the hero, steps, closing call and footer, and nothing is left to delete. Cut sections take their links with them.
+- **A seventh ground, `contour`**: topographic lines over a soft pool of light, high in the frame so the headline stays on quiet ground.
+- On light grounds the counterpoint colour is a hint, so blob and pool grounds no longer read as paint. On a phone the split hero's object is a short wide card, so the headline starts higher.
+- Tool fixes: a button or link saying "New record" is no longer called a "New" badge; the link to the current page may stay still under `craft`; `craft --shots` waits for the previous hover to settle before the rest picture; a flaky tilt test now polls.
+- Docs: `shoot --slices`, `inline --out`, the two type tiers (working scale and display), and the stacking-context pitfall for grounds. Eval write-ups for rounds 4 and 5.
+
 ## 0.6.0
 
 Driven by your note that the work was clean but static, with nothing that set it apart, and by a head-to-head on a brief about an AI product (see `evals/results/`).
