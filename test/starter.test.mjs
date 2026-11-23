@@ -16,6 +16,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const variants = [
   { name: 'dark', options: { theme: 'dark', palette: 'midnight' } },
   { name: 'light', options: { theme: 'light', palette: 'ember', accent: '#d0532a' } },
+  { name: 'split', options: { theme: 'dark', palette: 'dusk', hero: 'split' } },
 ];
 
 for (const { name, options } of variants) {

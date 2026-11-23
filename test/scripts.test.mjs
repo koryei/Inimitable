@@ -123,3 +123,10 @@ test('craft does not report controls hidden inside a closed menu', { skip }, asy
   assert.deepEqual(silent, []);
   assert.equal(desktop.problems.length, 0, JSON.stringify(desktop.problems));
 });
+
+test('a pill badge above the headline and a gradient logo tile are tells', { skip }, async () => {
+  const found = await scan(fileURLToPath(new URL('./fixtures/badge-and-tile.html', import.meta.url)));
+  const kinds = new Set(found.map((f) => f.tell));
+  assert.ok(kinds.has('Pill badge above the headline'), [...kinds].join(', '));
+  assert.ok(kinds.has('Gradient logo tile'), [...kinds].join(', '));
+});
