@@ -1,0 +1,94 @@
+/* Motion kit. Pure CSS part. Pair with motion.js (behaviour) and put this in <head> before first paint:
+     <script>document.documentElement.classList.add('m-js')</script>
+   Nothing important is ever hidden unless that class is present, so a page whose script fails still reads.
+   Every rule honours prefers-reduced-motion. Only transform and opacity move. */
+
+:root {
+  --m-ease: cubic-bezier(0.22, 1, 0.36, 1);   /* long soft settle, for entrances and reveals */
+  --m-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --m-press: 120ms;
+  --m-hover: 180ms;
+  --m-open: 280ms;
+}
+
+/* ---------- Entrance: one gesture, in the order the page is understood ---------- */
+/* Headline lines rise out of a mask. Markup:  <h1><span class="m-line"><span style="--d:0">One</span></span>…</h1> */
+.m-line { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.m-line > span { display: block; animation: m-line-up 800ms var(--m-ease) calc(var(--d, 0) * 1ms) both; }
+@keyframes m-line-up { from { transform: translateY(105%); } to { transform: none; } }
+
+/* Everything else on the first screen: data-enter with a delay in ms, and optionally a distance. */
+[data-enter] { animation: m-rise 700ms var(--m-ease) calc(var(--d, 0) * 1ms) both; }
+[data-enter="frame"] { animation-name: m-frame; animation-duration: 1000ms; }
+[data-enter="fade"] { animation-name: m-fade; animation-duration: 1200ms; }
+@keyframes m-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes m-frame { from { opacity: 0; transform: translateY(34px) scale(0.985); } to { opacity: 1; transform: none; } }
+@keyframes m-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Scroll reveal (needs motion.js) ---------- */
+.m-js [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 650ms var(--m-ease), transform 650ms var(--m-ease); transition-delay: calc(var(--i, 0) * 60ms); }
+.m-js [data-reveal].in { opacity: 1; transform: none; }
+.m-js [data-reveal="left"] { transform: translateX(-24px); }
+.m-js [data-reveal="scale"] { transform: scale(0.96); }
+.m-js [data-reveal].in { transform: none; }
+
+/* ---------- Buttons: a fill that sweeps in, an arrow that slides, a press that sinks ---------- */
+.m-btn { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0 1.25rem; overflow: hidden; color: var(--btn-ink, #fff); background: var(--btn-bg, #111); border: 1px solid var(--btn-edge, transparent); border-radius: var(--btn-radius, 999px); font: 500 0.9375rem/1 var(--sans, system-ui, sans-serif); text-decoration: none; cursor: pointer; transition: color var(--m-hover) var(--m-ease), transform var(--m-press) var(--m-ease), border-color var(--m-hover) var(--m-ease); }
+.m-btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--btn-fill, #fff); transform: translateY(101%); border-radius: inherit; transition: transform 360ms var(--m-ease); }
+.m-btn:hover::before, .m-btn:focus-visible::before { transform: none; }
+.m-btn:hover, .m-btn:focus-visible { color: var(--btn-ink-hover, #111); }
+.m-btn:active { transform: scale(0.97); }
+.m-btn:focus-visible { outline: 2px solid var(--btn-ring, currentColor); outline-offset: 3px; }
+.m-btn .m-arrow { position: relative; display: inline-block; width: 1em; height: 1em; overflow: hidden; flex: none; }
+.m-btn .m-arrow::before, .m-btn .m-arrow::after { content: ""; position: absolute; inset: 0; background: currentColor; -webkit-mask: var(--arrow) center / contain no-repeat; mask: var(--arrow) center / contain no-repeat; transition: transform 360ms var(--m-ease); }
+.m-btn .m-arrow::after { transform: translate(-130%, 130%); }
+.m-btn:hover .m-arrow::before, .m-btn:focus-visible .m-arrow::before { transform: translate(130%, -130%); }
+.m-btn:hover .m-arrow::after, .m-btn:focus-visible .m-arrow::after { transform: none; }
+.m-btn { --arrow: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 12L12 4M6 4h6v6' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>"); }
+
+/* ---------- Links: an underline that draws ---------- */
+.m-link { position: relative; text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 320ms var(--m-ease); padding-bottom: 2px; }
+.m-link:hover, .m-link:focus-visible { background-size: 100% 1px; }
+
+/* ---------- Cards: lift, light, tilt (light and tilt need motion.js) ---------- */
+.m-card { position: relative; isolation: isolate; transition: transform var(--m-open) var(--m-ease), border-color var(--m-hover) var(--m-ease); }
+.m-card:hover { transform: translateY(-4px); }
+[data-spot]::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 300ms var(--m-ease); background: radial-gradient(18rem circle at var(--mx, 50%) var(--my, 50%), var(--spot, rgba(255,255,255,0.10)), transparent 60%); }
+[data-spot]:hover::after { opacity: 1; }
+[data-tilt] { transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 500ms var(--m-ease); will-change: transform; }
+[data-tilt].is-tilting { transition: transform 80ms linear; }
+
+/* ---------- Magnetic: the element leans toward the pointer (motion.js sets --tx --ty) ---------- */
+[data-magnet] { transform: translate(var(--tx, 0px), var(--ty, 0px)); transition: transform 400ms var(--m-ease); }
+[data-magnet].is-pulled { transition: transform 90ms linear; }
+
+/* ---------- Marquee: slow, pausable, never behind text ---------- */
+.m-marquee { display: flex; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.m-marquee > .m-track { display: flex; flex: none; align-items: center; gap: var(--gap, 3rem); padding-right: var(--gap, 3rem); animation: m-marquee var(--dur, 50s) linear infinite; }
+.m-marquee:hover > .m-track, .m-marquee:focus-within > .m-track { animation-play-state: paused; }
+@keyframes m-marquee { to { transform: translateX(-100%); } }
+
+/* ---------- Ground drift: a very slow breath for a gradient ground, transform only ---------- */
+.m-drift { animation: m-drift 38s ease-in-out infinite alternate; will-change: transform; }
+@keyframes m-drift { from { transform: translate3d(-1.5%, -1%, 0) scale(1.04); } to { transform: translate3d(1.5%, 1%, 0) scale(1.08); } }
+
+/* ---------- Nav that settles when you scroll ---------- */
+[data-nav] { transition: background-color 300ms var(--m-ease), box-shadow 300ms var(--m-ease), transform 300ms var(--m-ease); }
+
+/* ---------- Counters: tabular so digits do not dance ---------- */
+[data-count] { font-variant-numeric: tabular-nums; }
+
+/* ---------- Draw: a line that draws itself when it enters (stroke-dasharray set by motion.js) ---------- */
+[data-draw] path, [data-draw] line, [data-draw] polyline { transition: stroke-dashoffset 1400ms var(--m-ease); }
+
+/* ---------- Reduced motion: nothing travels, nothing loops, everything is visible ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .m-line > span, [data-enter] { animation: none; }
+  .m-js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .m-btn, .m-btn::before, .m-btn .m-arrow::before, .m-btn .m-arrow::after, .m-card, [data-tilt], [data-magnet] { transition: none; }
+  .m-btn:hover { transform: none; }
+  .m-marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .m-marquee > .m-track { animation: none; }
+  .m-drift { animation: none; }
+  [data-draw] path, [data-draw] line, [data-draw] polyline { transition: none; stroke-dashoffset: 0 !important; }
+}
