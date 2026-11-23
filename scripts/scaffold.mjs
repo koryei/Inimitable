@@ -3,10 +3,11 @@
 // a product frame, a bento, steps, a big number, a closing call and a footer, with the motion kit wired in.
 //
 //   node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c']
-//                             [--seed 1] [--grain 0.45]
+//                             [--seed 1] [--grain 0.45] [--hero stack|split]
 //
 //   theme    dark or light (default dark)
 //   palette  one of the built-in grounds (see assets/recipes/mesh.mjs), or use --accent to derive one
+//   hero     stack (headline over its copy) or split (headline beside the one object only this product has)
 //   shape    pools | horizon | bowl | blob | sweep for the hero ground (default: bowl on dark, blob on light)
 //
 // Everything marked data-todo is placeholder. Replace it with the product's real words and numbers.
@@ -45,7 +46,7 @@ export function themeCss({ dark, palette }) {
 `;
 }
 
-export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, shape, seed = 1, grain = 0.45 } = {}) {
+export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, shape, seed = 1, grain = 0.45, hero: heroLayout = 'stack' } = {}) {
   const dark = theme === 'dark';
   let pal;
   if (accent) pal = fromAccent(accent, { dark });
@@ -60,7 +61,10 @@ export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, s
 
   mkdirSync(dest, { recursive: true });
   const starter = join(root, 'assets', 'starters', 'landing');
-  writeFileSync(join(dest, 'index.html'), readFileSync(join(starter, 'index.html'), 'utf8').replace('data-theme="dark"', `data-theme="${theme}"`));
+  let html = readFileSync(join(starter, 'index.html'), 'utf8').replace('data-theme="dark"', `data-theme="${theme}"`);
+  // The object block exists only in the split layout.
+  html = heroLayout === 'split' ? html.replace('<div class="hero-in">', '<div class="hero-in split">').replace(/<!--\/?object-->\n?/g, '') : html.replace(/ *<!--object-->[\s\S]*?<!--\/object-->\n?/, '');
+  writeFileSync(join(dest, 'index.html'), html);
   copyFileSync(join(starter, 'landing.css'), join(dest, 'landing.css'));
   copyFileSync(join(root, 'assets', 'motion', 'motion.css'), join(dest, 'motion.css'));
   copyFileSync(join(root, 'assets', 'motion', 'motion.js'), join(dest, 'motion.js'));
@@ -73,7 +77,7 @@ export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, s
 if (isMain(import.meta.url)) {
   const { positional, flags } = parseArgs(process.argv.slice(2));
   if (!positional[0]) {
-    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45]");
+    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split]");
     process.exit(2);
   }
   try {
@@ -84,6 +88,7 @@ if (isMain(import.meta.url)) {
       shape: typeof flags.shape === 'string' ? flags.shape : undefined,
       seed: flags.seed ? Number(flags.seed) : 1,
       grain: flags.grain ? Number(flags.grain) : 0.45,
+      hero: flags.hero === 'split' ? 'split' : 'stack',
     });
     console.log(`Started ${result.dest}  (${flags.theme === 'light' ? 'light' : 'dark'}, ${result.shape} ground)`);
     console.log(`${result.todo} placeholders to replace (every data-todo). signs.mjs lists any left.`);
