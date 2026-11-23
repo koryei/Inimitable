@@ -15,6 +15,7 @@ a { color: inherit; }
 /* ---------- Tokens used by the kit ---------- */
 .m-btn { --btn-bg: var(--ink); --btn-ink: var(--bg); --btn-fill: var(--accent); --btn-ink-hover: var(--on-accent); --btn-ring: var(--accent); font-family: var(--sans); }
 .m-btn.ghost { --btn-bg: transparent; --btn-ink: var(--ink); --btn-edge: var(--line-strong); --btn-fill: var(--ink); --btn-ink-hover: var(--bg); }
+.m-btn { white-space: nowrap; }
 .m-btn.glass { --btn-bg: color-mix(in srgb, var(--ink) 10%, transparent); --btn-ink: var(--ink); --btn-edge: var(--line); --btn-fill: var(--ink); --btn-ink-hover: var(--bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .m-btn.large { min-height: 3.25rem; padding: 0 1.5rem; font-size: 1rem; }
 
@@ -23,7 +24,8 @@ a { color: inherit; }
 .nav-in { pointer-events: auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: min(100% - 2rem, 62rem); margin-inline: auto; padding: 0.5rem 0.5rem 0.5rem 1.25rem; border-radius: 999px; border: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4); transition: background-color 300ms var(--m-ease), border-color 300ms var(--m-ease); }
 .nav.is-stuck .nav-in { background: color-mix(in srgb, var(--bg) 82%, transparent); border-color: var(--line-strong); }
 .brand { display: inline-flex; align-items: center; gap: 0.625rem; min-height: 2.75rem; font: 500 1.0625rem/1 var(--sans); letter-spacing: -0.02em; text-decoration: none; }
-.brand-mark { width: 1.25rem; height: 1.25rem; border-radius: 0.375rem; background: conic-gradient(from 210deg, var(--accent), var(--ink) 40%, var(--accent)); transition: transform 500ms var(--m-ease), border-radius 500ms var(--m-ease); }
+.brand-mark { position: relative; width: 1.25rem; height: 1.25rem; border-radius: 0.375rem; background: var(--ink); transition: transform 500ms var(--m-ease), border-radius 500ms var(--m-ease); }
+.brand-mark::after { content: ""; position: absolute; right: 0.25rem; bottom: 0.25rem; width: 0.4375rem; height: 0.4375rem; border-radius: 50%; background: var(--accent); }
 .brand:hover .brand-mark, .brand:focus-visible .brand-mark { transform: rotate(120deg); border-radius: 50%; }
 .links { display: flex; gap: 0.25rem; margin: 0; padding: 0; list-style: none; }
 .links a { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 0.875rem; font-size: 0.9375rem; color: var(--ink-2); text-decoration: none; border-radius: 999px; transition: color 180ms var(--m-ease), background-color 180ms var(--m-ease); }
@@ -40,12 +42,13 @@ a { color: inherit; }
 
 /* ---------- Hero: one lit frame, type in its calm corner ---------- */
 .hero { position: relative; isolation: isolate; margin: 0.75rem; border-radius: var(--radius); overflow: hidden; min-height: min(100svh - 1.5rem, 64rem); display: flex; align-items: flex-end; background: var(--bg); }
+/* Whatever the palette, the type sits on calm ground: the page colour rises softly from the bottom of the frame. */
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to top, color-mix(in srgb, var(--bg) 88%, transparent) 0%, color-mix(in srgb, var(--bg) 62%, transparent) 34%, transparent 70%); }
 .hero-in { position: relative; width: min(100% - 3rem, 80rem); margin-inline: auto; padding: 8rem 0 3rem; display: grid; gap: 2.5rem; }
-.chip { display: inline-flex; align-items: center; gap: 0.625rem; width: fit-content; min-height: 2.25rem; padding: 0 1rem 0 0.75rem; border-radius: 999px; border: 1px solid var(--line-strong); background: color-mix(in srgb, var(--bg) 40%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font: 400 0.875rem/1 var(--sans); color: var(--ink); text-decoration: none; transition: border-color 180ms var(--m-ease), background-color 180ms var(--m-ease); }
-a.chip:hover { border-color: var(--ink-3); background: color-mix(in srgb, var(--ink) 10%, transparent); }
-.dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--accent); }
 .display { margin: 0; font: 400 clamp(3rem, 8.4vw, 8.25rem)/0.94 var(--sans); letter-spacing: -0.055em; text-wrap: balance; }
 .display .dim { color: var(--ink-3); }
+.hero-main { display: grid; gap: 2.5rem; }
+.hero-object { display: none; margin: 0; }
 .hero-foot { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 3rem; align-items: end; }
 .lede { max-width: 30rem; margin: 0 0 1.75rem; font-size: 1.1875rem; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
 .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
@@ -54,6 +57,16 @@ a.chip:hover { border-color: var(--ink-3); background: color-mix(in srgb, var(--
 .stats dt { order: 2; font-size: 0.875rem; color: var(--ink-3); }
 .stats dd { order: 1; margin: 0; font: 400 clamp(2.25rem, 4.2vw, 3.75rem)/1 var(--sans); letter-spacing: -0.045em; font-variant-numeric: tabular-nums; }
 .note { margin: 1rem 0 0; font: 400 0.75rem/1.4 var(--mono); color: var(--ink-3); }
+
+/* Split hero: the headline beside the one object only this product has (scaffold --hero split). */
+.hero-in.split { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); align-items: end; gap: 3.5rem; }
+.hero-in.split .hero-object { display: block; align-self: center; position: relative; aspect-ratio: 1; border-radius: 1.75rem; border: 1px solid var(--line-strong); background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 1.5rem; }
+.hero-in.split .hero-object svg { width: 100%; height: 100%; }
+.hero-in.split .hero-object figcaption { position: absolute; left: 1.5rem; right: 1.5rem; bottom: 1rem; margin: 0; }
+.hero-in.split .display { font-size: clamp(2.75rem, 6vw, 6rem); }
+.hero-in.split .hero-foot { grid-template-columns: 1fr; gap: 2rem; }
+.hero-in.split .stats { justify-content: flex-start; }
+@media (max-width: 62rem) { .hero-in.split { grid-template-columns: 1fr; } .hero-in.split .hero-object { order: -1; aspect-ratio: 4 / 3; max-width: 28rem; } }
 
 /* ---------- Sections ---------- */
 .section { padding: clamp(5rem, 11vw, 9rem) 0 0; }
@@ -157,8 +170,7 @@ a.chip:hover { border-color: var(--ink-3); background: color-mix(in srgb, var(--
   .float { display: none; }
 }
 @media (max-width: 40rem) {
-  .chip { min-height: 2.75rem; }
-  .foot li a { min-height: 2.75rem; min-width: 2.75rem; }
+    .foot li a { min-height: 2.75rem; min-width: 2.75rem; }
   .wrap, .hero-in { width: min(100% - 2rem, 80rem); }
   .hero { margin: 0.5rem; min-height: min(100svh - 1rem, 56rem); }
   .hero-in { padding: 7rem 0 2rem; gap: 2rem; }
