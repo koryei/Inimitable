@@ -1,4 +1,4 @@
-/* Motion kit: behaviour. No dependencies. Add with <script src="motion.js" defer></script>.
+/* Motion kit: behaviour. No dependencies. Load it with a deferred script tag.
    Everything is opt-in by attribute, runs once unless stated, and does nothing under prefers-reduced-motion
    except put content in its final state (counters show their final value, reveals show immediately).
 

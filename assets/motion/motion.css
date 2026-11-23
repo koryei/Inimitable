@@ -1,5 +1,5 @@
-/* Motion kit. Pure CSS part. Pair with motion.js (behaviour) and put this in <head> before first paint:
-     <script>document.documentElement.classList.add('m-js')</script>
+/* Motion kit. Pure CSS part. Pair with motion.js (behaviour). Before first paint, in the head, a one-line inline
+   script adds the class m-js to the html element (see the starter's index.html for the exact line).
    Nothing important is ever hidden unless that class is present, so a page whose script fails still reads.
    Every rule honours prefers-reduced-motion. Only transform and opacity move. */
 
