@@ -2,6 +2,8 @@
 
 The person came to get a job done. The interface is a tool: they should know where everything is before they notice the style. Brand shows in precise details, not in expression.
 
+**For a new app screen, start with `node scripts/scaffold.mjs <folder> --kind app [--theme dark|light] [--accent '#hex']`.** It writes a working surface that already follows the rules below: a sidebar that becomes a menu on a phone, a page header with its one primary action, four key numbers, one chart with its legend and an "example data" label, a table whose status is a word and a dot, an empty state that says what to do, and a hover, focus and press state on every control. Four type sizes, one neutral ramp, one accent. It passes `check`, `signs` and `craft` at all four widths. Replace every `data-todo` with the product's own words and numbers; label drawn data as an example until it is real.
+
 ## Structure
 
 - **Shell:** fixed top bar (56 to 64) or a sidebar (240 to 280), fluid content capped near 1440 to 1600. The shell fills the viewport. Navigation names where you are.
