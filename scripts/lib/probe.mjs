@@ -192,7 +192,9 @@ for (const el of document.querySelectorAll('body, body *')) {
     if ((el.tagName === 'BUTTON' || el.getAttribute('role') === 'button' || el.matches('a.button, a.btn')) && VAGUE_BUTTON.test(text.replace(/[.!]+$/, ''))) add('Vague button label', el, text);
     if (VAGUE_ERROR.test(text)) add('Vague error message', el, text);
     if ((el.tagName === 'BUTTON' || el.tagName === 'LABEL') && /\\.$/.test(text) && text.split(/\\s+/).length <= 12 && !/\\.\\s+\\S/.test(text)) add('Trailing period on a label', el, text);
-    if (/^(new|beta|pro|introducing)\\b/i.test(text.replace(/^[^\\p{L}]+/u, '')) && text.length < 40 && (px(s.borderTopLeftRadius) >= 8 || EMOJI.test(text))) add('Badge above or beside content', el, text);
+    // A button or link styled as one that says "New record" is an action, not a "New" badge.
+    const isAction = el.matches('button, [role="button"], a.btn, a.button, a[href].m-btn');
+    if (!isAction && /^(new|beta|pro|introducing)\\b/i.test(text.replace(/^[^\\p{L}]+/u, '')) && text.length < 40 && (px(s.borderTopLeftRadius) >= 8 || EMOJI.test(text))) add('Badge above or beside content', el, text);
     if (s.fontStyle === 'italic' && /^(EM|I)$/.test(el.tagName) && !el.closest('blockquote, cite, q') && size < 24) add('Italic emphasis', el, text);
   }
   if (s.animationName !== 'none' && s.animationIterationCount === 'infinite' && !isLive(el) && !el.closest('[data-loop]')) add('Looping animation', el, s.animationName);
