@@ -43,27 +43,38 @@
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="ground" aria-hidden="true"></div>
     <div class="hero-in">
-      <a class="chip" href="#features" data-enter style="--d:60"><span class="dot" aria-hidden="true"></span><span data-todo>New: one real, recent thing</span></a>
-      <h1 class="display" id="hero-title" data-todo>
-        <span class="m-line"><span style="--d:0">What it does,</span></span>
-        <span class="m-line dim"><span style="--d:90">for whom.</span></span>
-      </h1>
-      <div class="hero-foot">
-        <div>
-          <p class="lede" data-enter style="--d:260" data-todo>One or two plain sentences: what the product is, who it is for, and the result they get.</p>
-          <div class="actions" data-enter style="--d:340">
-            <a class="m-btn large" href="#start" data-magnet data-todo>Primary action <span class="m-arrow" aria-hidden="true"></span></a>
-            <a class="m-btn large glass" href="#product" data-todo>See it working</a>
+      <div class="hero-main">
+        <h1 class="display" id="hero-title" data-todo>
+          <span class="m-line"><span style="--d:0">What it does,</span></span>
+          <span class="m-line dim"><span style="--d:90">for whom.</span></span>
+        </h1>
+        <div class="hero-foot">
+          <div>
+            <p class="lede" data-enter style="--d:260" data-todo>One or two plain sentences: what the product is, who it is for, and the result they get.</p>
+            <div class="actions" data-enter style="--d:340">
+              <a class="m-btn large" href="#start" data-magnet data-todo>Primary action <span class="m-arrow" aria-hidden="true"></span></a>
+              <a class="m-btn large glass" href="#product" data-todo>See it working</a>
+            </div>
+          </div>
+          <div>
+            <dl class="stats" data-enter style="--d:440">
+              <div><dd data-count="120" data-suffix="K+" data-todo>120K+</dd><dt data-todo>A real figure</dt></div>
+              <div><dd data-count="98" data-suffix="%" data-todo>98%</dd><dt data-todo>A real figure</dt></div>
+              <div><dd data-count="24" data-suffix="h" data-todo>24h</dd><dt data-todo>A real figure</dt></div>
+            </dl>
           </div>
         </div>
-        <div>
-          <dl class="stats" data-enter style="--d:440">
-            <div><dd data-count="120" data-suffix="K+" data-todo>120K+</dd><dt data-todo>A real figure</dt></div>
-            <div><dd data-count="98" data-suffix="%" data-todo>98%</dd><dt data-todo>A real figure</dt></div>
-            <div><dd data-count="24" data-suffix="h" data-todo>24h</dd><dt data-todo>A real figure</dt></div>
-          </dl>
-        </div>
       </div>
+      <!--object-->
+      <figure class="hero-object" data-enter="frame" style="--d:300" aria-label="The one object only this product has. Replace this drawing.">
+        <svg viewBox="0 0 400 400" fill="none" data-draw aria-hidden="true">
+          <g stroke="var(--line-strong)" stroke-width="1"><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="104"/><circle cx="200" cy="200" r="58"/><path d="M200 30V370M30 200H370"/></g>
+          <path d="M200 200L318 118" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="318" cy="118" r="7" fill="var(--accent)"/>
+        </svg>
+        <figcaption class="note" data-todo>Replace with the object only this product has. Label anything drawn as an example.</figcaption>
+      </figure>
+      <!--/object-->
     </div>
   </section>
 
