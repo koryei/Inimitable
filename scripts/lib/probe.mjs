@@ -168,7 +168,7 @@ for (const el of document.querySelectorAll('body, body *')) {
       const nums = (part.match(/-?[\\d.]+px/g) || []).map(px);
       const blur = nums[2] || 0;
       const colour = colourStops(part)[0];
-      if (colour && hue(colour) !== null && colour[3] > 0.08 && blur >= 8) { add('Coloured glow', el, part.trim()); break; }
+      if (colour && hue(colour) !== null && colour[3] > 0.08 && blur >= 8) { add('Coloured glow', el, 'a tinted, blurred shadow (' + part.trim() + '): use a neutral shadow such as rgba(0,0,0,.18), or none'); break; }
     }
   }
   if (s.textShadow && s.textShadow !== 'none') {
