@@ -122,6 +122,28 @@ function isLive(el) {
   return !!el.closest('[data-live], [aria-busy="true"], [role="progressbar"], [role="status"]');
 }
 for (const el of document.querySelectorAll('[data-todo]')) add('Unfinished placeholder', el, (el.textContent || '').trim().slice(0, 60) || el.tagName);
+{
+  // A pill badge sitting right above the page's headline ("New", "Introducing...", a dot and a few words).
+  const h1 = document.querySelector('h1');
+  if (h1) {
+    const top = h1.getBoundingClientRect().top;
+    const seen = new Set();
+    const badge = (c) => {
+      const cs = getComputedStyle(c);
+      const r = c.getBoundingClientRect();
+      const t = (c.textContent || '').trim();
+      return /inline/.test(cs.display) && parseFloat(cs.borderTopLeftRadius) >= 12 && (parseFloat(cs.borderTopWidth) > 0 || toRGBA(cs.backgroundColor)[3] > 0.03) && t && t.split(/\s+/).length <= 8 && r.height > 0 && r.height <= 52 && r.bottom <= top + 12 && top - r.bottom < 160;
+    };
+    for (let node = h1; node && node !== document.body && seen.size < 4; node = node.parentElement) {
+      const c = node.previousElementSibling;
+      if (!c || seen.has(c)) continue;
+      seen.add(c);
+      // The badge may be the sibling itself, or the only thing inside a block wrapper.
+      const hit = badge(c) ? c : c.children.length === 1 && badge(c.firstElementChild) ? c.firstElementChild : null;
+      if (hit) add('Pill badge above the headline', hit, (hit.textContent || '').trim());
+    }
+  }
+}
 for (const el of document.querySelectorAll('body, body *')) {
   if (skip(el) || !visible(el)) continue;
   const s = getComputedStyle(el);
@@ -130,6 +152,13 @@ for (const el of document.querySelectorAll('body, body *')) {
   const weight = parseInt(s.fontWeight, 10);
   const heading = /^H[1-6]$/.test(el.tagName);
 
+  {
+    const box = el.getBoundingClientRect();
+    // A small square filled with a gradient is the machine-made logo: a tile, a sparkle, a glossy ball.
+    const ratio = box.width / (box.height || 1);
+    const stops = new Set(colourStops(s.backgroundImage).map((c) => c.join(',')));
+    if (s.backgroundImage.includes('gradient') && stops.size >= 2 && box.width >= 10 && box.width <= 48 && box.height >= 10 && box.height <= 48 && ratio > 0.8 && ratio < 1.25 && !el.closest('button, input')) add('Gradient logo tile', el, s.backgroundImage);
+  }
   if (s.backgroundImage && s.backgroundImage.includes('gradient')) {
     if (s.webkitBackgroundClip === 'text' || s.backgroundClip === 'text') add('Gradient text', el, s.backgroundImage);
     else if (isHueGradient(s.backgroundImage)) add('Hue-to-hue gradient', el, s.backgroundImage);
