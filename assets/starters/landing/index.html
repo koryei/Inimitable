@@ -21,8 +21,8 @@
   <nav class="nav-in" aria-label="Main">
     <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span data-todo>Product</span></a>
     <ul class="links">
-      <li><a href="#product" data-todo>Product</a></li>
-      <li><a href="#features" data-todo>Features</a></li>
+      <!--optional:product--><li><a href="#product" data-todo>Product</a></li><!--/optional:product-->
+      <!--optional:features--><li><a href="#features" data-todo>Features</a></li><!--/optional:features-->
       <li><a href="#how" data-todo>How it works</a></li>
       <li><a href="#start" data-todo>Pricing</a></li>
     </ul>
@@ -30,8 +30,8 @@
     <details class="nav-menu">
       <summary>Menu</summary>
       <ul>
-        <li><a href="#product" data-todo>Product</a></li>
-        <li><a href="#features" data-todo>Features</a></li>
+        <!--optional:product--><li><a href="#product" data-todo>Product</a></li><!--/optional:product-->
+        <!--optional:features--><li><a href="#features" data-todo>Features</a></li><!--/optional:features-->
         <li><a href="#how" data-todo>How it works</a></li>
         <li><a href="#start" data-todo>Get started</a></li>
       </ul>
@@ -78,6 +78,7 @@
     </div>
   </section>
 
+<!--optional:ticker-->
   <div class="ticker" aria-label="What it covers" data-todo>
     <div class="m-marquee" data-loop>
       <div class="m-track">
@@ -85,7 +86,9 @@
       </div>
     </div>
   </div>
+<!--/optional:ticker-->
 
+<!--optional:product-->
   <section class="section wrap" id="product" aria-labelledby="product-title">
     <div class="head" data-reveal>
       <div><p class="eyebrow" data-todo>Product</p><h2 class="h2" id="product-title" data-todo>The real thing, <span class="dim">shown large.</span></h2></div>
@@ -116,7 +119,9 @@
       <p class="note" data-todo>Example data. Replace this screen with the real product, or state plainly that it is illustrative.</p>
     </div>
   </section>
+<!--/optional:product-->
 
+<!--optional:features-->
   <section class="section wrap" id="features" aria-labelledby="features-title">
     <div class="head" data-reveal>
       <div><p class="eyebrow" data-todo>Features</p><h2 class="h2" id="features-title" data-todo>Each one earns <span class="dim">its place.</span></h2></div>
@@ -136,6 +141,7 @@
       <article class="cell c6" data-reveal data-spot style="--i:5"><div><h3 data-todo>Small feature</h3><p data-todo>One short sentence.</p></div></article>
     </div>
   </section>
+<!--/optional:features-->
 
   <section class="section wrap" id="how" aria-labelledby="how-title">
     <div class="head" data-reveal>
@@ -150,12 +156,14 @@
     </div>
   </section>
 
+<!--optional:proof-->
   <section class="section wrap" aria-label="A number that matters">
     <div class="proof" data-reveal>
       <b data-count="92" data-suffix="%" data-todo>92%</b>
       <p data-todo>One real result, stated plainly. <span>Say where the number comes from.</span></p>
     </div>
   </section>
+<!--/optional:proof-->
 
   <section class="closer" id="start" aria-labelledby="close-title">
     <div class="ground" aria-hidden="true"></div>
@@ -170,7 +178,7 @@
 <footer class="foot wrap">
   <div class="foot-cols">
     <div><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span data-todo>Product</span></a><p data-todo>One line about what it is.</p></div>
-    <div><h4 data-todo>Product</h4><ul><li><a class="m-link" href="#product" data-todo>Overview</a></li><li><a class="m-link" href="#features" data-todo>Features</a></li><li><a class="m-link" href="#how" data-todo>How it works</a></li></ul></div>
+    <div><h4 data-todo>Product</h4><ul><!--optional:product--><li><a class="m-link" href="#product" data-todo>Overview</a></li><!--/optional:product--><!--optional:features--><li><a class="m-link" href="#features" data-todo>Features</a></li><!--/optional:features--><li><a class="m-link" href="#how" data-todo>How it works</a></li></ul></div>
     <div><h4 data-todo>Company</h4><ul><li><a class="m-link" href="#" data-todo>About</a></li><li><a class="m-link" href="#" data-todo>Contact</a></li></ul></div>
     <div><h4 data-todo>Legal</h4><ul><li><a class="m-link" href="#" data-todo>Privacy</a></li><li><a class="m-link" href="#" data-todo>Terms</a></li></ul></div>
   </div>

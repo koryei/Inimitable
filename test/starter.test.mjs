@@ -97,3 +97,32 @@ for (const { name, options } of variants) {
     } finally { await chrome.close(); }
   });
 }
+
+// --minimal: a short brief with few facts keeps the hero, the steps, the closing call and the footer.
+{
+  const dir = mkdtempSync(join(tmpdir(), 'starter-minimal-'));
+  const result = scaffold(dir, { theme: 'light', palette: 'ember', minimal: true });
+  const full = scaffold(mkdtempSync(join(tmpdir(), 'starter-full-')), { theme: 'light', palette: 'ember' });
+  const file = join(dir, 'index.html');
+
+  test('minimal: the optional sections and their links are gone, and the markers with them', async () => {
+    const { readFileSync } = await import('node:fs');
+    const html = readFileSync(file, 'utf8');
+    assert.ok(result.todo < full.todo, `${result.todo} placeholders against ${full.todo}`);
+    assert.doesNotMatch(html, /optional:/);
+    for (const id of ['product', 'features']) {
+      assert.doesNotMatch(html, new RegExp(`id="${id}"`));
+      assert.doesNotMatch(html, new RegExp(`href="#${id}"`));
+    }
+    // Every in-page link still lands on something.
+    const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
+    for (const [, target] of html.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.has(target), `#${target} has nothing to land on`);
+  });
+
+  test('minimal: the page passes the same checks as the full one', { skip }, async () => {
+    const kinds = new Set((await scan(file)).map((f) => f.tell));
+    assert.deepEqual([...kinds], ['Unfinished placeholder']);
+    for (const r of await check(file, [320, 1440])) assert.deepEqual(r.problems, [], `${r.width}px: ${JSON.stringify(r.problems)}`);
+    for (const r of await craft(file, { widths: [390, 1440] })) assert.deepEqual(r.problems, [], `${r.width}px: ${JSON.stringify(r.problems)}`);
+  });
+}
