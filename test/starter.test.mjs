@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { check } from '../scripts/check.mjs';
 import { craft } from '../scripts/craft.mjs';
-import { scaffold } from '../scripts/scaffold.mjs';
+import { scaffold, scaffoldApp } from '../scripts/scaffold.mjs';
 import { scan } from '../scripts/signs.mjs';
 import { findChrome, launch, openPage, toUrl } from '../scripts/lib/chrome.mjs';
 
@@ -124,5 +124,46 @@ for (const { name, options } of variants) {
     assert.deepEqual([...kinds], ['Unfinished placeholder']);
     for (const r of await check(file, [320, 1440])) assert.deepEqual(r.problems, [], `${r.width}px: ${JSON.stringify(r.problems)}`);
     for (const r of await craft(file, { widths: [390, 1440] })) assert.deepEqual(r.problems, [], `${r.width}px: ${JSON.stringify(r.problems)}`);
+  });
+}
+
+// The app starter: a working surface with a sidebar, key numbers, a chart, a table and an empty state.
+for (const { name, options } of [{ name: 'app dark', options: { theme: 'dark' } }, { name: 'app light', options: { theme: 'light', accent: '#2f5fd0' } }]) {
+  const dir = mkdtempSync(join(tmpdir(), 'starter-app-'));
+  const result = scaffoldApp(dir, options);
+  const file = join(dir, 'index.html');
+
+  test(`${name}: the scaffold writes every file, and its only tell is the placeholder marker`, { skip }, async () => {
+    assert.ok(result.todo > 50, `${result.todo} placeholders`);
+    const found = await scan(file);
+    assert.deepEqual([...new Set(found.map((f) => f.tell))], ['Unfinished placeholder']);
+  });
+
+  test(`${name}: contrast, targets, names and focus pass at 320, 390, 1440 and 2560`, { skip }, async () => {
+    for (const r of await check(file, [320, 390, 1440, 2560])) assert.deepEqual(r.problems, [], `${r.width}px: ${JSON.stringify(r.problems)}`);
+  });
+
+  test(`${name}: every control answers the pointer`, { skip }, async () => {
+    for (const r of await craft(file, { widths: [390, 1440] })) assert.deepEqual(r.problems, [], `${r.width}px: ${JSON.stringify(r.problems)}`);
+  });
+
+  test(`${name}: nothing overflows sideways, no console errors, counters end on their number, every link lands`, { skip }, async () => {
+    const chrome = await launch();
+    try {
+      for (const width of [320, 390, 1440, 2560]) {
+        const page = await openPage(chrome.browser, { width, height: width < 700 ? 800 : 900, mobile: width < 700 });
+        await page.goto(toUrl(file), 1500);
+        assert.equal(await page.evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1'), true, `${width}px scrolls sideways`);
+        const total = await page.evaluate('document.documentElement.scrollHeight');
+        for (let y = 0; y <= total; y += 500) { await page.evaluate(`window.scrollTo(0, ${y})`); await wait(90); }
+        await wait(1500);
+        assert.equal(await page.evaluate("[...document.querySelectorAll('[data-reveal]')].filter((e) => !e.classList.contains('in')).length"), 0, `${width}px: every reveal fired`);
+        const counts = await page.evaluate("[...document.querySelectorAll('[data-count]')].map((e) => [e.textContent, e.dataset.count, e.dataset.suffix || ''])");
+        for (const [text, target, suffix] of counts) assert.equal(text, `${Number(target).toLocaleString('en-GB')}${suffix}`);
+        assert.equal(await page.evaluate("[...document.querySelectorAll('a[href^=\"#\"]')].filter((a) => a.getAttribute('href').length > 1 && !document.querySelector(a.getAttribute('href'))).length"), 0, 'a link points at nothing');
+        assert.deepEqual(page.logs, [], `${width}px console errors: ${page.logs.join('; ')}`);
+        await page.close();
+      }
+    } finally { await chrome.close(); }
   });
 }

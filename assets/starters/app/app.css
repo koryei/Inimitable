@@ -1,0 +1,148 @@
+/* App starter. A calm, exact working surface: one neutral ramp, one accent, four type sizes, an 8 px grid.
+   Colours come from theme.css (written by scaffold.mjs); everything here reads them, nothing hard-codes a hue.
+   Sizes: 12, 14, 16 and 28 px. Weights: 400 and 500. Spacing: 4, 8, 12, 16, 24, 32. */
+:root {
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --hover: 160ms;
+  --side: 15.5rem;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 0.875rem/1.25rem var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+h1, h2, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+main:focus { outline: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: 1rem; top: -4rem; z-index: 10; padding: 0.75rem 1rem; border-radius: 0.5rem; background: var(--accent); color: var(--on-accent); }
+.skip:focus { top: 1rem; }
+
+.shell { display: grid; grid-template-columns: var(--side) minmax(0, 1fr); min-height: 100vh; }
+.col { min-width: 0; }
+
+/* Sidebar */
+.side { position: sticky; top: 0; align-self: start; height: 100vh; display: flex; flex-direction: column; gap: 1.5rem; padding: 1rem 0.75rem; background: var(--side-bg); border-right: 1px solid var(--line); overflow-y: auto; }
+.brand { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0 0.75rem; font-size: 1rem; line-height: 1.5rem; font-weight: 500; }
+.brand { transition: opacity var(--hover) var(--ease); }
+.brand:hover { opacity: 0.8; }
+.brand-mark { position: relative; width: 1.25rem; height: 1.25rem; flex: none; border-radius: 0.375rem; background: var(--ink); }
+.brand-mark::after { content: ""; position: absolute; width: 0.375rem; height: 0.375rem; right: 0.25rem; bottom: 0.25rem; border-radius: 50%; background: var(--accent); }
+.group + .group { margin-top: 1.5rem; }
+.group h2 { padding: 0 0.75rem; margin-bottom: 0.5rem; font-size: 0.75rem; line-height: 1rem; font-weight: 400; color: var(--ink-3); }
+.nav { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0 0.75rem; margin-bottom: 2px; border-radius: 0.5rem; color: var(--ink-2); transition: background-color var(--hover) var(--ease), color var(--hover) var(--ease); }
+.nav svg, .search svg { width: 1rem; height: 1rem; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.nav:hover { background: var(--raised); color: var(--ink); }
+.nav[aria-current="page"] { background: var(--raised); color: var(--ink); box-shadow: inset 0 1px 0 var(--edge); }
+.side-foot { display: flex; align-items: center; gap: 0.75rem; margin-top: auto; padding: 0.75rem; border-top: 1px solid var(--line); }
+.side-foot b { display: block; font-weight: 500; }
+.side-foot small { display: block; font-size: 0.75rem; line-height: 1rem; color: var(--ink-3); }
+.avatar { display: grid; place-items: center; width: 2rem; height: 2rem; flex: none; border-radius: 50%; background: var(--raised); color: var(--ink-2); font-size: 0.75rem; line-height: 1; font-weight: 500; }
+
+/* Top bar (phone and search) */
+.top { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 2rem; border-bottom: 1px solid var(--line); }
+.nav-menu { display: none; position: relative; }
+.nav-menu summary { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0 0.75rem; border-radius: 0.5rem; font-weight: 500; cursor: pointer; list-style: none; }
+.nav-menu summary::-webkit-details-marker { display: none; }
+.nav-menu summary:hover { background: var(--raised); }
+.nav-menu ul { position: absolute; z-index: 5; left: 0; top: calc(100% + 0.25rem); min-width: 14rem; padding: 0.5rem; border: 1px solid var(--line-strong); border-radius: 0.75rem; background: var(--card); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28); }
+.nav-menu li a { display: flex; align-items: center; min-height: 2.75rem; padding: 0 0.75rem; border-radius: 0.5rem; color: var(--ink-2); }
+.nav-menu li a:hover { background: var(--raised); color: var(--ink); }
+.search { position: relative; display: block; flex: 1; max-width: 26rem; }
+.search svg { position: absolute; left: 0.75rem; top: 50%; translate: 0 -50%; color: var(--ink-3); pointer-events: none; }
+.search input { width: 100%; min-height: 2.75rem; padding: 0 0.75rem 0 2.25rem; border: 1px solid var(--line-strong); border-radius: 0.5rem; background: var(--card); color: var(--ink); font: inherit; transition: border-color var(--hover) var(--ease); }
+.search input::placeholder { color: var(--ink-3); }
+.search input:hover { border-color: var(--ink-3); }
+
+/* Page */
+main { max-width: 90rem; padding: 2rem; }
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+h1 { font-size: 1.75rem; line-height: 2rem; font-weight: 500; letter-spacing: -0.02em; }
+.head p { margin-top: 0.25rem; color: var(--ink-2); }
+.actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: 0 1.25rem; border: 1px solid transparent; border-radius: 0.5rem; font: 500 0.875rem/1.25rem var(--sans); cursor: pointer; transition: background-color var(--hover) var(--ease), border-color var(--hover) var(--ease), color var(--hover) var(--ease), transform 120ms var(--ease); }
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: color-mix(in srgb, var(--accent) 86%, var(--ink)); }
+.btn-quiet { background: transparent; border-color: var(--line-strong); color: var(--ink); }
+.btn-quiet:hover { background: var(--raised); border-color: var(--ink-3); }
+.btn[aria-disabled="true"], .btn:disabled { opacity: 0.5; pointer-events: none; }
+.select select { min-height: 2.75rem; padding: 0 2rem 0 0.75rem; border: 1px solid var(--line-strong); border-radius: 0.5rem; background: var(--card); color: var(--ink); font: inherit; transition: border-color var(--hover) var(--ease); }
+.select select:hover { border-color: var(--ink-3); }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.kpi { padding: 1.5rem; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--card); }
+.k { font-size: 0.75rem; line-height: 1rem; color: var(--ink-3); }
+.v { margin: 0.5rem 0 0.25rem; font-size: 1.75rem; line-height: 2rem; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.d { font-size: 0.75rem; line-height: 1rem; color: var(--ink-2); }
+
+.duo { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1rem; margin-bottom: 1rem; }
+.panel { padding: 1.5rem; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--card); }
+.panel + .panel { margin-top: 1rem; }
+.duo .panel + .panel { margin-top: 0; }
+.panel h2 { font-size: 1rem; line-height: 1.5rem; font-weight: 500; }
+.hint { margin: 0.25rem 0 1rem; font-size: 0.75rem; line-height: 1rem; color: var(--ink-3); }
+.panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.legend { display: flex; gap: 1rem; font-size: 0.75rem; line-height: 1rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+.legend b { font-weight: 400; }
+.sw { width: 0.75rem; height: 2px; background: var(--accent); }
+.sw.muted { background: var(--ink-3); }
+
+.chart { display: block; width: 100%; height: auto; max-height: 18rem; }
+.chart .grid path { stroke: var(--line); fill: none; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.chart .line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.chart .line.muted { stroke: var(--ink-3); stroke-width: 1.5; stroke-dasharray: 2 4; }
+.chart .area { fill: color-mix(in srgb, var(--accent) 12%, transparent); }
+.chart .dot { fill: var(--accent); stroke: var(--card); stroke-width: 2; }
+/* Axis labels are HTML under the picture, so they keep their size when the chart scales down on a phone. */
+.axis { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.75rem; line-height: 1rem; color: var(--ink-3); }
+
+.list li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 2.75rem; border-top: 1px solid var(--line); }
+.list li:first-child { border-top: 0; }
+.flag { font-size: 0.75rem; line-height: 1rem; color: var(--bad); }
+.soft { font-size: 0.75rem; line-height: 1rem; color: var(--ink-3); }
+.more { display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: 0.5rem; color: var(--ink-2); transition: color var(--hover) var(--ease); }
+.more:hover { color: var(--ink); }
+
+.scroll { margin: 0 -1.5rem; padding: 0 1.5rem; overflow-x: auto; }
+table { width: 100%; min-width: 34rem; border-collapse: collapse; }
+th, td { padding: 0 0.75rem; height: 3rem; text-align: left; border-top: 1px solid var(--line); }
+thead th { height: 2.5rem; border-top: 0; font-size: 0.75rem; line-height: 1rem; font-weight: 400; color: var(--ink-3); }
+tbody th { font-weight: 500; }
+tbody th a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 0.25em; transition: text-decoration-color var(--hover) var(--ease); }
+tbody th a:hover { text-decoration-color: currentColor; }
+tbody tr { transition: background-color var(--hover) var(--ease); }
+tbody tr:hover { background: var(--raised); }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+/* Status is a word and a dot, never colour alone. */
+.status { display: inline-flex; align-items: center; gap: 0.5rem; }
+.status::before { content: ""; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--ink-3); }
+.status.ok::before { background: var(--accent); }
+.status.warn::before { background: var(--bad); }
+
+.empty { text-align: center; padding: 3rem 1.5rem; }
+.empty p { max-width: 28rem; margin: 0.5rem auto 1.5rem; color: var(--ink-2); }
+
+/* Loading: name what is loading, and keep the shape of what is coming. */
+.skel { display: block; border-radius: 0.375rem; background: linear-gradient(90deg, var(--raised), var(--card), var(--raised)); background-size: 200% 100%; animation: skel 1.4s linear infinite; }
+@keyframes skel { to { background-position: -200% 0; } }
+
+@media (max-width: 62rem) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .side { display: none; }
+  .nav-menu { display: block; }
+  .top { padding: 0.5rem 1rem; }
+  main { padding: 1.5rem 1rem; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .duo { grid-template-columns: minmax(0, 1fr); }
+  .scroll { margin: 0 -1rem; padding: 0 1rem; }
+  .panel { padding: 1rem; }
+  .kpi { padding: 1rem; }
+}
+@media (max-width: 26rem) { .kpis { grid-template-columns: minmax(0, 1fr); } .head .actions { width: 100%; } .head .actions .btn { flex: 1; } }
+@media (prefers-reduced-motion: reduce) { .skel { animation: none; } .btn { transition: none; } }
+@media (min-width: 1800px) { html { font-size: clamp(16px, 0.62vw + 6px, 24px); } }

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product: Overview</title>
+<meta name="description" content="Replace with one line about what this app is for.">
+<script>document.documentElement.classList.add('m-js')</script>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="motion.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Everything marked data-todo is placeholder. Replace it with the product's real words, numbers and facts.
+     signs.mjs reports every data-todo left on the page, so unfinished copy cannot ship.
+     Numbers drawn in the chart and table are example data: say so on screen until they come from the product. -->
+
+<div class="shell">
+  <aside class="side" aria-label="Sidebar">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span data-todo>Product</span></a>
+    <nav aria-label="Main">
+      <div class="group">
+        <h2 data-todo>Workspace</h2>
+        <ul>
+          <li><a class="nav" href="#top" aria-current="page"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 7.5 8 2.5l6 5M3.5 6.5V13h9V6.5"/></svg><span data-todo>Overview</span></a></li>
+          <li><a class="nav" href="#activity"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h3l2-5 2 10 2-5h3"/></svg><span data-todo>Activity</span></a></li>
+          <li><a class="nav" href="#records"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 3.5h11v9h-11zM2.5 7h11M6.5 7v5.5"/></svg><span data-todo>Records</span></a></li>
+        </ul>
+      </div>
+      <div class="group">
+        <h2 data-todo>Manage</h2>
+        <ul>
+          <li><a class="nav" href="#settings"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.8v1.6M8 12.6v1.6M1.8 8h1.6M12.6 8h1.6M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M3.6 12.4l1.1-1.1M11.3 4.7l1.1-1.1"/></svg><span data-todo>Settings</span></a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="side-foot"><span class="avatar" aria-hidden="true" data-todo>AB</span><span><b data-todo>Your name</b><small data-todo>Your workspace</small></span></div>
+  </aside>
+
+  <div class="col">
+    <header class="top">
+      <details class="nav-menu">
+        <summary><span class="brand-mark" aria-hidden="true"></span><span data-todo>Product</span><span class="sr"> menu</span></summary>
+        <ul>
+          <li><a href="#top" data-todo>Overview</a></li>
+          <li><a href="#activity" data-todo>Activity</a></li>
+          <li><a href="#records" data-todo>Records</a></li>
+          <li><a href="#settings" data-todo>Settings</a></li>
+        </ul>
+      </details>
+      <label class="search"><span class="sr">Search</span><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><input type="search" placeholder="Search" data-todo></label>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <div class="head" id="top" data-reveal>
+        <div>
+          <h1 data-todo>Overview</h1>
+          <p data-todo>One line on what this page answers, for example: how the month is going.</p>
+        </div>
+        <div class="actions">
+          <label class="select"><span class="sr">Period</span>
+            <select data-todo><option>This month</option><option>Last month</option><option>Last 90 days</option></select>
+          </label>
+          <a class="btn btn-primary" href="#records" data-todo>New record</a>
+        </div>
+      </div>
+
+      <section class="kpis" aria-label="Key numbers">
+        <article class="kpi" data-reveal style="--i:0"><p class="k" data-todo>A measure</p><p class="v" data-count="1284" data-todo>1,284</p><p class="d" data-todo>Compared with last period</p></article>
+        <article class="kpi" data-reveal style="--i:1"><p class="k" data-todo>A measure</p><p class="v" data-count="86" data-suffix="%" data-todo>86%</p><p class="d" data-todo>Compared with last period</p></article>
+        <article class="kpi" data-reveal style="--i:2"><p class="k" data-todo>A measure</p><p class="v" data-count="42" data-todo>42</p><p class="d" data-todo>Compared with last period</p></article>
+        <article class="kpi" data-reveal style="--i:3"><p class="k" data-todo>A measure</p><p class="v" data-count="12" data-suffix="d" data-todo>12d</p><p class="d" data-todo>Compared with last period</p></article>
+      </section>
+
+      <div class="duo" id="activity">
+        <section class="panel" aria-labelledby="chart-title" data-reveal>
+          <div class="panel-head">
+            <div><h2 id="chart-title" data-todo>The one trend that matters</h2><p class="hint" data-todo>Example data. Replace with the product's own series.</p></div>
+            <p class="legend"><span><i class="sw"></i><b data-todo>This period</b></span><span><i class="sw muted"></i><b data-todo>Last period</b></span></p>
+          </div>
+          <svg class="chart" viewBox="0 0 640 224" role="img" aria-label="Example line chart: this period rises steadily and ends above last period">
+            <g class="grid"><path d="M0 40H640M0 100H640M0 160H640M0 220H640"/></g>
+            <path class="area" d="M0 190 C60 180 90 170 140 150 S230 120 290 118 S400 90 460 70 S560 48 640 38 V220 H0Z"/>
+            <path class="line muted" d="M0 200 C60 196 100 186 150 176 S240 150 300 148 S410 130 470 118 S570 100 640 92"/>
+            <path class="line" d="M0 190 C60 180 90 170 140 150 S230 120 290 118 S400 90 460 70 S560 48 640 38"/>
+            <circle class="dot" cx="640" cy="38" r="4"/>
+          </svg>
+          <p class="axis" aria-hidden="true"><span data-todo>Start</span><span data-todo>Middle</span><span data-todo>Now</span></p>
+        </section>
+
+        <section class="panel" aria-labelledby="list-title" data-reveal style="--i:1">
+          <h2 id="list-title" data-todo>Needs attention</h2>
+          <p class="hint" data-todo>Example data. The few things a person should act on today.</p>
+          <ul class="list">
+            <li><span data-todo>First item</span><span class="flag" data-todo>Late</span></li>
+            <li><span data-todo>Second item</span><span class="flag" data-todo>Late</span></li>
+            <li><span data-todo>Third item</span><span class="soft" data-todo>Due soon</span></li>
+          </ul>
+          <a class="more" href="#records" data-todo>See all records</a>
+        </section>
+      </div>
+
+      <section class="panel table" id="records" aria-labelledby="rec-title" data-reveal>
+        <div class="panel-head">
+          <div><h2 id="rec-title" data-todo>Recent records</h2><p class="hint" data-todo>Example data. Replace with real rows.</p></div>
+          <a class="btn btn-quiet" href="#top" data-todo>Export</a>
+        </div>
+        <div class="scroll" tabindex="0" role="region" aria-label="Recent records, scrolls sideways on a small screen">
+          <table>
+            <thead><tr><th scope="col" data-todo>Name</th><th scope="col" data-todo>Status</th><th scope="col" data-todo>Owner</th><th scope="col" class="num" data-todo>Amount</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><a href="#top" data-todo>First record</a></th><td><span class="status ok" data-todo>Done</span></td><td data-todo>Owner</td><td class="num" data-todo>0.00</td></tr>
+              <tr><th scope="row"><a href="#top" data-todo>Second record</a></th><td><span class="status warn" data-todo>Late</span></td><td data-todo>Owner</td><td class="num" data-todo>0.00</td></tr>
+              <tr><th scope="row"><a href="#top" data-todo>Third record</a></th><td><span class="status wait" data-todo>Waiting</span></td><td data-todo>Owner</td><td class="num" data-todo>0.00</td></tr>
+              <tr><th scope="row"><a href="#top" data-todo>Fourth record</a></th><td><span class="status ok" data-todo>Done</span></td><td data-todo>Owner</td><td class="num" data-todo>0.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel empty" id="settings" aria-labelledby="empty-title" data-reveal>
+        <h2 id="empty-title" data-todo>What an empty page says</h2>
+        <p data-todo>Say what goes here, why it is empty, and the one thing to do about it.</p>
+        <a class="btn btn-primary" href="#top" data-todo>The one next step</a>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="motion.js" defer></script>
+</body>
+</html>
