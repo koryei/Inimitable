@@ -10,7 +10,7 @@
 //   minimal  keep only the hero, the steps, the closing call and the footer (for a short brief with few facts)
 //   motes    drifting specks in the light (a slow breath, stopped under reduced motion)
 //   hero     stack (headline over its copy) or split (headline beside the one object only this product has)
-//   shape    pools | horizon | bowl | blob | sweep | rays for the hero ground (default: bowl on dark, blob on light)
+//   shape    pools | horizon | bowl | blob | sweep | rays | contour for the hero ground (default: bowl on dark, blob on light)
 //
 // Everything marked data-todo is placeholder. Replace it with the product's real words and numbers.
 // signs.mjs reports every data-todo left on a page, so unfinished copy cannot ship.

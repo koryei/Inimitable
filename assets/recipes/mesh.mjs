@@ -168,6 +168,37 @@ const SHAPES = {
       pool(88, 16, 46, 52, mixIn(p.family[3]), 70),
     ];
   },
+  // Topographic contour lines over a soft pool of light: a map of the product's terrain, calm and exact.
+  // The lines sit on ::before so they fade out with the mask and can drift on their own.
+  contour(p, rand) {
+    const cx = 500 + (rand() - 0.5) * 360, cy = 175 + (rand() - 0.5) * 70;  // the terrain sits high, so the headline below it stays on quiet ground
+    const wob = [[2, rand() * 6.28, 0.07 + rand() * 0.05], [3, rand() * 6.28, 0.05 + rand() * 0.04], [5, rand() * 6.28, 0.02 + rand() * 0.02]];
+    const rings = 15;
+    const paths = [];
+    for (let i = 1; i <= rings; i++) {
+      const r0 = 26 + i * 34;
+      const pts = [];
+      for (let k = 0; k < 96; k++) {
+        const t = (k / 96) * Math.PI * 2;
+        const r = r0 * (1 + wob.reduce((sum, [n, ph, a]) => sum + a * Math.sin(n * t + ph + i * 0.09), 0));
+        pts.push(`${(cx + r * Math.cos(t) * 1.45).toFixed(1)} ${(cy + r * Math.sin(t) * 0.82).toFixed(1)}`);
+      }
+      paths.push(`<path d="M${pts.join('L')}Z"/>`);
+    }
+    const stroke = p.dark ? p.family[2] : '#2a2218';
+    const opacity = p.dark ? 0.34 : 0.16;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice"><g fill="none" stroke="${stroke}" stroke-opacity="${opacity}" stroke-width="1.1" vector-effect="non-scaling-stroke">${paths.join('')}</g></svg>`;
+    const url = `url("data:image/svg+xml,${svg.replace(/</g, '%3C').replace(/>/g, '%3E').replace(/#/g, '%23').replace(/"/g, "'")}") center / cover no-repeat`;
+    const mixIn = (c, n) => `color-mix(in srgb, ${c} ${p.dark ? Math.round(n * 0.8) : n}%, transparent)`;
+    return {
+      layers: [
+        pool(cx / 10, cy / 6, 50, 52, mixIn(p.family[1], 70), 66),
+        pool(cx / 10 - 18, cy / 6 + 10, 34, 38, mixIn(p.family[0], 70), 70),
+        pool(cx / 10 + 22, cy / 6 - 12, 26, 30, mixIn(p.counter, 45), 72),
+      ],
+      before: { background: url, mask: 'radial-gradient(90% 90% at 50% 45%, #000 35%, transparent 100%)' },
+    };
+  },
 };
 export const SHAPE_NAMES = Object.keys(SHAPES);
 

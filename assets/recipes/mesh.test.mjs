@@ -76,6 +76,17 @@ test('rays put shafts of light on ::before with their own mask, and motes add sp
   assert.doesNotMatch(grainient({ palette: 'abyss', shape: 'pools' }).css, /::before/);
 });
 
+test('contour draws its lines as an inline SVG on ::before, deterministic per seed, with no raw # or quotes in the URL', () => {
+  const a = grainient({ palette: 'ember', shape: 'contour', seed: 3 }).css;
+  assert.match(a, /\.ground::before \{/);
+  assert.match(a, /url\("data:image\/svg\+xml,%3Csvg/);
+  const url = a.match(/url\("([^"]+)"\)/)[1];
+  assert.doesNotMatch(url, /[#<>]/);
+  assert.equal(a, grainient({ palette: 'ember', shape: 'contour', seed: 3 }).css);
+  assert.notEqual(a, grainient({ palette: 'ember', shape: 'contour', seed: 4 }).css);
+  assert.ok((a.match(/%3Cpath/g) || []).length >= 12, 'a dozen or more contour rings');
+});
+
 test('motes are deterministic and few', () => {
   assert.deepEqual(motes({ seed: 3 }), motes({ seed: 3 }));
   assert.ok(motes({ count: 30 }).length === 30);

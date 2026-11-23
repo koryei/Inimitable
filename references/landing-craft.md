@@ -22,6 +22,7 @@ Start every landing page with `node scripts/scaffold.mjs <folder> [--theme dark|
 | `pools` | several soft pools, off-centre | a quiet, even ground; light or dark |
 | `rays` | shafts of light falling from above, like sun through water or a window in a dark room | dark pages that want atmosphere: pair with `--motes` and the `abyss`, `dusk` or `coal` palette |
 | `sweep` | a diagonal fold of colour | showpieces and section breaks |
+| `contour` | topographic lines over a soft pool of light, high in the frame | tools, maps, data, infrastructure: a ground that says "terrain" without a picture |
 
 Add `--motes` for faint specks that drift very slowly, like dust in a beam. Palettes: `ember`, `petal`, `glacier`, `moss` (light) and `dusk`, `midnight`, `abyss`, `coal`, `ink` (dark). They keep to **one temperature family plus a single counterpoint**; `fromAccent('#hex')` derives one from a brand colour and pulls it back until it reads as light, not paint. The audit refuses anything over the paint cap.
 
