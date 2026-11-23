@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { PAINT_CAP, PALETTES, SHAPE_NAMES, audit, fromAccent, grainient, hexToHsl, paintiness } from './mesh.mjs';
+import { PAINT_CAP, PALETTES, SHAPE_NAMES, audit, fromAccent, grainient, hexToHsl, motes, paintiness } from './mesh.mjs';
 
 test('every built-in palette passes its own audit', () => {
   for (const [name, p] of Object.entries(PALETTES)) assert.deepEqual(audit(p), [], name);
@@ -64,4 +64,19 @@ test('a dark bowl and horizon carry a luminous rim, a light one does not', () =>
   assert.match(grainient({ palette: 'dusk', shape: 'bowl' }).css, /radial-gradient\(ellipse [^)]*transparent 65%/);
   assert.match(grainient({ palette: 'dusk', shape: 'horizon' }).css, /ellipse/);
   assert.doesNotMatch(grainient({ palette: 'ember', shape: 'bowl' }).css, /ellipse/);
+});
+
+test('rays put shafts of light on ::before with their own mask, and motes add specks', () => {
+  const { css } = grainient({ palette: 'abyss', shape: 'rays' });
+  assert.match(css, /\.ground::before \{/);
+  assert.match(css, /repeating-linear-gradient/);
+  assert.match(css, /mask-image: linear-gradient\(to bottom/);
+  const speckled = grainient({ palette: 'abyss', shape: 'pools', withMotes: true }).css;
+  assert.equal((speckled.match(/radial-gradient\(circle at/g) || []).length, 46);
+  assert.doesNotMatch(grainient({ palette: 'abyss', shape: 'pools' }).css, /::before/);
+});
+
+test('motes are deterministic and few', () => {
+  assert.deepEqual(motes({ seed: 3 }), motes({ seed: 3 }));
+  assert.ok(motes({ count: 30 }).length === 30);
 });

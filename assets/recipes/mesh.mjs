@@ -42,6 +42,7 @@ export const PALETTES = {
   dusk:    { family: ['#6a5bd6', '#8a4fc9', '#b24fb0', '#4b3fa8'], counter: '#ff9a7a', base: '#0c0814', dark: true },
   midnight:{ family: ['#4f7df0', '#6f97f5', '#9bbcf8', '#2f5fd8'], counter: '#ffb28a', base: '#070b1f', dark: true },
   coal:    { family: ['#8b6a55', '#a47d63', '#6f5446', '#c9a487'], counter: '#6f86a8', base: '#0e0d0c', dark: true },
+  abyss:   { family: ['#2c8a85', '#3aa59a', '#1f6f78', '#5fc4b0'], counter: '#e7a86f', base: '#04110f', dark: true },
   ink:     { family: ['#5b6a8a', '#7b8aa8', '#46557a', '#9aa7c1'], counter: '#d9a98a', base: '#0b0d12', dark: true },
 };
 
@@ -137,6 +138,23 @@ const SHAPES = {
       pool(x - 24, y + 6, 30, 40, p.family[2], 70),
     ];
   },
+  // Shafts of light falling from above, like sun through water or a window in a dark room. The shafts are a
+  // separate layer (drawn on ::before) so they can be masked on their own; the pools beneath give them a source.
+  rays(p, rand) {
+    const angle = 96 + rand() * 10;
+    const ray = (c, a) => `color-mix(in srgb, ${c} ${a}%, transparent)`;
+    const colour = p.dark ? p.family[2] : p.family[0];
+    return {
+      layers: [pool(50, -12, 96, 64, p.family[1], 92), pool(30, -6, 58, 40, p.family[0], 80), pool(74, -8, 52, 36, p.counter, 74)],
+      before: {
+        background: [
+          `repeating-linear-gradient(${angle}deg, transparent 0 7%, ${ray(colour, p.dark ? 34 : 40)} 10%, transparent 13.5%, transparent 19%)`,
+          `repeating-linear-gradient(${angle + 5}deg, transparent 0 11%, ${ray(p.family[2], p.dark ? 22 : 28)} 14%, transparent 17%, transparent 27%)`,
+        ].join(',\n    '),
+        mask: 'linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.65) 38%, transparent 82%)',
+      },
+    };
+  },
   // A diagonal sweep of colour, like a fold in cloth.
   sweep(p, rand) {
     const a = 118 + rand() * 20;
@@ -174,13 +192,29 @@ export function audit(palette) {
   return problems;
 }
 
-export function grainient({ palette = 'ember', shape = 'pools', seed = 1, mask = 'bottom', grain = 0.4, selector = '.ground', drift = false } = {}) {
+// Faint specks scattered through the light, like dust in a beam. Static dots; pair with .m-drift for a slow breath.
+export function motes({ count = 46, seed = 7, color = '#ffffff', alpha = 0.55 } = {}) {
+  const rand = rng(seed);
+  return Array.from({ length: count }, () => {
+    const x = (rand() * 100).toFixed(1), y = (rand() * 100).toFixed(1), r = (1 + rand() * 1.6).toFixed(1);
+    const a = Math.round(alpha * (0.3 + rand() * 0.7) * 100);
+    return `radial-gradient(circle at ${x}% ${y}%, color-mix(in srgb, ${color} ${a}%, transparent) ${r}px, transparent ${(Number(r) + 1).toFixed(1)}px)`;
+  });
+}
+
+export function grainient({ palette = 'ember', shape = 'pools', seed = 1, mask = 'bottom', grain = 0.4, selector = '.ground', drift = false, withMotes = false } = {}) {
   const p = typeof palette === 'string' ? PALETTES[palette] : palette;
   if (!p) throw new Error(`Unknown palette "${palette}". Use one of ${Object.keys(PALETTES).join(', ')} or fromAccent("#hex").`);
   if (!SHAPES[shape]) throw new Error(`Unknown shape "${shape}". Use one of ${SHAPE_NAMES.join(', ')}.`);
   const rand = rng(seed);
-  const layers = SHAPES[shape](p, rand);
+  const built = SHAPES[shape](p, rand);
+  const layers = Array.isArray(built) ? built : built.layers;
+  const before = Array.isArray(built) ? null : built.before;
   const maskCss = MASKS[mask] ?? mask;
+  // A second layer on ::before holds shafts of light and/or motes, so it can be masked and animated on its own.
+  const speck = withMotes ? motes({ color: p.dark ? p.family[2] : '#ffffff', alpha: p.dark ? 0.7 : 0.9 }) : [];
+  const beforeBg = [...(before ? [before.background] : []), ...speck].join(',\n    ');
+  const beforeCss = beforeBg ? [`${selector}::before {`, '  content: "";', '  position: absolute;', '  inset: 0;', '  pointer-events: none;', `  background:\n    ${beforeBg};`, before?.mask ? `  -webkit-mask-image: ${before.mask};\n  mask-image: ${before.mask};` : '', drift && withMotes ? '  animation: m-drift 38s ease-in-out infinite alternate;' : '', '}'].filter(Boolean).join('\n') : '';
   const css = [
     `${selector} {`,
     '  position: absolute;',
@@ -192,6 +226,7 @@ export function grainient({ palette = 'ember', shape = 'pools', seed = 1, mask =
     maskCss ? `  -webkit-mask-image: ${maskCss};\n  mask-image: ${maskCss};` : '',
     drift ? '  animation: m-drift 38s ease-in-out infinite alternate;' : '',
     '}',
+    beforeCss,
     grainCss({ dark: !!p.dark, strength: grain, selector: `${selector}::after` }),
   ].filter(Boolean).join('\n');
   return { css, palette: p, problems: audit(p), layers };
