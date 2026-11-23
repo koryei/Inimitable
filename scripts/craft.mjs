@@ -218,6 +218,8 @@ export async function craft(target, { widths = [390, 1440], shots } = {}) {
             scale: 3,
           };
           const slug = `${String(c.i).padStart(2, '0')}-${c.where.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}`;
+          // The pointer left this control moments ago: let a 360 ms transition finish, or the rest picture shows the reply sliding back.
+          await new Promise((r) => setTimeout(r, 480));
           writeFileSync(join(shots, `${width}-${slug}-rest.png`), await page.screenshot({ clip }));
           await page.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y, buttons: 0 });
           await new Promise((r) => setTimeout(r, 420));
