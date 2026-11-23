@@ -2,7 +2,7 @@ name: pages
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'examples/**', 'assets/recipes/**', 'scripts/dotify.mjs', 'scripts/lib/**', '.github/workflows/pages.yml']
+    paths: ['site/**', 'examples/**', 'assets/recipes/**', 'assets/starters/**', 'assets/motion/**', 'assets/fonts/**', 'scripts/scaffold.mjs', 'scripts/dotify.mjs', 'scripts/lib/**', '.github/workflows/pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
