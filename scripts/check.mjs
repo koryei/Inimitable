@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Measured accessibility and quality checks: contrast, touch targets, small text, names, document basics.
 //
-//   node scripts/check.mjs <url or file> [--widths 390,1440] [--json]
+//   node scripts/check.mjs <url or file> [--widths 320,390,1440,2560] [--json]
 //
 // Touch targets need 44 px under 700 px wide and 24 px above (WCAG 2.2). Exit code 1 on any problem.
 
@@ -11,7 +11,7 @@ import { launch, openPage, toUrl } from './lib/chrome.mjs';
 import { sampleBackdrops } from './lib/backdrop.mjs';
 import { CHECK } from './lib/probe.mjs';
 
-export async function check(target, widths = [390, 1440]) {
+export async function check(target, widths = [320, 390, 1440, 2560]) {
   const chrome = await launch();
   const results = [];
   try {
@@ -43,7 +43,7 @@ export async function check(target, widths = [390, 1440]) {
 if (isMain(import.meta.url)) {
   const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['json'] });
   if (!positional[0]) {
-    console.error('Usage: node scripts/check.mjs <url or file> [--widths 390,1440] [--json]');
+    console.error('Usage: node scripts/check.mjs <url or file> [--widths 320,390,1440,2560] [--json]');
     process.exit(2);
   }
   const results = await check(positional[0], flags.widths ? String(flags.widths).split(',').map(Number) : undefined);

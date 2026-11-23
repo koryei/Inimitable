@@ -4,7 +4,7 @@
 //   node scripts/shoot.mjs <url or file> [--out shots] [--label before] [--widths 320,390,1440,2560]
 //                          [--full | --slices] [--dark | --light] [--wait 1500] [--eval 'js'] [--json]
 //
-//   --wait ms     settle time after load, for entrance animations and drawn charts (default 400)
+//   --wait ms     settle time after load, for entrance animations and drawn charts (default 2400, long enough for an entrance and its counters to finish)
 //   --eval js     run this JavaScript in the page after load and before the shot, to set a state
 //                 (click a tab, open a menu). It may be async: --eval "(async () => { ... })()"
 //   --slices      instead of one image per width, save one image per screenful while scrolling,
@@ -47,7 +47,7 @@ export async function shoot(target, options = {}) {
     widths,
     full = false,
     slices = false,
-    wait = 400,
+    wait = 2400,
     evalJs,
     colorScheme,
   } = options;
@@ -99,7 +99,7 @@ if (isMain(import.meta.url)) {
     widths: flags.widths ? String(flags.widths).split(',').map(Number) : undefined,
     full: Boolean(flags.full),
     slices: Boolean(flags.slices),
-    wait: flags.wait ? Number(flags.wait) : 400,
+    wait: flags.wait ? Number(flags.wait) : 2400,
     evalJs: typeof flags.eval === 'string' ? flags.eval : undefined,
     colorScheme: flags.dark ? 'dark' : flags.light ? 'light' : undefined,
   });
