@@ -53,7 +53,12 @@ export function analyse(raw, { scale = SCALE } = {}) {
   const hues = hueBands({ ...raw.textColors, ...raw.surfaceColors, ...raw.borderColors });
   const tinyText = sizes.filter((s) => s < 12);
   const flags = [];
-  if (sizes.length > 7) flags.push(`${sizes.length} font sizes in use (a scale needs about 6 or fewer)`);
+  // The working scale (under 40 px) is capped at about 7 sizes; display, numeral and statement sizes (40 px and up,
+  // used once or twice each) are a separate allowance of 4, so a page may have a real hierarchy at the top.
+  const working = sizes.filter((n) => n < 40);
+  const display = sizes.filter((n) => n >= 40);
+  if (working.length > 7) flags.push(`${working.length} working font sizes under 40 px (a scale needs about 7 or fewer)`);
+  if (display.length > 4) flags.push(`${display.length} display sizes at 40 px and up (keep to about 4: headline, numeral, statement, price)`);
   if (tinyText.length) flags.push(`text smaller than 12 px: ${tinyText.join(', ')}`);
   if (weights.some((w) => w >= 700)) flags.push(`weights ${weights.filter((w) => w >= 700).join(', ')} in use (heavy)`);
   if (weights.length > 3) flags.push(`${weights.length} font weights in use`);

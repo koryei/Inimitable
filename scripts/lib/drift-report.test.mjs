@@ -45,3 +45,12 @@ test('an accent plus red and green is not hue drift, five hues is', () => {
   const bad = analyse({ ...base, surfaceColors: { '#ff0000': 1, '#00ff00': 1, '#0000ff': 1, '#ffff00': 1, '#ff00ff': 1 } });
   assert.match(bad.flags.join(' '), /colour hues/);
 });
+
+test('a real hierarchy at the top does not count against the working scale, but too many display sizes does', () => {
+  const sizes = { 12: 3, 14: 6, 16: 8, 20: 2, 28: 2, 56: 1, 96: 1, 160: 1 };
+  assert.deepEqual(analyse({ ...base, fontSizes: sizes }).flags.filter((f) => /font sizes|display sizes/.test(f)), []);
+  const many = { 12: 1, 14: 1, 16: 1, 18: 1, 20: 1, 24: 1, 28: 1, 32: 1 };
+  assert.match(analyse({ ...base, fontSizes: many }).flags.join(' '), /8 working font sizes/);
+  const display = { 14: 4, 48: 1, 64: 1, 96: 1, 128: 1, 192: 1 };
+  assert.match(analyse({ ...base, fontSizes: display }).flags.join(' '), /5 display sizes/);
+});
