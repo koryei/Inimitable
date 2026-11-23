@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { check } from '../scripts/check.mjs';
 import { craft } from '../scripts/craft.mjs';
 import { measure } from '../scripts/drift.mjs';
-import { findChrome } from '../scripts/lib/chrome.mjs';
+import { findChrome, launch, openPage, toUrl } from '../scripts/lib/chrome.mjs';
 import { scan } from '../scripts/signs.mjs';
 
 const fixture = fileURLToPath(new URL('./fixtures/sloppy.html', import.meta.url));
@@ -129,4 +129,14 @@ test('a pill badge above the headline and a gradient logo tile are tells', { ski
   const kinds = new Set(found.map((f) => f.tell));
   assert.ok(kinds.has('Pill badge above the headline'), [...kinds].join(', '));
   assert.ok(kinds.has('Gradient logo tile'), [...kinds].join(', '));
+});
+
+test('the browser driver evaluates a function as well as a string', { skip }, async () => {
+  const chrome = await launch();
+  try {
+    const page = await openPage(chrome.browser, { width: 800, height: 600 });
+    await page.goto(toUrl(fileURLToPath(new URL('./fixtures/clean.html', import.meta.url))), 100);
+    assert.equal(await page.evaluate(() => document.querySelectorAll('h1').length), 1);
+    assert.equal(await page.evaluate((a, b) => a + b, 2, 3), 5);
+  } finally { await chrome.close(); }
 });
