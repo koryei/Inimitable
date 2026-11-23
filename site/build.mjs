@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds the website into site/dist: the page, one stylesheet, the script, the two font files,
+// Builds the website into site/dist: the landing starter (motion kit, fonts, ground), this page on top,
 // and the example images (copied from examples/, the single source of truth).
 //
 //   node site/build.mjs            then open site/dist/index.html
@@ -7,27 +7,24 @@ import { copyFileSync, cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DRIFT } from '../scripts/lib/probe.mjs';
+import { scaffold } from '../scripts/scaffold.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'site', 'dist');
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(join(dist, 'img'), { recursive: true });
-mkdirSync(join(dist, 'fonts'), { recursive: true });
 
-// Pages and styles.
+// The page is the skill's own landing starter: scaffold writes the motion kit, the open fonts, the lit ground
+// and the starter's styles, then this page's own markup, styles and script go on top.
+scaffold(dist, { theme: 'light', palette: 'ember', shape: 'contour', seed: 3 });
 copyFileSync(join(root, 'site', 'index.html'), join(dist, 'index.html'));
 copyFileSync(join(root, 'site', 'site.js'), join(dist, 'site.js'));
-copyFileSync(join(root, 'site', 'site.css'), join(dist, 'styles.css'));
+copyFileSync(join(root, 'site', 'site.css'), join(dist, 'site.css'));
 writeFileSync(join(dist, '.nojekyll'), '');
 
 // The page counts itself with the same probe drift.mjs runs, so the receipt and the tool cannot
 // disagree. Written from the one copy in scripts/lib/probe.mjs rather than retyped here.
 writeFileSync(join(dist, 'count.js'), `window.__countPage = () => (${DRIFT});\n`);
-
-// Fonts, with their licence.
-for (const file of ['instrument-serif.woff2', 'instrument-serif-italic.woff2', 'OFL.txt']) {
-  copyFileSync(join(root, 'site', 'fonts', file), join(dist, 'fonts', file));
-}
 
 // Example images, copied from the examples so there is one copy in the repo.
 const images = {
