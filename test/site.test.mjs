@@ -18,7 +18,7 @@ const page = join(root, 'site', 'dist', 'index.html');
 function authored() {
   const html = readFileSync(join(root, 'site', 'index.html'), 'utf8');
   const found = {};
-  for (const [, key, value] of html.matchAll(/data-count="([a-z]+)">(\d+)</g)) found[key] = Number(value);
+  for (const [, key, value] of html.matchAll(/data-measure="([a-z]+)">(\d+)</g)) found[key] = Number(value);
   return found;
 }
 
@@ -37,10 +37,10 @@ async function measuredAt(chrome, width) {
   const tab = await openPage(chrome.browser, { width, height: mobile ? 844 : 900, mobile, deviceScaleFactor: 1 });
   await tab.goto(toUrl(page));
   // site.js recounts after the fonts land, so wait for the measured values rather than a fixed delay.
-  await tab.evaluate('new Promise((done) => { const tick = () => { const el = document.querySelector("[data-count][data-measured]"); if (el) return done(); setTimeout(tick, 50); }; tick(); })');
+  await tab.evaluate('new Promise((done) => { const tick = () => { const el = document.querySelector("[data-measure][data-measured]"); if (el) return done(); setTimeout(tick, 50); }; tick(); })');
   const out = await tab.evaluate(`(() => {
     const found = {};
-    for (const el of document.querySelectorAll('[data-count]')) found[el.dataset.count] = Number(el.dataset.measured);
+    for (const el of document.querySelectorAll('[data-measure]')) found[el.dataset.measure] = Number(el.dataset.measured);
     return found;
   })()`);
   await tab.close();
@@ -99,9 +99,9 @@ test('the questions section shows an answer before it is clicked', { skip }, asy
   }
 });
 
-// The nav is a map, not a message, and on a phone it is one control. Below the split the five links fold
-// into a panel behind a Menu button. Without it the bar shows a logo and a GitHub button and every section
-// on the page is unreachable except by scrolling, which is the one thing a map is for.
+// The nav is a map, not a message, and on a phone it is one control. Below the split the links fold into a
+// panel behind a Menu button. Without it the bar shows a logo and a button and every section on the page is
+// unreachable except by scrolling, which is the one thing a map is for.
 test('the phone gets a menu that reaches every section', { skip }, async () => {
   execFileSync(process.execPath, [join(root, 'site', 'build.mjs')], { stdio: 'ignore' });
 
@@ -110,19 +110,23 @@ test('the phone gets a menu that reaches every section', { skip }, async () => {
     const tab = await openPage(chrome.browser, { width: 390, height: 844, mobile: true, deviceScaleFactor: 1 });
     await tab.goto(toUrl(page));
 
-    const before = await tab.evaluate(`(() => {
-      const btn = document.querySelector('[data-menu-btn]');
-      if (!btn) return { missing: true };
-      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    const state = () => tab.evaluate(`(() => {
+      const menu = document.querySelector('[data-menu]');
+      if (!menu) return { missing: true };
+      const panel = menu.querySelector('ul');
       return {
         missing: false,
-        expanded: btn.getAttribute('aria-expanded'),
-        panelShown: panel ? getComputedStyle(panel).display !== 'none' : null,
-        targets: panel ? [...panel.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute('href')) : [],
+        open: menu.open,
+        // checkVisibility sees through a closed <details>, whose content still has a layout box.
+        panelShown: panel.checkVisibility({ contentVisibilityAuto: true, visibilityProperty: true }),
+        focused: document.activeElement === menu.querySelector('summary'),
+        targets: [...panel.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute('href')),
       };
     })()`);
+    await new Promise((r) => setTimeout(r, 600));
+    const before = await state();
     assert.equal(before.missing, false, 'the phone has no menu control, so the sections are unreachable');
-    assert.equal(before.expanded, 'false', 'the menu claims to be open before it is touched');
+    assert.equal(before.open, false, 'the menu is open before it is touched');
     assert.equal(before.panelShown, false, 'the panel is visible before the menu is opened');
     assert.ok(before.targets.length >= 5, 'the panel does not carry the section links');
 
@@ -130,27 +134,15 @@ test('the phone gets a menu that reaches every section', { skip }, async () => {
     const landed = await tab.evaluate(`(() => ${JSON.stringify(before.targets)}.map((href) => Boolean(document.querySelector(href))))()`);
     assert.deepEqual(landed, before.targets.map(() => true), 'a menu link points at a section that does not exist');
 
-    await tab.evaluate(`document.querySelector('[data-menu-btn]').click()`);
-    const opened = await tab.evaluate(`(() => {
-      const btn = document.querySelector('[data-menu-btn]');
-      const panel = document.getElementById(btn.getAttribute('aria-controls'));
-      return { expanded: btn.getAttribute('aria-expanded'), shown: getComputedStyle(panel).display !== 'none' };
-    })()`);
-    assert.equal(opened.expanded, 'true', 'the button does not report that it opened');
-    assert.equal(opened.shown, true, 'the panel stays hidden after the menu is opened');
+    await tab.evaluate(`document.querySelector('[data-menu] summary').click()`);
+    await new Promise((r) => setTimeout(r, 150));
+    const opened = await state();
+    assert.equal(opened.open, true, 'the summary does not open the menu');
+    assert.equal(opened.panelShown, true, 'the panel stays hidden after the menu is opened');
 
     await tab.evaluate(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))`);
-    const closed = await tab.evaluate(`(() => {
-      const btn = document.querySelector('[data-menu-btn]');
-      const panel = document.getElementById(btn.getAttribute('aria-controls'));
-      return {
-        expanded: btn.getAttribute('aria-expanded'),
-        shown: getComputedStyle(panel).display !== 'none',
-        focused: document.activeElement === btn,
-      };
-    })()`);
-    assert.equal(closed.expanded, 'false', 'Escape does not close the menu');
-    assert.equal(closed.shown, false, 'the panel stays open after Escape');
+    const closed = await state();
+    assert.equal(closed.open, false, 'Escape does not close the menu');
     assert.equal(closed.focused, true, 'Escape closes the menu but drops the reader somewhere else');
 
     await tab.close();
