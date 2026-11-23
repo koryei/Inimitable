@@ -99,3 +99,27 @@ test('an icon beside the text is not treated as the text backdrop', { skip }, as
   const [desktop] = await check(fileURLToPath(new URL('./fixtures/icon-in-link.html', import.meta.url)), [1440]);
   assert.deepEqual(desktop.problems.filter((p) => p.kind === 'contrast'), []);
 });
+
+test('a copyright sign is not an emoji, and an audited ground is not a hue gradient', { skip }, async () => {
+  const found = await scan(fileURLToPath(new URL('./fixtures/ground-and-copyright.html', import.meta.url)));
+  assert.deepEqual(found.map((f) => f.tell), []);
+});
+
+test('placeholder markers are reported until they are replaced', { skip }, async () => {
+  const found = await scan(fileURLToPath(new URL('./fixtures/ground-and-copyright.html', import.meta.url)).replace('ground-and-copyright', 'placeholder-left'));
+  assert.ok(found.some((f) => f.tell === 'Unfinished placeholder'));
+});
+
+test('decorative aria-hidden text is exempt from contrast, real faint text is not', { skip }, async () => {
+  const [a] = await check(fileURLToPath(new URL('./fixtures/decorative-text.html', import.meta.url)), [1440]);
+  assert.deepEqual(a.problems.filter((p) => p.kind === 'contrast'), []);
+  const [b] = await check(fileURLToPath(new URL('./fixtures/faint-real-text.html', import.meta.url)), [1440]);
+  assert.ok(b.problems.some((p) => p.kind === 'contrast'));
+});
+
+test('craft does not report controls hidden inside a closed menu', { skip }, async () => {
+  const [desktop] = await craft(fileURLToPath(new URL('./fixtures/closed-menu.html', import.meta.url)), { widths: [1440] });
+  const silent = desktop.problems.filter((p) => /Hidden link/.test(p.detail || p.where || ''));
+  assert.deepEqual(silent, []);
+  assert.equal(desktop.problems.length, 0, JSON.stringify(desktop.problems));
+});
