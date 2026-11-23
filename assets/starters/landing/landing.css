@@ -66,7 +66,7 @@ a { color: inherit; }
 .hero-in.split .display { font-size: clamp(2.75rem, 6vw, 6rem); }
 .hero-in.split .hero-foot { grid-template-columns: 1fr; gap: 2rem; }
 .hero-in.split .stats { justify-content: flex-start; }
-@media (max-width: 62rem) { .hero-in.split { grid-template-columns: 1fr; } .hero-in.split .hero-object { order: -1; aspect-ratio: 4 / 3; max-width: 28rem; } }
+@media (max-width: 62rem) { .hero-in.split { grid-template-columns: 1fr; } .hero-in.split .hero-object { order: -1; aspect-ratio: 16 / 10; max-width: 28rem; padding: 1rem; } .hero-in.split .hero-object { display: flex; flex-direction: column; gap: .5rem; } .hero-in.split .hero-object svg { flex: 1; min-height: 0; } .hero-in.split .hero-object figcaption { position: static; } }
 
 /* ---------- Sections ---------- */
 .section { padding: clamp(5rem, 11vw, 9rem) 0 0; }
