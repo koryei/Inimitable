@@ -7,8 +7,9 @@
 //
 //   theme    dark or light (default dark)
 //   palette  one of the built-in grounds (see assets/recipes/mesh.mjs), or use --accent to derive one
+//   motes    drifting specks in the light (a slow breath, stopped under reduced motion)
 //   hero     stack (headline over its copy) or split (headline beside the one object only this product has)
-//   shape    pools | horizon | bowl | blob | sweep for the hero ground (default: bowl on dark, blob on light)
+//   shape    pools | horizon | bowl | blob | sweep | rays for the hero ground (default: bowl on dark, blob on light)
 //
 // Everything marked data-todo is placeholder. Replace it with the product's real words and numbers.
 // signs.mjs reports every data-todo left on a page, so unfinished copy cannot ship.
@@ -46,7 +47,7 @@ export function themeCss({ dark, palette }) {
 `;
 }
 
-export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, shape, seed = 1, grain = 0.45, hero: heroLayout = 'stack' } = {}) {
+export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, shape, seed = 1, grain = 0.45, hero: heroLayout = 'stack', motes = false } = {}) {
   const dark = theme === 'dark';
   let pal;
   if (accent) pal = fromAccent(accent, { dark });
@@ -56,7 +57,7 @@ export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, s
     if (Boolean(pal.dark) !== dark) throw new Error(`The ${palette} palette is ${pal.dark ? 'dark' : 'light'}: use --theme ${pal.dark ? 'dark' : 'light'}, or pick another palette.`);
   }
   const heroShape = shape || (dark ? 'bowl' : 'blob');
-  const hero = grainient({ palette: pal, shape: heroShape, seed, grain, selector: '.hero .ground', mask: heroShape === 'blob' || heroShape === 'sweep' ? 'none' : 'bottom' });
+  const hero = grainient({ palette: pal, shape: heroShape, seed, grain, selector: '.hero .ground', withMotes: motes, drift: motes, mask: heroShape === 'blob' || heroShape === 'sweep' ? 'none' : 'bottom' });
   const closer = grainient({ palette: pal, shape: dark ? 'horizon' : 'pools', seed: seed + 7, grain, selector: '.closer .ground', mask: 'radial' });
 
   mkdirSync(dest, { recursive: true });
@@ -75,9 +76,9 @@ export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, s
 }
 
 if (isMain(import.meta.url)) {
-  const { positional, flags } = parseArgs(process.argv.slice(2));
+  const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['motes'] });
   if (!positional[0]) {
-    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split]");
+    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split] [--motes]");
     process.exit(2);
   }
   try {
@@ -89,6 +90,7 @@ if (isMain(import.meta.url)) {
       seed: flags.seed ? Number(flags.seed) : 1,
       grain: flags.grain ? Number(flags.grain) : 0.45,
       hero: flags.hero === 'split' ? 'split' : 'stack',
+      motes: Boolean(flags.motes),
     });
     console.log(`Started ${result.dest}  (${flags.theme === 'light' ? 'light' : 'dark'}, ${result.shape} ground)`);
     console.log(`${result.todo} placeholders to replace (every data-todo). signs.mjs lists any left.`);
