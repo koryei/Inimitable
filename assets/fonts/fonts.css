@@ -1,0 +1,10 @@
+/* Open fonts that ship with the skill (SIL Open Font Licence 1.1, see the OFL files beside them).
+   Geist: the interface and display sans. Geist Mono: metadata and figures. Instrument Serif: one large moment. */
+@font-face { font-family: "Geist"; src: url("geist.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("geist-mono.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("instrument-serif.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+:root {
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --serif: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
