@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product name: what it does for whom</title>
+<meta name="description" content="One sentence that says what the product does, for whom.">
+<script>document.documentElement.classList.add('m-js')</script>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="motion.css">
+<link rel="stylesheet" href="ground.css">
+<link rel="stylesheet" href="landing.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Everything marked data-todo is placeholder. Replace it with the product's real words, numbers and facts.
+     signs.mjs reports every data-todo left on the page, so unfinished copy cannot ship. -->
+
+<header class="nav" data-nav>
+  <nav class="nav-in" aria-label="Main">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span data-todo>Product</span></a>
+    <ul class="links">
+      <li><a href="#product" data-todo>Product</a></li>
+      <li><a href="#features" data-todo>Features</a></li>
+      <li><a href="#how" data-todo>How it works</a></li>
+      <li><a href="#start" data-todo>Pricing</a></li>
+    </ul>
+    <a class="m-btn glass" href="#start" data-todo>Get started <span class="m-arrow" aria-hidden="true"></span></a>
+    <details class="nav-menu">
+      <summary>Menu</summary>
+      <ul>
+        <li><a href="#product" data-todo>Product</a></li>
+        <li><a href="#features" data-todo>Features</a></li>
+        <li><a href="#how" data-todo>How it works</a></li>
+        <li><a href="#start" data-todo>Get started</a></li>
+      </ul>
+    </details>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="ground" aria-hidden="true"></div>
+    <div class="hero-in">
+      <a class="chip" href="#features" data-enter style="--d:60"><span class="dot" aria-hidden="true"></span><span data-todo>New: one real, recent thing</span></a>
+      <h1 class="display" id="hero-title" data-todo>
+        <span class="m-line"><span style="--d:0">What it does,</span></span>
+        <span class="m-line dim"><span style="--d:90">for whom.</span></span>
+      </h1>
+      <div class="hero-foot">
+        <div>
+          <p class="lede" data-enter style="--d:260" data-todo>One or two plain sentences: what the product is, who it is for, and the result they get.</p>
+          <div class="actions" data-enter style="--d:340">
+            <a class="m-btn large" href="#start" data-magnet data-todo>Primary action <span class="m-arrow" aria-hidden="true"></span></a>
+            <a class="m-btn large glass" href="#product" data-todo>See it working</a>
+          </div>
+        </div>
+        <div>
+          <dl class="stats" data-enter style="--d:440">
+            <div><dd data-count="120" data-suffix="K+" data-todo>120K+</dd><dt data-todo>A real figure</dt></div>
+            <div><dd data-count="98" data-suffix="%" data-todo>98%</dd><dt data-todo>A real figure</dt></div>
+            <div><dd data-count="24" data-suffix="h" data-todo>24h</dd><dt data-todo>A real figure</dt></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-label="What it covers" data-todo>
+    <div class="m-marquee" data-loop>
+      <div class="m-track">
+        <span>A true statement</span><span>Another true statement</span><span>A third one</span><span>A fourth, short</span><span>A fifth statement</span><span>The sixth</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section wrap" id="product" aria-labelledby="product-title">
+    <div class="head" data-reveal>
+      <div><p class="eyebrow" data-todo>Product</p><h2 class="h2" id="product-title" data-todo>The real thing, <span class="dim">shown large.</span></h2></div>
+      <p data-todo>One sentence on what to look at in the picture below, and why it matters to the person reading.</p>
+    </div>
+    <div class="stage" data-reveal="scale">
+      <div class="float" data-loop style="top: 22%; left: -1.5rem" aria-hidden="true"><span class="av">M</span><span data-todo>Maya is reviewing</span></div>
+      <div class="float b" data-loop style="bottom: 16%; right: -1.5rem" aria-hidden="true"><span class="av">D</span><span data-todo>Dev approved</span></div>
+      <div class="window" role="img" aria-label="An example of the product's main screen. Replace with the real screen.">
+        <div class="window-bar"><i></i><i></i><i></i><span data-todo>Example screen</span></div>
+        <div class="window-body">
+          <div class="side" aria-hidden="true"><b data-todo>Workspace</b><span aria-current="page">Overview</span><span>Activity</span><span>Reports</span><span>Settings</span></div>
+          <div class="panel" aria-hidden="true">
+            <div class="kpis">
+              <div class="kpi"><small data-todo>Measure one</small><strong data-todo>1,284</strong><em data-todo>+12%</em></div>
+              <div class="kpi"><small data-todo>Measure two</small><strong data-todo>86%</strong><em data-todo>+4%</em></div>
+              <div class="kpi"><small data-todo>Measure three</small><strong data-todo>3.2d</strong><em data-todo>-0.6d</em></div>
+            </div>
+            <div class="chart">
+              <svg viewBox="0 0 600 150" preserveAspectRatio="none" data-draw fill="none">
+                <path d="M0 120 C60 112 90 70 150 78 S240 128 300 96 S400 30 460 52 S560 40 600 18" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M0 140 L600 140" stroke="var(--line)" stroke-width="1"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="note" data-todo>Example data. Replace this screen with the real product, or state plainly that it is illustrative.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" id="features" aria-labelledby="features-title">
+    <div class="head" data-reveal>
+      <div><p class="eyebrow" data-todo>Features</p><h2 class="h2" id="features-title" data-todo>Each one earns <span class="dim">its place.</span></h2></div>
+      <p data-todo>Say what these have in common, in one sentence.</p>
+    </div>
+    <div class="bento">
+      <article class="cell c1" data-reveal data-spot data-tilt data-max="2.5" style="--i:0">
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" fill="none"><g stroke="var(--line-strong)" stroke-width="1"><path d="M0 40H400M0 90H400M0 140H400M0 190H400"/><path d="M60 0V220M140 0V220M220 0V220M300 0V220"/></g><path d="M0 170 C70 160 90 90 160 100 S250 160 310 90 S380 40 400 30" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/><circle cx="310" cy="90" r="5" fill="var(--accent)"/></svg>
+        </div>
+        <div><h3 data-todo>The headline feature</h3><p data-todo>What it does, how it changes the person's work, in two short sentences.</p></div>
+      </article>
+      <article class="cell c2" data-reveal data-spot style="--i:1"><span class="big" aria-hidden="true">01</span><div><h3 data-todo>A second feature</h3><p data-todo>One plain sentence.</p></div></article>
+      <article class="cell c3" data-reveal data-spot style="--i:2"><ul class="ticks"><li data-todo>A real capability</li><li data-todo>Another real capability</li><li data-todo>A third</li></ul><div><h3 data-todo>A list-shaped feature</h3><p data-todo>One plain sentence.</p></div></article>
+      <article class="cell c4" data-reveal data-spot style="--i:3"><div><h3 data-todo>Small feature</h3><p data-todo>One short sentence.</p></div></article>
+      <article class="cell c5" data-reveal data-spot style="--i:4"><div><h3 data-todo>Small feature</h3><p data-todo>One short sentence.</p></div></article>
+      <article class="cell c6" data-reveal data-spot style="--i:5"><div><h3 data-todo>Small feature</h3><p data-todo>One short sentence.</p></div></article>
+    </div>
+  </section>
+
+  <section class="section wrap" id="how" aria-labelledby="how-title">
+    <div class="head" data-reveal>
+      <div><p class="eyebrow" data-todo>How it works</p><h2 class="h2" id="how-title" data-todo>Three steps, <span class="dim">no more.</span></h2></div>
+      <p data-todo>What the person does first, and how soon they see a result.</p>
+    </div>
+    <div class="steps">
+      <svg class="rail" viewBox="0 0 1000 24" preserveAspectRatio="none" fill="none" aria-hidden="true" data-draw><path d="M0 12H1000" stroke="var(--line-strong)" stroke-width="1" stroke-dasharray="4 6"/></svg>
+      <div class="step" data-reveal style="--i:0"><span class="n" aria-hidden="true">1</span><h3 data-todo>First step</h3><p data-todo>What happens, in one sentence.</p></div>
+      <div class="step" data-reveal style="--i:1"><span class="n" aria-hidden="true">2</span><h3 data-todo>Second step</h3><p data-todo>What happens, in one sentence.</p></div>
+      <div class="step" data-reveal style="--i:2"><span class="n" aria-hidden="true">3</span><h3 data-todo>Third step</h3><p data-todo>What happens, in one sentence.</p></div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-label="A number that matters">
+    <div class="proof" data-reveal>
+      <b data-count="92" data-suffix="%" data-todo>92%</b>
+      <p data-todo>One real result, stated plainly. <span>Say where the number comes from.</span></p>
+    </div>
+  </section>
+
+  <section class="closer" id="start" aria-labelledby="close-title">
+    <div class="ground" aria-hidden="true"></div>
+    <div data-reveal>
+      <h2 class="h2" id="close-title" data-todo>One clear next step.</h2>
+      <p data-todo>One sentence that makes the next step feel small.</p>
+      <a class="m-btn large" href="#top" data-magnet data-todo>Primary action <span class="m-arrow" aria-hidden="true"></span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <div class="foot-cols">
+    <div><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span data-todo>Product</span></a><p data-todo>One line about what it is.</p></div>
+    <div><h4 data-todo>Product</h4><ul><li><a class="m-link" href="#product" data-todo>Overview</a></li><li><a class="m-link" href="#features" data-todo>Features</a></li><li><a class="m-link" href="#how" data-todo>How it works</a></li></ul></div>
+    <div><h4 data-todo>Company</h4><ul><li><a class="m-link" href="#" data-todo>About</a></li><li><a class="m-link" href="#" data-todo>Contact</a></li></ul></div>
+    <div><h4 data-todo>Legal</h4><ul><li><a class="m-link" href="#" data-todo>Privacy</a></li><li><a class="m-link" href="#" data-todo>Terms</a></li></ul></div>
+  </div>
+  <p class="wordmark" aria-hidden="true" data-todo>Product</p>
+  <div class="legal"><span data-todo>&copy; Year Company</span><span data-todo>A true line</span></div>
+</footer>
+
+<script src="motion.js" defer></script>
+</body>
+</html>
