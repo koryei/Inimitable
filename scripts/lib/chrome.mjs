@@ -74,8 +74,18 @@ export async function connect(url) {
   };
 }
 
-// Start Chrome and return a handle. Always call close().
+// Start Chrome and return a handle. Always call close(). A browser that fails to come up (a busy CI runner, a
+// profile directory that is slow to create) is tried once more before the error is reported.
 export async function launch() {
+  try {
+    return await launchOnce();
+  } catch (error) {
+    if (!/did not start|exited early/.test(error.message)) throw error;
+    return launchOnce();
+  }
+}
+
+async function launchOnce() {
   const chrome = findChrome();
   if (!chrome) {
     throw new Error(
@@ -100,7 +110,7 @@ export async function launch() {
   );
   const endpoint = await new Promise((resolve, reject) => {
     let seen = '';
-    const timer = setTimeout(() => reject(new Error('Chrome did not start in 20 seconds.')), 20000);
+    const timer = setTimeout(() => { proc.kill(); reject(new Error('Chrome did not start in 20 seconds.')); }, 20000);
     proc.stderr.on('data', (chunk) => {
       seen += chunk.toString();
       const match = seen.match(/DevTools listening on (ws:\/\/\S+)/);
