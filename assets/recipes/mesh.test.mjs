@@ -59,3 +59,9 @@ test('mask none leaves no mask and drift adds the slow animation', () => {
   assert.doesNotMatch(grainient({ mask: 'none' }).css, /mask-image/);
   assert.match(grainient({ drift: true }).css, /m-drift/);
 });
+
+test('a dark bowl and horizon carry a luminous rim, a light one does not', () => {
+  assert.match(grainient({ palette: 'dusk', shape: 'bowl' }).css, /radial-gradient\(ellipse [^)]*transparent 65%/);
+  assert.match(grainient({ palette: 'dusk', shape: 'horizon' }).css, /ellipse/);
+  assert.doesNotMatch(grainient({ palette: 'ember', shape: 'bowl' }).css, /ellipse/);
+});

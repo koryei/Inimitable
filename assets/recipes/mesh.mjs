@@ -83,6 +83,11 @@ export function grainCss({ dark = false, strength = 0.4, selector = '.ground::af
 }
 
 // ---------- shapes: where the light comes from ----------
+// The luminous edge of a body of light: a soft elliptical rim, like the limb of a planet or the lip of a bowl of glow.
+// It is what turns a smudge of colour into a shape with an inside and an outside.
+const rim = (x, y, rx, ry, color, at = 70, soft = 5) => `radial-gradient(ellipse ${rx}% ${ry}% at ${x}% ${y}%, transparent ${at - soft}%, ${color} ${at}%, transparent ${at + soft}%)`;
+const mixIn = (c, pct) => `color-mix(in srgb, ${c} ${pct}%, transparent)`;
+
 const pool = (x, y, rx, ry, color, fade = 62) => `radial-gradient(${rx}% ${ry}% at ${x}% ${y}%, ${color} 0%, transparent ${fade}%)`;
 
 const SHAPES = {
@@ -98,9 +103,11 @@ const SHAPES = {
   // A glow rising from the bottom edge, dark above: an atmosphere, a planet's limb, a sunrise.
   horizon(p, rand) {
     const x = 42 + rand() * 16;
+    const edge = p.dark ? [rim(x, 118, 70, 62, mixIn(p.family[2], 60), 70)] : [];
     // Pale pastel on pale paper barely differs in lightness, so a light horizon rises further into the frame.
     const lift = p.dark ? 0 : 16;
     return [
+      ...edge,
       pool(x, 112 - lift, 85, 62 + lift / 2, p.family[2], 88),
       pool(x - 12, 108 - lift, 68, 46 + lift / 2, p.family[1], 80),
       pool(x + 18, 104 - lift, 52, 34 + lift / 2, p.counter, 74),
@@ -110,11 +117,13 @@ const SHAPES = {
   // The inverse: light pours down from the top into the dark, leaving the lower half calm for type.
   bowl(p, rand) {
     const x = 40 + rand() * 20;
+    const edge = p.dark ? [rim(x, -20, 74, 58, mixIn(p.family[2], 62), 70)] : [];
     return [
-      pool(x, -12, 90, 60, p.family[0], 90),
-      pool(x - 20, -6, 55, 36, p.family[1], 80),
-      pool(x + 22, -8, 50, 32, p.counter, 78),
-      pool(x, -14, 70, 40, p.family[2], 85),
+      ...edge,
+      pool(x, -14, 104, 72, p.family[0], 92),
+      pool(x - 22, -6, 64, 46, p.family[1], 84),
+      pool(x + 26, -8, 58, 42, p.counter, 82),
+      pool(x, -16, 84, 54, p.family[2], 88),
     ];
   },
   // One soft cloud of colour to one side, the rest of the page left clean.
