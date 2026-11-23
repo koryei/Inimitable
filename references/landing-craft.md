@@ -2,7 +2,7 @@
 
 A good landing page is not a layout with a nice colour. It is a handful of decisions made together: **where the light comes from, where the type sits in it, what is big, what moves and in what order, and how everything answers the pointer.** This file explains each decision, why it works on a person, how to build it with the kits in this skill, and which script catches it when it is wrong.
 
-Start every landing page with `node scripts/scaffold.mjs <folder>`. It gives you a page that already makes these decisions and already passes every check. Your job is then to replace the placeholder content with the product's own and to push the direction until it could only be this product.
+Start every landing page with `node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette name] [--shape rays|bowl|blob|...] [--hero split] [--motes]`. `--hero split` puts the headline beside the one object only this product has (a drawing, the real screen, a diagram). To deliver a single file, run `node scripts/inline.mjs <folder>`. It gives you a page that already makes these decisions and already passes every check. Your job is then to replace the placeholder content with the product's own and to push the direction until it could only be this product.
 
 ## The ten decisions
 
@@ -20,9 +20,10 @@ Start every landing page with `node scripts/scaffold.mjs <folder>`. It gives you
 | `horizon` | rises from the bottom edge | dark pages with type at the top, or a closing band |
 | `blob` | one soft cloud to one side | light pages; the opposite side stays clean |
 | `pools` | several soft pools, off-centre | a quiet, even ground; light or dark |
+| `rays` | shafts of light falling from above, like sun through water or a window in a dark room | dark pages that want atmosphere: pair with `--motes` and the `abyss`, `dusk` or `coal` palette |
 | `sweep` | a diagonal fold of colour | showpieces and section breaks |
 
-Palettes keep to **one temperature family plus a single counterpoint**; `fromAccent('#hex')` derives one from a brand colour and pulls it back until it reads as light, not paint. The audit refuses anything over the paint cap.
+Add `--motes` for faint specks that drift very slowly, like dust in a beam. Palettes: `ember`, `petal`, `glacier`, `moss` (light) and `dusk`, `midnight`, `abyss`, `coal`, `ink` (dark). They keep to **one temperature family plus a single counterpoint**; `fromAccent('#hex')` derives one from a brand colour and pulls it back until it reads as light, not paint. The audit refuses anything over the paint cap.
 
 **Rules.** One ground per screen. No glow stacked on it. Never behind the busiest part of the type. Grain visible as softness, never as a pattern. It may drift once, very slowly (`.m-drift`), and stops under reduced motion.
 
