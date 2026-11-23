@@ -43,6 +43,29 @@ Building well is mostly choosing well. This file says where good parts and good 
 | **[Grainient](https://grainient.supply/collections)** | A large library of grain and mesh gradient backgrounds, organised by family: noisy and grainy, smooth blends, dither, hero, light and dark, glass and metal | The ground of a hero or showpiece page, and the study of how a material is lit | Study the families and rebuild the mechanism in CSS (`materials.md`); download a texture only when the project can carry a bitmap | The site mixes free and paid collections: check the collection's page before shipping a file, and never subscribe on the person's behalf |
 | **[Construct · Material](https://www.tobiadonadon.com/projects/construct/material)** | A free guide to the basics of interface material, done properly | Learning why surfaces need light and texture before you build one | Read it, then build from `materials.md` | Free to read; do not copy its wording |
 
+## Pulling real source
+
+Do not describe a library's component from memory when you can take the source. Check the project's stack first:
+
+| Project is | Do this |
+| --- | --- |
+| React (or Next.js) with Tailwind | `node scripts/lib-add.mjs add bencho <item>`, `add boardui <item>`, `add aceternity <item>`. Files land in `vendor/` with a NOTICE and the npm packages to install. |
+| React, any styling | The same, then re-skin the CSS to the project's tokens. Most Bencho blocks ship their own `.css` and read `--bencho-*` tokens: map them. |
+| Plain HTML, no build | Use the skill's own kit in `assets/motion/` (dependency-free): reveal, split text, count-up, magnetic, tilt, spotlight, marquee, draw, sweep buttons. Take a library's *behaviour* as a reference and rebuild it in the kit's style. |
+| CSS-only motion wanted | `npx transitions-dev add <name>` (free recipes: card resize, dropdown, modal, toast, tabs, skeleton, success check, error shake and more) or `npx transitions-dev add --free`. |
+
+`node scripts/lib-add.mjs sources` lists the registries; `list <source>` lists their items; `--dry-run` shows what would be written. It only writes files: it never runs fetched code and never installs packages (it prints the ones to install, for you to confirm). Never log in, subscribe or pay on the person's behalf, and never fetch a Pro item.
+
+**What is worth taking for a landing page**
+
+- **Bencho** (MIT): `tilt` (a card that sinks under the pointer), `card-stack` and `card-swap` (a deck of examples), `image-compare` (a before and after), `liq-toggle` (a monthly and yearly switch with weight), `magnet-select`, `toast-stack`, `dock`, `rolling-counter`, `slide-confirm`. Take one per page.
+- **Transitions.dev**: the dropdown, modal, tabs, toast and success-check recipes for any app-like piece on the page.
+- **BoardUI**: stat cards, a data table, a sidebar and a command palette when the page shows a product dashboard.
+- **Aceternity**: a spotlight or a text effect, for the mechanism only, and only on Persuade or Experience pages.
+- **Grainient**: download a free collection image for a painterly ground, or build the ground in code with `mesh.mjs` (the skill never redistributes their files).
+
+Re-skin everything you take to the project's tokens, and name what you took in the report.
+
 ## How to take from a library
 
 The point of a library is not its look. It is the **mechanism** and the **judgement** behind it. Copying the look is how a page ends up as a collage of other people's decisions.
