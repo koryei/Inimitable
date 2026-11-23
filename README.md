@@ -128,9 +128,9 @@ Plain Node scripts, no dependencies. The agent runs them for you, and you can ru
 | `scripts/signs.mjs <url or file>` | Finds machine-made tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims, looping animation and more. `--allow` licenses devices a committed direction uses on purpose. |
 | `scripts/check.mjs <url or file>` | WCAG contrast read from the rendered pixels (so gradients, images and pseudo-element backgrounds are judged too), touch-target size, small text, missing names, visible focus styles, images that cause layout shift, and document basics, at phone and desktop widths. |
 | `scripts/craft.mjs <url or file>` | Hovers every control with a real pointer and diffs the computed style, so a control that ignores the pointer is caught rather than missed. Also flags transitions on layout properties and motion that keeps running when the reduced-motion setting is on. `--shots` writes a rest and hover crop for each control. |
-| `scripts/scaffold.mjs <folder>` | Starts a landing page from a complete, tested starter (lit ground, motion, hover states) in dark or light. |
+| `scripts/scaffold.mjs <folder>` | Starts a landing page from a complete, tested starter (lit ground, motion, hover states) in dark or light. Seven grounds (`--shape pools, horizon, bowl, blob, sweep, rays, contour`), `--hero split` for a headline beside the one object only the product has, `--minimal` for a short brief with few facts. |
+| `scripts/inline.mjs <folder> --out page.html` | Folds a finished page, its styles, script and fonts into one file you can send. |
 | `scripts/lib-add.mjs add bencho <item>` | Pulls real source from Bencho, BoardUI, Aceternity or any shadcn registry, files only, with the licence notice. |
-| `scripts/craft.mjs <url or file>` | Hovers every control with a real pointer and diffs the pixels; checks that motion stops under reduced motion. |
 | `scripts/dotify.mjs <image or svg>` | Turns any picture or drawn SVG into dithered, halftone, hex-dot or ASCII art for a hero object. |
 | `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100 with what cost points. |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal program at a set width in a real pseudo-terminal and captures text and an image. |
