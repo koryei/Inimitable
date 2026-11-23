@@ -16,7 +16,9 @@
 (() => {
   const doc = document;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  // Pointer effects are for a mouse or trackpad. A touch screen reports a coarse pointer and gets none of them; a machine
+  // that reports no pointer at all (some headless and embedded browsers) is treated as having one.
+  const fine = !matchMedia('(pointer: coarse)').matches;
   const $$ = (sel, root = doc) => [...root.querySelectorAll(sel)];
   const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
 
