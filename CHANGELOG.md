@@ -2,6 +2,9 @@
 
 ## 0.7.0
 
+- **The website is rebuilt on the skill's own landing starter** and set in a type system (five working sizes, four display sizes, roles not sizes). It ships the same motion kit, fonts and lit ground it teaches, and passes `signs`, `check` and `craft` at all four widths.
+- **The README is rewritten** in plain sentence-case copy with typographic punctuation, a defined term, a starters section and a tools table with flags.
+
 Built from using the skill's own starters on real briefs and fixing what the tools found.
 
 - **An app starter** (`scripts/scaffold.mjs <folder> --kind app`): sidebar that becomes a menu on a phone, header with one primary action, four key numbers, one chart with an "example data" label, a table whose status is a word and a dot, an empty state, hover, focus and press on every control. Dark and light, tested at 320, 390, 1440 and 2560.
