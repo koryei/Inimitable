@@ -128,6 +128,9 @@ Plain Node scripts, no dependencies. The agent runs them for you, and you can ru
 | `scripts/signs.mjs <url or file>` | Finds machine-made tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims, looping animation and more. `--allow` licenses devices a committed direction uses on purpose. |
 | `scripts/check.mjs <url or file>` | WCAG contrast read from the rendered pixels (so gradients, images and pseudo-element backgrounds are judged too), touch-target size, small text, missing names, visible focus styles, images that cause layout shift, and document basics, at phone and desktop widths. |
 | `scripts/craft.mjs <url or file>` | Hovers every control with a real pointer and diffs the computed style, so a control that ignores the pointer is caught rather than missed. Also flags transitions on layout properties and motion that keeps running when the reduced-motion setting is on. `--shots` writes a rest and hover crop for each control. |
+| `scripts/scaffold.mjs <folder>` | Starts a landing page from a complete, tested starter (lit ground, motion, hover states) in dark or light. |
+| `scripts/lib-add.mjs add bencho <item>` | Pulls real source from Bencho, BoardUI, Aceternity or any shadcn registry, files only, with the licence notice. |
+| `scripts/craft.mjs <url or file>` | Hovers every control with a real pointer and diffs the pixels; checks that motion stops under reduced motion. |
 | `scripts/dotify.mjs <image or svg>` | Turns any picture or drawn SVG into dithered, halftone, hex-dot or ASCII art for a hero object. |
 | `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100 with what cost points. |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal program at a set width in a real pseudo-terminal and captures text and an image. |
@@ -144,6 +147,7 @@ references/
   anti-slop.md           the tells, each with its fix
   principles.md          why design works: perception, grouping, type, colour, feedback, trust
   visual-craft.md        finding and drawing the one memorable moment in code
+  landing-craft.md       why the best landing pages work, decision by decision, with the kit piece that builds each
   directions.md          committed looks: instrument dark and light, blueprint, horizon, dithered data
   devices.md             fifteen structural moves that make a page memorable, each with the reason it works
   feels-cheap.md         trust, feedback, loading, retention, consistency, permissions
@@ -154,6 +158,9 @@ references/
   libraries.md           where to take parts from, and the rules for taking them
   layers/                spacing, colour, icons, copy, type, layout, details, motion
   surfaces/              web app, landing, reading, showpiece, terminal, iOS, Android
+assets/motion/           the motion kit: ordered entrance, reveal, count-up, magnetic, tilt, spotlight, marquee, draw, sweep buttons
+assets/starters/landing  a complete landing page to start from, tested in a browser
+assets/fonts/            Geist, Geist Mono and Instrument Serif under the Open Font Licence
 assets/recipes/          generators and kits, all tested: contours, stones, vessels, dither and halftone, HUD callouts, isometric art, the instrument CSS kit
 scripts/                 the measuring tools above, plus score.mjs and craft.mjs
 evals/                   briefs, scoring and the protocol used to test and improve the skill
