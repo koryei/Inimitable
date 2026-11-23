@@ -162,3 +162,24 @@ test('an element in the last screenful of the page still reveals', { skip }, asy
     assert.equal(await page.evaluate("[...document.querySelectorAll('#split > span > span')].every((s) => s.style.transform === 'none')"), true);
   } finally { await chrome.close(); }
 });
+
+// The pointer effects must follow the device: on for a mouse, on when no pointer is reported (headless, embedded), off for touch.
+async function withPointer(kind, run) {
+  const { chrome, page } = await session();
+  try {
+    const script = `(() => { const real = window.matchMedia.bind(window); window.matchMedia = (q) => { const r = real(q); const touch = ${kind === 'touch'}; const none = ${kind === 'none'}; if (/pointer: coarse/.test(q)) return { ...r, matches: touch, addEventListener() {} }; if (/pointer: fine/.test(q) || /hover: hover/.test(q)) return { ...r, matches: !touch && !none, addEventListener() {} }; if (/hover: none|pointer: none/.test(q)) return { ...r, matches: touch || none, addEventListener() {} }; return r; }; })();`;
+    await page.send('Page.addScriptToEvaluateOnNewDocument', { source: script });
+    await page.goto(toUrl(fixture), 1200);
+    await run(page);
+  } finally { await chrome.close(); }
+}
+const pulled = async (page) => {
+  const c = await centre(page, '#btn');
+  await mouse(page, 'mouseMoved', c.x + c.w / 2 - 4, c.y);
+  await wait(300);
+  return parseFloat(await page.evaluate("document.querySelector('#btn').style.getPropertyValue('--tx')") || '0');
+};
+
+test('a mouse gets the magnetic pull', { skip }, async () => withPointer('mouse', async (page) => assert.ok((await pulled(page)) > 5)));
+test('a machine that reports no pointer at all still gets it', { skip }, async () => withPointer('none', async (page) => assert.ok((await pulled(page)) > 5)));
+test('a touch screen gets no pointer effects', { skip }, async () => withPointer('touch', async (page) => assert.ok(!((await pulled(page)) > 0))));
