@@ -39,3 +39,13 @@ test('invert draws the light parts of a picture instead of the dark ones', { ski
   assert.ok(count(light) < count(dark), 'the dark background draws more dots than the bright disc');
   assert.ok(count(light) > 20, 'the bright disc is drawn');
 });
+
+test('lines mode draws an engraving in two colours: thick where the picture is dark, nothing where it is paper', { skip }, async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'dotify-test-'));
+  const file = join(dir, 'disc.svg');
+  writeFileSync(file, '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="100" cy="100" r="70" fill="#222"/></svg>');
+  const r = await dotify(file, { mode: 'lines', dots: 40, cell: 6, fill: '#1f43d6', bg: '#ffffff', trim: false });
+  assert.match(r.svg, /fill="#1f43d6"/);
+  assert.match(r.svg, /fill="#ffffff"/);
+  assert.ok((r.svg.match(/M/g) || []).length > 10, 'one run of ink per line that crosses the disc');
+});

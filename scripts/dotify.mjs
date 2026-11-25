@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Turn any picture, drawn SVG or HTML into a dithered, dotted, halftone, hex-cell or ASCII image.
 //
-//   node scripts/dotify.mjs <input> [--mode fs|ordered|stipple|halftone|hex|ascii] [--dots 140] [--cell 6]
+//   node scripts/dotify.mjs <input> [--mode fs|ordered|stipple|halftone|hex|lines|ascii] [--dots 140] [--cell 6]
 //                           [--fill '#e8e6e1'] [--bg '#0f0f10'] [--invert] [--contrast 1.2] [--gamma 1]
 //                           [--threshold 0] [--out result.svg]
 //
@@ -13,7 +13,10 @@
 //            dots (a dark object on a light page); use --invert when the subject is the bright part, for
 //            example white text or a lit shape on a dark picture. Choose --fill and --bg for the page you place it on.
 //   --no-trim keeps the empty space around the subject (by default it is cropped away)
+//   lines    an engraving: one horizontal line per row of the picture, thicker where it is darker
 //   ascii    writes the characters as text instead of an SVG
+//   For a duotone, give --fill the ink and --bg the paper: two colours and nothing else (assets/recipes/duotone.mjs draws
+//   subjects with no picture at all). Render the product's own artifact to HTML and dotify it, so the artwork is about the product.
 //
 // This is how a subject becomes a "computational" hero object: one picture, one texture, one or two colours.
 // Use only images you have the right to use.
@@ -22,6 +25,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, extname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { engraveSvg } from '../assets/recipes/duotone.mjs';
 import { asciiLines, contentBox, crop, downsample, ditherSvg, fieldFromImage, floydSteinberg, halftoneSvg, orderedDither, stipple } from '../assets/recipes/dither.mjs';
 import { isMain, parseArgs } from './lib/args.mjs';
 import { launch, openPage } from './lib/chrome.mjs';
@@ -67,6 +71,7 @@ export async function dotify(input, options = {}) {
   const field = factor > 1 ? downsample(ink, factor) : ink;
   if (mode === 'ascii') return { text: asciiLines(field, { cell: 1, aspect: 2, invert: true }).join('\n') };
   if (mode === 'halftone' || mode === 'hex') return { svg: halftoneSvg(field, { cell, fill, background: bg, hex: mode === 'hex', maxRadius: cell * 0.5, invert: true, scale: cell }) };
+  if (mode === 'lines') return { svg: engraveSvg({ ...field, data: field.data.map((v) => 1 - v) }, { pitch: cell, step: Math.max(2, Math.round(cell / 2)), scale: cell, ink: fill, paper: bg }) };
   const grid = mode === 'ordered' ? orderedDither(field, { threshold }) : mode === 'stipple' ? stipple(field, { seed: 3 }) : floydSteinberg(field, { threshold: 0.5 - threshold });
   return { svg: ditherSvg(grid, { cell, fill, background: bg, lit: 1 }), cols: grid.width, rows: grid.height };
 }
@@ -74,7 +79,7 @@ export async function dotify(input, options = {}) {
 if (isMain(import.meta.url)) {
   const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['invert', 'no-trim'] });
   if (!positional[0]) {
-    console.error("Usage: node scripts/dotify.mjs <input> [--mode fs|ordered|stipple|halftone|hex|ascii] [--dots 140] [--cell 6] [--fill '#e8e6e1'] [--bg '#0f0f10'] [--invert] [--contrast 1.2] [--gamma 1] [--out file]");
+    console.error("Usage: node scripts/dotify.mjs <input> [--mode fs|ordered|stipple|halftone|hex|lines|ascii] [--dots 140] [--cell 6] [--fill '#e8e6e1'] [--bg '#0f0f10'] [--invert] [--contrast 1.2] [--gamma 1] [--out file]");
     process.exit(2);
   }
   const result = await dotify(positional[0], {
