@@ -1,0 +1,3 @@
+Artifact: a weekly rota grid (staff down the side, Monday to Sunday across), at the moment a shift is dropped on a day where that person is already booked and the grid flags it.
+Without the category word: a Mon-Sun grid of shift blocks drawn large and marked as example data, one block clashing and flagged in plain words, the headline beside it.
+Signature: interaction, one shift block on the grid you can drag; drop it on a day the person is already working and it flags the clash (the block snaps back if you drop it clear). Ground: flat sand, because a rota is a paper thing pinned in the back room. Everything else calm.

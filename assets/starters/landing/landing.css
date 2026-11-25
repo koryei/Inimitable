@@ -50,7 +50,10 @@ a { color: inherit; }
 @media (min-width: 48rem) { .display { letter-spacing: -0.04em; } }
 @media (min-width: 62rem) { .display { letter-spacing: -0.05em; } }
 @media (min-width: 80rem) { .display { letter-spacing: -0.055em; } }
-.display .dim { color: var(--ink-3); }
+.display .dim, .h2 .dim, .dim { color: var(--ink-3); }
+/* Figures: tabular digits, with the decimals set back (assets/recipes/headline.mjs writes this markup). */
+.num { font-variant-numeric: tabular-nums; }
+.dec { color: var(--ink-3); }
 .hero-main { display: grid; gap: 2.5rem; }
 .hero-object { display: none; margin: 0; }
 .hero-foot { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 3rem; align-items: end; }
@@ -71,6 +74,37 @@ a { color: inherit; }
 .hero-in.split .hero-foot { grid-template-columns: 1fr; gap: 2rem; }
 .hero-in.split .stats { justify-content: flex-start; }
 @media (max-width: 62rem) { .hero-in.split { grid-template-columns: 1fr; } .hero-in.split .hero-object { order: -1; aspect-ratio: 16 / 10; max-width: 28rem; padding: 1rem; } .hero-in.split .hero-object { display: flex; flex-direction: column; gap: .5rem; } .hero-in.split .hero-object svg { flex: 1; min-height: 0; } .hero-in.split .hero-object figcaption { position: static; } }
+
+/* Card hero (scaffold --hero card): a centred headline, then the product card cropped by the bottom of the first screen,
+   with a thin traced diagram behind it and annotation chips on it. The hero is one screen tall and clips the card. */
+.hero.has-card { align-items: flex-start; height: min(100svh - 1.5rem, 62rem); min-height: 40rem; }
+.hero-in.card { padding: 8rem 0 0; justify-items: center; text-align: center; gap: 2.5rem; }
+.hero-in.card .hero-main { justify-items: center; gap: 1.75rem; }
+.hero-in.card .display { max-width: 15ch; margin-inline: auto; font-size: clamp(2.5rem, 5.4vw, 5.25rem); line-height: 1; letter-spacing: -0.03em; }
+@media (min-width: 64rem) { .hero-in.card .display { letter-spacing: -0.035em; } }
+@media (min-width: 80rem) { .hero-in.card .display { letter-spacing: -0.045em; } }
+@media (min-width: 96rem) { .hero-in.card .display { letter-spacing: -0.05em; } }
+.hero-in.card .hero-foot { grid-template-columns: 1fr; justify-items: center; gap: 0; }
+.hero-in.card .lede { margin-inline: auto; margin-bottom: 1.5rem; }
+.hero-in.card .actions { justify-content: center; }
+.hero-card { position: relative; width: min(100%, 56rem); }
+.hero-card .window { position: relative; z-index: 1; }
+.hero-card .diagram { position: absolute; z-index: 0; left: -25%; top: 0; width: 150%; max-width: none; height: auto; transform: translateY(-48.08%); pointer-events: none; overflow: visible; }
+.hero-card .window-body { min-height: 24rem; }
+@media (max-width: 62rem) { .hero-card .diagram { display: none; } }
+@media (max-width: 40rem) { .hero.has-card { height: min(100svh - 1rem, 56rem); } .hero-in.card { padding-top: 7rem; gap: 2rem; } }
+
+/* A duotone print in the split hero's object slot (scaffold --art): the picture is the whole plate. */
+.hero-in.split .hero-object.is-art { padding: 0; overflow: hidden; display: flex; flex-direction: column; aspect-ratio: 4 / 5; background: var(--ink); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.hero-in.split .hero-object.is-art svg { flex: 1; min-height: 0; width: 100%; height: 100%; }
+.hero-in.split .hero-object.is-art figcaption { position: static; margin: 0; padding: 0.75rem 1.25rem 1rem; background: var(--ink); color: var(--bg); }
+@media (max-width: 62rem) { .hero-in.split .hero-object.is-art { aspect-ratio: 4 / 3; max-width: 28rem; padding: 0; } }
+
+/* Split hero tracking follows its own, smaller size (evals/tracking.mjs). */
+.hero-in.split .display { letter-spacing: -0.03em; }
+@media (min-width: 62rem) { .hero-in.split .display { letter-spacing: -0.04em; } }
+@media (min-width: 80rem) { .hero-in.split .display { letter-spacing: -0.05em; } }
+@media (min-width: 96rem) { .hero-in.split .display { letter-spacing: -0.055em; } }
 
 /* ---------- Sections ---------- */
 .section { padding: clamp(5rem, 11vw, 9rem) 0 0; }

@@ -30,6 +30,8 @@ Pick **one** material for the page and let the others appear only as small accen
 
 ## The grainient, built properly
 
+It is also the default ground of machine-built pages now, so choose it on purpose (`directions.md`, "Choosing the ground"): a flat colour, a framed panel or a duotone print are equal options, and `scaffold --ground` builds them.
+
 A grainient is not a linear gradient with pretty colours. It is a **mesh of soft light** with grain on top. Build it in four layers, back to front:
 
 1. **Base.** The page's own background colour, so the ground never fights the content.

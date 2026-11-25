@@ -1,0 +1,3 @@
+Artifact: a strip log of one core run, at the moment a sample's depth from and to is logged and the layer boundary lands at 14.1 m.
+Without the category word: a tall strip log drawn large on a sheet (depth ticks in metres down the side, coloured layers each labelled with rock type and depth from to, a marker that reads the depth under the pointer), the headline beside it, marked Example data.
+Signature: the strip log, drawn in code, drawn top to bottom by a scan line on entry, hatched as a draft until it is signed. Ground: flat sand (a log sheet's paper), because the log is the picture. Everything else calm.

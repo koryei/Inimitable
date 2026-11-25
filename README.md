@@ -133,7 +133,11 @@ node scripts/scaffold.mjs my-app --kind app --theme dark
 | **Landing page** | A lit grainient ground, a floating nav, a product frame, an uneven bento, steps, one big number, a closing call and a footer. The motion kit is wired in: ordered entrance, scroll reveals, count-up, and a hover and press state on every control. |
 | **App screen** (`--kind app`) | A sidebar that becomes a menu on a phone, a page header with one primary action, four key numbers, one chart, a table whose status is a word and a dot, and an empty state that says what to do. |
 
-Seven grounds are built in (`--shape pools`, `horizon`, `bowl`, `blob`, `sweep`, `rays` or `contour`). Add `--hero split` to put the headline beside the one object only your product has, or `--minimal` for a short brief with few facts. Every placeholder is marked `data-todo`, and `signs.mjs` reports any left, so unfinished copy cannot ship.
+Seven lit grounds are built in (`--shape pools`, `horizon`, `bowl`, `blob`, `sweep`, `rays` or `contour`). The soft grainy gradient is also what most machine-built pages reach for now, so there are first-class alternatives: `--ground flat` (one saturated colour, `--palette cobalt`, `mint` or `sand`) and `--ground frame` (a dark rounded panel set into the page). `--hero split` puts the headline beside the one object only your product has, and `--art column` (or `vase`, `sphere`, `drape`, `strata`) fills it with a duotone print as a stand-in. `--hero card` centres the headline and crops the product card at the fold, with a traced diagram behind it and annotation chips on it. `--minimal` is for a short brief with few facts.
+
+```bash
+node scripts/scaffold.mjs my-page --ground flat --palette cobalt --hero card
+``` Every placeholder is marked `data-todo`, and `signs.mjs` reports any left, so unfinished copy cannot ship.
 
 ## The tools
 
@@ -146,10 +150,10 @@ Plain Node scripts with no dependencies. The agent runs them for you, and you ca
 | `scripts/signs.mjs <url or file>` | Finds tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims, looping animation and more. | `--allow` licenses a device your committed direction uses on purpose |
 | `scripts/check.mjs <url or file>` | Reads WCAG contrast from the rendered pixels, so gradients, images and pseudo-element backgrounds are judged too. Also checks touch targets, small text, missing names, focus styles, layout shift and document basics. | `--widths` |
 | `scripts/craft.mjs <url or file>` | Hovers every control with a real pointer and diffs the result, so a control that ignores the pointer is caught, not missed. Also flags layout-property transitions and motion that ignores the reduced-motion setting. | `--shots` writes a rest and hover crop per control |
-| `scripts/scaffold.mjs <folder>` | Starts a landing page or an app screen from a tested starter. | `--kind`, `--theme`, `--palette`, `--shape`, `--hero`, `--minimal` |
+| `scripts/scaffold.mjs <folder>` | Starts a landing page or an app screen from a tested starter. | `--kind`, `--theme`, `--palette`, `--shape`, `--ground`, `--hero`, `--art`, `--minimal` |
 | `scripts/inline.mjs <folder>` | Folds a finished page, with its styles, script and fonts, into one file you can send. | `--out page.html` |
 | `scripts/lib-add.mjs add <source> <item>` | Pulls real source from Bencho, BoardUI, Aceternity or any shadcn registry. Files only, with the licence notice. | `--dry-run`, `--out` |
-| `scripts/dotify.mjs <image or svg>` | Turns a picture or drawn SVG into dithered, halftone, hex-dot or ASCII art for a hero object. | `--invert` |
+| `scripts/dotify.mjs <image or svg>` | Turns a picture or drawn SVG into dithered, halftone, hex-dot, engraved-line or ASCII art for a hero object. | `--mode`, `--invert`, `--fill`, `--bg` |
 | `scripts/swap.mjs <url or file>` | The swap-the-name test. With the product name removed, does the first screen still use the nouns of the product's own subject, and does its artwork name them? It catches a page where only the skeleton is the product's own. It cannot judge the picture. | `--nouns`, `--name`, `--typographic` |
 | `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100, with what cost points. | |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal program at a set width in a real pseudo-terminal and captures its text and an image. | |
@@ -180,9 +184,9 @@ references/
 assets/motion/           the motion kit: entrance, reveal, count-up, magnetic, tilt, spotlight, marquee, draw, sweep buttons
 assets/starters/         the landing and app starters, tested in a browser
 assets/fonts/            Geist, Geist Mono and Instrument Serif under the Open Font Licence
-assets/recipes/          tested generators and kits: grounds, contours, stones, vessels, dither, halftone, HUD callouts, isometric art
+assets/recipes/          tested generators and kits: grounds, flat colour tones, duotone prints, annotation chips and diagrams, headline helpers, contours, stones, vessels, dither, halftone, HUD callouts, isometric art
 scripts/                 the measuring and building tools above
-evals/                   briefs, scoring and the write-up of every test round
+evals/                   briefs, scoring, a tracking measurement and the write-up of every test round
 examples/                real before and after runs
 ```
 
@@ -192,7 +196,9 @@ Each brief was built twice by the same model, once with no skill and once with i
 
 Across the first three rounds the skill won 9 of 12 comparisons, with a mean mechanical score of 96 against 62. On a later plain brief that never mentioned how it would be judged, the motion and hover score was 75 with the skill and 31 without.
 
-The limits are real: one reviewer, a round that was not blind, and both sides on the same model. The skill lost two comparisons in the first round, because it made clean pages where the other side drew something memorable. The guide and recipes for that one rich moment came from those losses. [Read all five rounds.](evals/results)
+In round 6 the comparison was blind, with the product name masked and two judge agents, and it went the other way on distinctiveness: the skilled pages scored 89 against 43 on the mechanical checks, but the judges found the baseline pages more ownable and more memorable in all six comparisons, because the three skilled pages shared one frame. The write-up says what that means and what to change.
+
+The limits are real: one reviewer in the early rounds, a round that was not blind, and both sides on the same model. The skill lost two comparisons in the first round, because it made clean pages where the other side drew something memorable. The guide and recipes for that one rich moment came from those losses. [Read all six rounds.](evals/results)
 
 ## Questions
 

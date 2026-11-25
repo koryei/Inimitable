@@ -154,3 +154,23 @@ test('the browser driver evaluates a function as well as a string', { skip }, as
     assert.equal(await page.evaluate((a, b) => a + b, 2, 3), 5);
   } finally { await chrome.close(); }
 });
+
+test('revealAll scrolls a page through so scroll-revealed sections are in a full-page shot', { skip }, async () => {
+  const { mkdtempSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { scaffold } = await import('../scripts/scaffold.mjs');
+  const { revealAll } = await import('../scripts/shoot.mjs');
+  const dir = mkdtempSync(join(tmpdir(), 'reveal-'));
+  scaffold(dir, { theme: 'dark', palette: 'midnight' });
+  const chrome = await launch();
+  try {
+    const page = await openPage(chrome.browser, { width: 1440, height: 900 });
+    await page.goto(toUrl(join(dir, 'index.html')), 800);
+    const before = await page.evaluate("[...document.querySelectorAll('[data-reveal]')].filter((e) => !e.classList.contains('in')).length");
+    assert.ok(before > 5, `${before} sections wait to be revealed`);
+    await revealAll(page);
+    assert.equal(await page.evaluate("[...document.querySelectorAll('[data-reveal]')].filter((e) => !e.classList.contains('in')).length"), 0);
+    assert.equal(await page.evaluate('window.scrollY'), 0);
+  } finally { await chrome.close(); }
+});

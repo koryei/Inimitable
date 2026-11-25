@@ -3,14 +3,21 @@
 // a product frame, a bento, steps, a big number, a closing call and a footer, with the motion kit wired in.
 //
 //   node scripts/scaffold.mjs <folder> [--kind landing|app] [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c']
-//                             [--seed 1] [--grain 0.45] [--hero stack|split]
+//                             [--seed 1] [--grain 0.45] [--hero stack|split|card] [--ground lit|flat|frame] [--art column]
 //
 //   kind     landing (default) or app: a working surface with a sidebar, key numbers, a chart, a table and an empty state
 //   theme    dark or light (default dark)
 //   palette  one of the built-in grounds (see assets/recipes/mesh.mjs), or use --accent to derive one
 //   minimal  keep only the hero, the steps, the closing call and the footer (for a short brief with few facts)
 //   motes    drifting specks in the light (a slow breath, stopped under reduced motion)
-//   hero     stack (headline over its copy) or split (headline beside the one object only this product has)
+//   hero     stack (headline over its copy), split (headline beside the one object only this product has) or
+//            card (centred headline, then the product card cropped by the bottom of the first screen, with a traced
+//            diagram behind it and annotation chips on it; it replaces the product section)
+//   ground   lit (default: the soft grainy gradient, the default of machine-built pages, so say why the product wants it),
+//            flat (one saturated colour carries the first screen; --palette cobalt|mint|sand), or frame (the page in
+//            that colour, the hero a dark rounded panel set in below the nav). The theme follows the colour.
+//   art      a duotone print in the split hero's object slot: column | vase | sphere | drape | strata. A stand-in to show the
+//            technique: replace it with a picture of the product's own artifact (assets/recipes/duotone.mjs, dotify.mjs)
 //   shape    pools | horizon | bowl | blob | sweep | rays | contour for the hero ground (default: bowl on dark, blob on light)
 //
 // Everything marked data-todo is placeholder. Replace it with the product's real words and numbers.
@@ -19,6 +26,9 @@
 import { copyFileSync, cpSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { chip, annotationCss, heroDiagram } from '../assets/recipes/annotate.mjs';
+import { SUBJECT_NAMES, duotoneSvg } from '../assets/recipes/duotone.mjs';
+import { FLATS, FLAT_NAMES, flatGroundCss, flatThemeCss } from '../assets/recipes/flat.mjs';
 import { PALETTES, fromAccent, grainient, hexToHsl, hslToHex } from '../assets/recipes/mesh.mjs';
 import { isMain, parseArgs } from './lib/args.mjs';
 
@@ -49,24 +59,55 @@ export function themeCss({ dark, palette }) {
 `;
 }
 
-export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, shape, seed = 1, grain = 0.45, hero: heroLayout = 'stack', motes = false, minimal = false } = {}) {
+export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, shape, seed = 1, grain = 0.45, hero: heroLayout = 'stack', motes = false, minimal = false, ground = 'lit', art } = {}) {
+  if (!['lit', 'flat', 'frame'].includes(ground)) throw new Error(`--ground is lit, flat or frame (got "${ground}").`);
+  if (!['stack', 'split', 'card'].includes(heroLayout)) throw new Error(`--hero is stack, split or card (got "${heroLayout}").`);
+  if (art && !SUBJECT_NAMES.includes(art)) throw new Error(`--art is one of ${SUBJECT_NAMES.join(', ')} (got "${art}").`);
+  if (art && heroLayout === 'card') throw new Error('--art goes in the split hero\'s object slot; the card hero shows the product card instead.');
+  if (art) heroLayout = 'split';
+  // Flat and frame grounds take a colour from --palette (cobalt, mint, sand); the default is cobalt, or sand for a frame.
+  let tone;
+  if (ground !== 'lit') {
+    tone = FLATS[palette] ? palette : ground === 'frame' ? 'sand' : 'cobalt';
+    if (palette && palette !== 'midnight' && !FLATS[palette]) throw new Error(`Unknown tone "${palette}". Flat and frame grounds use ${FLAT_NAMES.join(', ')}.`);
+  }
+  // A flat or framed ground is a colour with its own text colours, so the theme follows the colour.
+  if (tone) theme = FLATS[tone].dark ? 'dark' : 'light';
   const dark = theme === 'dark';
   let pal;
-  if (accent) pal = fromAccent(accent, { dark });
+  if (tone) pal = { base: FLATS[tone].base, counter: FLATS[tone].accent, family: [], dark };
+  else if (accent) pal = fromAccent(accent, { dark });
   else {
     pal = PALETTES[palette === 'midnight' && !dark ? 'ember' : palette];
     if (!pal) throw new Error(`Unknown palette "${palette}". Use one of ${Object.keys(PALETTES).join(', ')} or --accent '#hex'.`);
     if (Boolean(pal.dark) !== dark) throw new Error(`The ${palette} palette is ${pal.dark ? 'dark' : 'light'}: use --theme ${pal.dark ? 'dark' : 'light'}, or pick another palette.`);
   }
   const heroShape = shape || (dark ? 'bowl' : 'blob');
-  const hero = grainient({ palette: pal, shape: heroShape, seed, grain, selector: '.hero .ground', withMotes: motes, drift: motes, mask: heroShape === 'blob' || heroShape === 'sweep' ? 'none' : 'bottom' });
-  const closer = grainient({ palette: pal, shape: dark ? 'horizon' : 'pools', seed: seed + 7, grain, selector: '.closer .ground', mask: 'radial' });
+  const hero = tone ? { css: '', problems: [] } : grainient({ palette: pal, shape: heroShape, seed, grain, selector: '.hero .ground', withMotes: motes, drift: motes, mask: heroShape === 'blob' || heroShape === 'sweep' ? 'none' : 'bottom' });
+  const closer = tone ? { css: '', problems: [] } : grainient({ palette: pal, shape: dark ? 'horizon' : 'pools', seed: seed + 7, grain, selector: '.closer .ground', mask: 'radial' });
 
   mkdirSync(dest, { recursive: true });
   const starter = join(root, 'assets', 'starters', 'landing');
   let html = readFileSync(join(starter, 'index.html'), 'utf8').replace('data-theme="dark"', `data-theme="${theme}"`);
   // The object block exists only in the split layout.
   html = heroLayout === 'split' ? html.replace('<div class="hero-in">', '<div class="hero-in split">').replace(/<!--\/?object-->\n?/g, '') : html.replace(/ *<!--object-->[\s\S]*?<!--\/object-->\n?/, '');
+  if (art) {
+    // The print is the whole plate: ink is the page colour, paper is the text colour, so it follows the theme.
+    const print = duotoneSvg({ subject: art, seed, mode: art === 'strata' ? 'lines' : 'halftone', ink: 'var(--bg)', paper: 'var(--ink)', width: 440, height: 550 });
+    html = html.replace('<figure class="hero-object"', '<figure class="hero-object is-art"').replace(/<svg viewBox="0 0 400 400"[\s\S]*?<\/svg>/, print);
+  }
+  if (heroLayout === 'card') {
+    html = html.replace('<div class="hero-in">', '<div class="hero-in card">').replace('<section class="hero"', '<section class="hero has-card"').replace(/<!--\/?card-->\n?/g, '');
+    html = html.replace('<!--diagram-->', heroDiagram({ seed })).replace('<!--chips-->', [
+      chip({ label: 'Say what to look at', x: 3, y: 62, pointer: 'tr', todo: true }),
+      chip({ label: 'One true detail', x: 66, y: 70, pointer: 'tl', tone: 'ink', todo: true }),
+    ].join('\n        '));
+    html = html.replace(/ *<!--stats-->[\s\S]*?<!--\/stats-->\n?/, '');
+    // The card is the product section's job now: cut that section and send its links to the features instead.
+    html = html.replace(/<!--optional:product-->[\s\S]*?<!--\/optional:product-->\n?/g, '');
+    html = html.replace(/href="#product"/g, 'href="#features"');
+  } else html = html.replace(/ *<!--card-->[\s\S]*?<!--\/card-->\n?/, '').replace(/<!--\/?stats-->\n?/g, '');
+  if (ground === 'frame') html = html.replace('<section class="hero"', '<section class="hero is-frame"').replace('<section class="hero has-card"', '<section class="hero is-frame has-card"');
   // --minimal keeps the hero, the steps, the closing call and the footer: for a short brief with few facts.
   html = minimal ? html.replace(/<!--optional:(\w+)-->[\s\S]*?<!--\/optional:\1-->\n?/g, '') : html.replace(/<!--\/?optional:\w+-->\n?/g, '');
   if (minimal) {
@@ -79,9 +120,11 @@ export function scaffold(dest, { theme = 'dark', palette = 'midnight', accent, s
   copyFileSync(join(root, 'assets', 'motion', 'motion.css'), join(dest, 'motion.css'));
   copyFileSync(join(root, 'assets', 'motion', 'motion.js'), join(dest, 'motion.js'));
   cpSync(join(root, 'assets', 'fonts'), join(dest, 'fonts'), { recursive: true });
-  writeFileSync(join(dest, 'ground.css'), `${themeCss({ dark, palette: pal })}\n/* Hero ground */\n${hero.css}\n\n/* Closing ground */\n${closer.css}\n`);
+  const annotations = heroLayout === 'card' ? `\n${annotationCss()}` : '';
+  if (tone) writeFileSync(join(dest, 'ground.css'), `${flatThemeCss({ tone })}\n${flatGroundCss({ tone, ground })}${annotations}`);
+  else writeFileSync(join(dest, 'ground.css'), `${themeCss({ dark, palette: pal })}\n/* Hero ground */\n${hero.css}\n\n/* Closing ground */\n${closer.css}\n${annotations}`);
   const todo = (readFileSync(join(dest, 'index.html'), 'utf8').match(/data-todo/g) || []).length;
-  return { dest, todo, palette: pal, problems: [...hero.problems, ...closer.problems], shape: heroShape };
+  return { dest, todo, palette: pal, problems: [...hero.problems, ...closer.problems], shape: tone ? `${ground} ${tone}` : `${heroShape} ground`, theme, ground, tone };
 }
 
 // ---------- app starter ----------
@@ -134,7 +177,7 @@ export function scaffoldApp(dest, { theme = 'dark', accent } = {}) {
 if (isMain(import.meta.url)) {
   const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['motes', 'minimal'] });
   if (!positional[0]) {
-    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split] [--motes] [--minimal] [--kind app]");
+    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split|card] [--ground lit|flat|frame] [--art column] [--motes] [--minimal] [--kind app]");
     process.exit(2);
   }
   try {
@@ -146,11 +189,14 @@ if (isMain(import.meta.url)) {
       shape: typeof flags.shape === 'string' ? flags.shape : undefined,
       seed: flags.seed ? Number(flags.seed) : 1,
       grain: flags.grain ? Number(flags.grain) : 0.45,
-      hero: flags.hero === 'split' ? 'split' : 'stack',
+      hero: ['split', 'card'].includes(flags.hero) ? flags.hero : 'stack',
+      ground: typeof flags.ground === 'string' ? flags.ground : 'lit',
+      art: typeof flags.art === 'string' ? flags.art : undefined,
       motes: Boolean(flags.motes),
       minimal: Boolean(flags.minimal),
     });
-    console.log(`Started ${result.dest}  (${flags.theme === 'light' ? 'light' : 'dark'}, ${kind === 'app' ? 'app shell' : `${result.shape} ground`})`);
+    console.log(`Started ${result.dest}  (${kind === 'app' ? `${flags.theme === 'light' ? 'light' : 'dark'}, app shell` : `${result.theme}, ${result.shape}`})`);
+    if (kind !== 'app' && result.ground === 'lit') console.log('Ground: lit, the soft grainy gradient. It is the default of machine-built pages: keep it only if the concept says why this product wants light (flat and frame are the alternatives).');
     console.log(`${result.todo} placeholders to replace (every data-todo). signs.mjs lists any left.`);
     for (const p of result.problems) console.log(`warning: ${p}`);
     console.log('\nNext: replace the placeholders with the real content, then run shoot, signs, check and craft on index.html.');

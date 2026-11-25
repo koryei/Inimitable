@@ -18,6 +18,20 @@ A device that `anti-slop.md` would remove on a default screen (small uppercase m
 
 Reference leaning: when the person's taste runs technical, default to Instrument or Blueprint for technical products.
 
+## Choosing the ground
+
+The ground is the largest thing on the first screen, so it is the first thing a visitor remembers, and the soft grainy gradient (the lit ground) is now what most machine-built pages reach for. It is a good ground. It is also a default, and a page whose ground, skeleton and type are all defaults is replaceable. Choose the ground on purpose and write the reason in the concept (`direction.md`): one clause.
+
+| Ground | It says | Use it when | Build with |
+| --- | --- | --- | --- |
+| **Lit** (soft grainy gradient) | atmosphere, calm, a place | the product is about light, space, mood or the future, or the picture on top has to feel part of a scene. Say why: "lit, because the product is a night-shift monitor" | `scaffold` default; `mesh.mjs` |
+| **Flat colour** | a decision: one colour carries the nav, the ground and the buttons | the product has a colour it owns, or the type and the product card have to carry the page | `scaffold --ground flat --palette cobalt\|mint\|sand`; `flat.mjs` |
+| **Frame** (a dark panel set into a light page) | a stage: the product is shown inside a room of its own | the product card is the point and needs contrast against a quiet page | `scaffold --ground frame --palette sand --hero card`; `flat.mjs` |
+| **Duotone print** | craft: a picture made in one ink, tied to the interface by its texture | there is a subject worth drawing, a real artifact, drawn from the product | `duotone.mjs`, `dotify.mjs --mode lines`; `scaffold --art strata` |
+| **The artifact itself** | the page is made of what the product makes | the artifact is visual (a strip log, a score, a map, a receipt, a waveform) | draw it in code, large, as the hero object (`visual-craft.md`) |
+
+A flat or framed ground hides nothing, so use it only when the layout and the type are good; the checks read contrast from the pixels, so it is also the easiest ground to get right. These grounds are first-class: the lit gradient is not the safe choice, it is one choice.
+
 ## The grammar of the instrument family
 
 The most distinctive pages share eight habits. A direction in this family uses most of them.
@@ -106,6 +120,31 @@ Use the system stacks in `house-rules.md`. By direction: **Instrument** pairs th
 **Moment:** a drawn object from the product's world (`visual-craft.md`): a contour field, vessels, stones, an invoice.
 **Don't:** go instrument on a product that is about people and warmth.
 
+## Flat colour
+
+**Feel:** a decision. One saturated colour for the whole first screen, so the type, the product card and the one picture on it do the work.
+**Palette:** `flat.mjs` has cobalt, mint and sand, each with its own ink, tinted text, accent and a darker panel of the same hue, all checked for contrast. The accent is for hover fills, focus and one chip, never for body text on the ground. **Type:** the sans at display size, with one word in the lighter tint.
+**Devices:** the product card as a darker panel on the colour; a thin traced diagram behind it; one or two annotation chips; the closing call as a dark inset panel.
+**Build with:** `scaffold --ground flat --palette cobalt --hero card`.
+**Don't:** add a gradient to "warm it up" (that is the lit ground again), or use a second saturated colour.
+
+## Framed panel
+
+**Feel:** a stage. The page stays quiet; the hero is a dark rounded panel set in below the nav, with the product on it.
+**Build with:** `scaffold --ground frame --palette sand --hero card`, or `--hero split --art strata`. A frame with nothing in it is just a large dark rectangle, so it needs the card or a print.
+**Mixed radius is a decision:** a rounded nav and panel with sharp-cornered buttons or chips reads as deliberate; round everything or keep two radii and name them.
+
+## Duotone print
+
+**Feel:** printed. One subject, one ink, one paper, with a halftone, a line screen or a dither that ties the picture to the interface.
+**Devices:** the subject at large scale, cropped by its frame; the same ink as the page's ground colour (the scaffold uses `var(--bg)` for ink and `var(--ink)` for paper, so it follows the theme); the grain of the ground over the top.
+**Build with:** `duotone.mjs` (`duotoneSvg({ subject, mode: 'halftone' | 'lines' | 'dither' })`), `dotify.mjs --mode lines` for the product's own artifact rendered to HTML, `scaffold --art column|vase|sphere|drape|strata`.
+**The stand-ins are stand-ins.** A column or a vase is the technique, not the idea: unless the product is about columns, replace it with the product's own artifact (a clause, a core, a tide chart) before the swap test (`gate.md`). The built-in subjects are drawn by computation, so there is no photograph, no licence and no stock image.
+
+## Annotations (a technique, not a direction)
+
+A product picture explains itself when it is annotated: a **chip** says what to look at, its **arrow** says where, a **thin traced line** shows how the card connects to the rest of the product. `annotate.mjs` makes the chips (`chip()`, styles from `annotationCss()`) and the diagram (`heroDiagram()`); `scaffold --hero card` places them. Rules: three chips at most; a chip points at something real in the picture; one plain statement, never a number the product cannot back; diagram nodes name the product's own parts; hide both on a phone rather than shrink them.
+
 ---
 
 ## Making any of these the product's own
@@ -116,6 +155,6 @@ The finished looks above are starting points. What makes one feel *made for this
 - The **hero object** drawn from its world, not a generic sphere or chip.
 - **Real labels** from its real facts.
 - **One accent** from its world or brand.
-- **One signature** (a status dot, a unit, a typeface detail) used everywhere.
+- **One signature** (a status dot, a unit, a typeface detail, one artwork, one interaction) used everywhere, with everything else calm.
 
 If you could swap the product name and the page still fits, it is a template. Go back to the inventory.

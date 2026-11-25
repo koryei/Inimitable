@@ -62,3 +62,31 @@ test('the starter hero fails until its object is replaced', { skip }, async () =
   const r = await swap(join(dir, 'index.html'), { nouns: ['clause', 'redline'] });
   assert.equal(r.pass, false, 'a stack hero with only a ground has no artwork');
 });
+
+test('the card hero passes once its card and chips are about the product, and not before', { skip }, async () => {
+  const { mkdtempSync, readFileSync, writeFileSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { scaffold } = await import('../scripts/scaffold.mjs');
+  const dir = mkdtempSync(join(tmpdir(), 'swap-card-'));
+  scaffold(dir, { ground: 'flat', palette: 'cobalt', hero: 'card' });
+  const file = join(dir, 'index.html');
+  const nouns = ['clause', 'redline', 'contract'];
+  assert.equal((await swap(file, { nouns })).pass, false, 'placeholders name nothing');
+  const html = readFileSync(file, 'utf8')
+    .replace("Example: the product's main screen, cropped at the fold. Replace with the real screen.", 'Example: clause 4.2 of a contract marked against the standard, with a suggested redline')
+    .replace('What it does,', 'Every clause checked,')
+    .replace('One true detail', 'Redline suggested');
+  writeFileSync(file, html);
+  const r = await swap(file, { nouns, name: 'Marrow' });
+  assert.equal(r.pass, true, JSON.stringify(r.reasons));
+  assert.ok(r.found.headline.includes('clause') && r.found.artwork.includes('redline'));
+});
+
+test('a product picture built from plain HTML counts as artwork, and a bare text hero still does not', { skip }, async () => {
+  const built = await swap(fixture('swap-html-artwork.html'), { nouns: ['clause', 'redline', 'contract'] });
+  assert.equal(built.pass, true, JSON.stringify(built.reasons));
+  assert.ok(built.found.artwork.includes('redline'));
+  const bare = await swap(fixture('swap-generic.html'), { nouns: ['clause', 'redline'] });
+  assert.equal(bare.pass, false);
+});

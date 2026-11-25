@@ -4,7 +4,7 @@
 //
 //   import { chip, heroDiagram, annotationCss } from './annotate.mjs';
 //   chip({ label: 'Clause 4.2 deviates', x: 8, y: 30, pointer: 'br' })   // HTML, positioned in % of its parent
-//   heroDiagram({ width: 1200, height: 520, card: { x: 230, y: 250, w: 740 }, seed: 2 })   // an SVG string
+//   heroDiagram({ width: 1200, height: 520, card: { x: 200, y: 250, w: 800 }, seed: 2 })   // an SVG string
 //
 // Rules that keep it honest (references/directions.md, "Annotations"): a chip points at something real in the
 // picture, says one thing in plain words, and never claims a number the product cannot back. Three chips at most.
@@ -69,18 +69,17 @@ export function elbow([x1, y1], [x2, y2], { first = 'h', radius = 14 } = {}) {
   return roundedPolyline([[x1, y1], [x2, y1], [x2, y2]], radius);
 }
 
-// A diagram that sits behind a card: nodes at the left, right and top, each joined to the card by a thin traced line.
+// A diagram that sits behind a card: nodes at the left and right, each joined to the card by a thin traced line.
 // Seeded, so the same page always gets the same diagram. `card` is { x, y, w }: where the card's top edge is.
 // Every label is a placeholder (data-todo): replace each with the name of one of the product's own parts.
-export function heroDiagram({ width = 1200, height = 520, card = { x: 230, y: 250, w: 740 }, seed = 1, stroke = 'var(--line-strong)', text = 'var(--ink-3)', labels } = {}) {
+export function heroDiagram({ width = 1200, height = 520, card = { x: 200, y: 250, w: 800 }, seed = 1, stroke = 'var(--line-strong)', text = 'var(--ink-3)', labels } = {}) {
   const rand = rng(seed);
-  const names = labels ?? ['Part one', 'Part two', 'Part three', 'Part four', 'Part five'];
+  const names = labels ?? ['Part one', 'Part two', 'Part three', 'Part four'];
   const slots = [
     { side: 'l', x: 36, y: 70 + rand() * 50, join: [card.x + card.w * 0.12, card.y], first: 'h' },
     { side: 'l', x: 36, y: 200 + rand() * 40, join: [card.x, card.y + 56 + rand() * 30], first: 'hvh' },
     { side: 'r', x: width - 36, y: 56 + rand() * 50, join: [card.x + card.w * 0.88, card.y], first: 'h' },
     { side: 'r', x: width - 36, y: 190 + rand() * 50, join: [card.x + card.w, card.y + 56 + rand() * 30], first: 'hvh' },
-    { side: 'l', x: card.x + card.w * 0.46, y: 30 + rand() * 20, join: [card.x + card.w * 0.5, card.y], first: 'v' },
   ];
   const paths = [];
   const nodes = [];

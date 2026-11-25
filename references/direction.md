@@ -23,6 +23,8 @@ Without the category word: a strip log drawn large, depth ticks down the side, t
 Signature: the strip log, drawn in code and set in one colour. Ground: flat, because the log is the picture. Everything else calm.
 ```
 
+The three lines above are an example, not a template. In round 6 of the evals all three agents copied the example's ground (flat sand) for three different products, which makes the three pages look alike. Take the tone and the ground from this product's own world, and if your reason is the example's reason, check that it is also true here.
+
 How much of this applies depends on the mode (`modes.md`). Persuade and Experience need all of it. Operate needs the first two lines in miniature: the artifact decides the key figure and the empty state. Read and Terminal need only line one. When the project has design rules they set the colours, type and ground; the concept still decides what the page shows and where.
 
 **The swap-the-name test comes at the gate** (`gate.md`): remove the product name and check that the first screen still says something only this product could say. If you cannot name the artifact in one line, the page will fail it, so do not scaffold yet.

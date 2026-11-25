@@ -20,7 +20,7 @@ import { launch, openPage, toUrl } from './lib/chrome.mjs';
 import { judge, parseNouns } from './lib/swap.mjs';
 
 // Runs in the page. Collects the first screen's words in three groups: the headline, the artwork, everything else.
-// Artwork is a figure, drawing, picture or product frame at least 120 x 80 px that is on the first screen.
+// Artwork is a figure, drawing, picture or framed box at least 120 x 80 px that is on the first screen.
 const COLLECT = `(() => {
   const H = innerHeight;
   const on = (el) => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width > 4 && r.height > 4 && r.top < H - 8 && r.bottom > 0 && s.display !== 'none' && s.visibility !== 'hidden' && parseFloat(s.opacity) > 0; };
@@ -34,7 +34,17 @@ const COLLECT = `(() => {
   const h1 = document.querySelector('h1');
   const headline = h1 ? h1.textContent : '';
   const big = (el) => { const r = el.getBoundingClientRect(); return r.width >= 120 && r.height >= 80; };
-  const found = [...document.querySelectorAll(art)].filter((el) => on(el) && big(el) && !el.closest(chrome));
+  // A product picture built from HTML (a rota, a contract, a log) has no figure or svg to find. A framed box, at least
+  // 280 x 180 px, with a border, a fill or a shadow, that is not the hero's own wrapper (it does not hold the headline
+  // and does not span the screen) counts as artwork too.
+  const framed = (el) => {
+    const r = el.getBoundingClientRect(); const s = getComputedStyle(el);
+    if (r.width < 280 || r.height < 180 || el.contains(h1) || (r.width > innerWidth * 0.9 && r.height > H * 0.6)) return false;
+    return parseFloat(s.borderTopWidth) > 0 || toRGBA(s.backgroundColor)[3] > 0.05 || (s.boxShadow && s.boxShadow !== 'none');
+  };
+  const toRGBA = (v) => { const m = v.match(/[\d.]+/g) || []; return [0, 0, 0, m.length > 3 ? Number(m[3]) : v === 'transparent' || v === 'rgba(0, 0, 0, 0)' ? 0 : 1]; };
+  const boxes = [...document.querySelectorAll('body *')].filter((el) => !/^(P|H1|H2|H3|SPAN|A|LI|UL|BUTTON|DD|DT|SMALL|B|EM|STRONG)$/.test(el.tagName) && on(el) && !el.closest(chrome) && !el.closest('.ground') && framed(el));
+  const found = [...new Set([...document.querySelectorAll(art), ...boxes])].filter((el) => on(el) && big(el) && !el.closest(chrome));
   const top = found.filter((el) => !found.some((o) => o !== el && o.contains(el)));
   const artwork = top.map(words).join(' ');
   const copyEls = [...document.querySelectorAll('p, h2, h3, li, dd, dt, small, figcaption')].filter((el) => on(el) && !el.closest(chrome) && !el.closest('h1') && !top.some((a) => a.contains(el)));
