@@ -12,7 +12,8 @@ for (const tone of FLAT_NAMES) {
   test(`${tone}: every text colour passes on the ground and on the card, and so do the accent and the panel`, () => {
     const t = flatTokens(tone);
     for (const [name, c] of [['ink', t.ink], ['ink-2', t.ink2], ['ink-3', t.ink3]]) {
-      assert.ok(contrast(c, t.bg) >= 4.5, `${name} on the ground: ${contrast(c, t.bg).toFixed(2)}`);
+      const floor = name === 'ink-3' ? 5 : 4.5; // the lighter tint carries small text, and the grain darkens the ground a little
+      assert.ok(contrast(c, t.bg) >= floor, `${name} on the ground: ${contrast(c, t.bg).toFixed(2)}`);
       assert.ok(contrast(c, t.surfaceHex) >= 4.5, `${name} on the card: ${contrast(c, t.surfaceHex).toFixed(2)}`);
     }
     assert.ok(contrast(t.accent, t.bg) >= 4.5, `accent as text on the ground: ${contrast(t.accent, t.bg).toFixed(2)}`);
@@ -36,8 +37,8 @@ test('the theme writes every token the starter uses, and the panel set', () => {
 test('flat keeps the hero in the tone and the closing call in the panel; frame puts the hero in the panel', () => {
   const flat = flatGroundCss({ tone: 'mint', ground: 'flat' });
   assert.match(flat, /\.closer \{ --bg: var\(--panel\)/);
-  assert.doesNotMatch(flat, /\.hero \{/);
+  assert.doesNotMatch(flat, /\.hero\.is-frame/);
   const frame = flatGroundCss({ tone: 'sand', ground: 'frame' });
-  assert.match(frame, /\.hero \{ --bg: var\(--panel\)/);
+  assert.match(frame, /\.hero\.is-frame \{ --bg: var\(--panel\)/);
   assert.match(frame, /margin-top: 5\.25rem/);
 });

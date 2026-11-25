@@ -17,7 +17,7 @@ import { grainCss } from './mesh.mjs';
 
 export const FLATS = {
   cobalt: { base: '#1f43d6', dark: true, ink: '#f6f4ee', ink2: '#e1e6fb', ink3: '#d3daf9', accent: '#f7d63a', onAccent: '#14120a', panel: '#0a1250', panelAccent: '#f7d63a' },
-  mint: { base: '#8fe3bd', dark: false, ink: '#0b2e22', ink2: '#1d4a3a', ink3: '#2f5f4d', accent: '#0b5c3f', onAccent: '#ffffff', panel: '#0b2e22', panelAccent: '#8fe3bd' },
+  mint: { base: '#8fe3bd', dark: false, ink: '#0b2e22', ink2: '#1d4a3a', ink3: '#245241', accent: '#0b5c3f', onAccent: '#ffffff', panel: '#0b2e22', panelAccent: '#8fe3bd' },
   sand: { base: '#e8dfca', dark: false, ink: '#1a1914', ink2: '#3d3a31', ink3: '#5c574b', accent: '#a82e17', onAccent: '#ffffff', panel: '#1a1914', panelAccent: '#e9a98a' },
 };
 export const FLAT_NAMES = Object.keys(FLATS);
@@ -88,7 +88,7 @@ export function flatThemeCss({ tone = 'cobalt' } = {}) {
 
 // The tokens re-pointed at the panel, so everything inside it (type, buttons, cards, lines) reads as dark-theme
 // without a second set of rules. The kit's buttons and the starter's type use these names only.
-const PANEL_SCOPE = `--bg: var(--panel); --ink: var(--panel-ink); --ink-2: var(--panel-ink-2); --ink-3: var(--panel-ink-3); --line: var(--panel-line); --line-strong: var(--panel-strong); --surface: var(--panel-surface); --accent: var(--panel-accent); --on-accent: #0b0a0f; color-scheme: dark;`;
+const PANEL_SCOPE = `--bg: var(--panel); --ink: var(--panel-ink); --ink-2: var(--panel-ink-2); --ink-3: var(--panel-ink-3); --line: var(--panel-line); --line-strong: var(--panel-strong); --surface: var(--panel-surface); --accent: var(--panel-accent); --on-accent: #0b0a0f; color: var(--ink); color-scheme: dark;`;
 
 export function flatGroundCss({ tone = 'cobalt', ground = 'flat', grain = 0.3 } = {}) {
   const f = FLATS[tone];
@@ -99,14 +99,15 @@ export function flatGroundCss({ tone = 'cobalt', ground = 'flat', grain = 0.3 } 
   if (ground === 'frame') {
     return `${common}
 /* Frame: the page stays in the tone; the hero is a dark panel set in below the nav. */
-.hero { ${PANEL_SCOPE} margin-top: 5.25rem; min-height: min(100svh - 6rem, 60rem); background: var(--panel); }
+.hero.is-frame { ${PANEL_SCOPE} margin-top: 5.25rem; min-height: min(100svh - 6rem, 60rem); background: var(--panel); }
 .closer { ${PANEL_SCOPE} background: var(--panel); }
 ${grained('.hero .ground::after, .closer .ground::after', true)}
 `;
   }
   return `${common}
-/* Flat: the hero is the tone itself; the closing call is a darker panel of the same hue. */
+/* Flat: the hero is the tone itself; the product card and the closing call are darker panels of the same hue. */
 .closer { ${PANEL_SCOPE} background: var(--panel); }
+.hero-card .window { ${PANEL_SCOPE} background: var(--panel); border-color: var(--panel-strong); }
 ${grained('.hero .ground::after', f.dark)}
 ${grained('.closer .ground::after', true)}
 `;

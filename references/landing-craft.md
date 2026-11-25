@@ -2,7 +2,7 @@
 
 A good landing page is not a layout with a nice colour. It is a handful of decisions made together: **where the light comes from, where the type sits in it, what is big, what moves and in what order, and how everything answers the pointer.** This file explains each decision, why it works on a person, how to build it with the kits in this skill, and which script catches it when it is wrong.
 
-Start every landing page with `node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette name] [--shape rays|bowl|blob|...] [--hero split] [--motes]`. `--hero split` puts the headline beside the one object only this product has (a drawing, the real screen, a diagram). (An app screen is a different starter: `--kind app`, see `surfaces/web-app.md`.) For a short brief with few facts, add `--minimal`: it keeps the hero, the steps, the closing call and the footer, and removes the ticker, product, features and proof sections together with their links, so nothing is left to delete. To deliver a single file, run `node scripts/inline.mjs <folder> --out page.html`. It gives you a page that already makes these decisions and already passes every check. Your job is then to replace the placeholder content with the product's own and to push the direction until it could only be this product.
+Start every landing page with `node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette name] [--shape rays|bowl|blob|...] [--hero stack|split|card] [--ground lit|flat|frame] [--art column|vase|sphere|drape|strata] [--motes]`. `--hero split` puts the headline beside the one object only this product has (a drawing, the real screen, a diagram; `--art` fills it with a duotone print as a stand-in). `--hero card` centres the headline and crops the product card at the fold, with a traced diagram behind it and annotation chips on it. `--ground flat` or `frame` swaps the lit gradient for a colour (`--palette cobalt|mint|sand`); the theme follows the colour. (An app screen is a different starter: `--kind app`, see `surfaces/web-app.md`.) For a short brief with few facts, add `--minimal`: it keeps the hero, the steps, the closing call and the footer, and removes the ticker, product, features and proof sections together with their links, so nothing is left to delete. To deliver a single file, run `node scripts/inline.mjs <folder> --out page.html`. It gives you a page that already makes these decisions and already passes every check. Your job is then to replace the placeholder content with the product's own and to push the direction until it could only be this product.
 
 ## Before the scaffold: the concept
 
@@ -10,7 +10,9 @@ The starter gives a page that already works. It does not give a page that is alr
 
 ## The ten decisions
 
-### 1. The ground is light, not colour
+### 1. The ground is light, not colour (or, on purpose, a colour)
+
+**Read this first: the lit ground is a default now.** It is a strong one, and nearly every page an agent builds reaches for it, which makes a page that uses it without a reason one more of the same. Use it when the concept says why this product wants light (`direction.md`). Otherwise choose from `directions.md` ("Choosing the ground"): flat colour, a framed panel, a duotone print, or the artifact itself. `scaffold --ground flat|frame` builds the first two with the same checks. The rest of this decision is how to build the lit ground well.
 
 **What good pages do.** The first screen is a luminous gradient with grain: a bowl of blue light pouring from the top into dark, a warm cloud on one side of a cream page, a glowing horizon, an arc of atmosphere. It is the biggest thing on the page and it contains no content.
 

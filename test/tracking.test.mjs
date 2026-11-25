@@ -33,20 +33,22 @@ test('tightestAt is size-aware: more room, tighter tracking', { skip }, async ()
 test('the landing starter never sets type tighter than the measured evidence allows, at any width', { skip }, async () => {
   const sans = await measureTracking({ font: 'Geist' });
   const numerals = await measureTracking({ font: 'Geist', headlines: NUMERALS });
-  const dir = mkdtempSync(join(tmpdir(), 'tracking-starter-'));
-  scaffold(dir, { theme: 'dark', palette: 'midnight' });
   const chrome = await launch();
   try {
+    for (const [variant, options] of [['stack', { theme: 'dark', palette: 'midnight' }], ['split', { theme: 'dark', palette: 'midnight', hero: 'split' }], ['card', { ground: 'flat', palette: 'cobalt', hero: 'card' }]]) {
+    const dir = mkdtempSync(join(tmpdir(), `tracking-${variant}-`));
+    scaffold(dir, options);
     for (const width of [320, 390, 768, 1024, 1440, 2560]) {
       const page = await openPage(chrome.browser, { width, height: 900, mobile: width < 700 });
       await page.goto(toUrl(join(dir, 'index.html')), 600);
-      const measured = await page.evaluate(`['.display', '.h2', '.stats dd', '.cell h3', '.kpi strong', '.step h3'].map((sel) => { const el = document.querySelector(sel); const s = getComputedStyle(el); const size = parseFloat(s.fontSize); return [sel, size, s.letterSpacing === 'normal' ? 0 : parseFloat(s.letterSpacing) / size]; })`);
+      const measured = await page.evaluate(`['.display', '.h2', '.stats dd', '.cell h3', '.kpi strong', '.step h3'].filter((sel) => document.querySelector(sel)).map((sel) => { const el = document.querySelector(sel); const s = getComputedStyle(el); const size = parseFloat(s.fontSize); return [sel, size, s.letterSpacing === 'normal' ? 0 : parseFloat(s.letterSpacing) / size]; })`);
       for (const [sel, size, em] of measured) {
         const rows = /dd|strong/.test(sel) ? numerals : sans;
         const limit = tightestAt(rows, size);
-        assert.ok(em >= limit - 0.0051, `${width}px: ${sel} is ${size}px at ${em.toFixed(3)}em; the evidence allows ${limit}em`);
+        assert.ok(em >= limit - 0.0051, `${variant} ${width}px: ${sel} is ${size}px at ${em.toFixed(3)}em; the evidence allows ${limit}em`);
       }
       await page.close();
+    }
     }
   } finally { await chrome.close(); }
 });

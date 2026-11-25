@@ -146,7 +146,7 @@ body { background: var(--table); }        /* the texture lives here */
 
 **Why it works.** A number at 80 px is a shape before it is a value, so it does the job of an image while carrying information. It also gives the page a second focal point without a second image.
 
-**How.** The display face, tight tracking, tabular figures, and a label at 12 to 14 px in the mono or the sans. The label sits under the number, not beside it.
+**How.** The display face, tight tracking, tabular figures, and a label at 12 to 14 px in the mono or the sans. For a figure with decimals, set the decimals back (`<span class="dec">.50</span>`, or `numeral(56498.5, { prefix: '£' })` from `assets/recipes/headline.mjs`): the whole part is the message, the cents are precision, and it still tells the truth. The label sits under the number, not beside it.
 
 ```css
 .stat b { font: 400 clamp(3rem, 6vw, 5.5rem)/0.9 var(--display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
@@ -161,7 +161,7 @@ body { background: var(--table); }        /* the texture lives here */
 
 **Why it works.** It gives a long headline a reading rhythm and a hierarchy inside a single line of thought. The eye reads the loud part, then the quiet part, which is the order the argument should land in. It also lets a headline be longer than two lines without becoming a paragraph.
 
-**How.** A `<span>` with a muted colour or a lighter weight. Keep the size identical; the change is weight and colour only.
+**How.** A `<span>` with a muted colour or a lighter weight. Keep the size identical; the change is weight and colour only. One word can carry it, not only a whole line ("Smarter *Financial* Management"): `<span class="dim">` in the starter, or `tintWord(text, word)` from `assets/recipes/headline.mjs`. The tint is the page's `--ink-3`, so it always passes contrast; do not pick a new colour for it.
 
 ```html
 <h1>Design and drafting software for architects. <span>From site to client-ready design.</span></h1>

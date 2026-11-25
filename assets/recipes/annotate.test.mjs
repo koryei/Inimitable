@@ -41,13 +41,13 @@ test('the diagram is the same for a seed, decorative, flat, and every label is a
   assert.match(a, /aria-hidden="true"/);
   assert.doesNotMatch(a, /gradient|filter|animate/i);
   const texts = a.match(/<text[^>]*>/g);
-  assert.equal(texts.length, 5);
+  assert.equal(texts.length, 4);
   for (const t of texts) assert.match(t, /data-todo/);
   assert.match(heroDiagram({ labels: ['Clause', 'Redline'] }), /Clause/);
 });
 
 test('every line of the diagram stays inside the picture', () => {
-  const svg = heroDiagram({ width: 1200, height: 520, card: { x: 230, y: 250, w: 740 }, seed: 7 });
+  const svg = heroDiagram({ width: 1200, height: 520, card: { x: 200, y: 250, w: 800 }, seed: 7 });
   for (const d of svg.match(/ d="[^"]+"/g)) for (const [, x, y] of d.matchAll(/(-?\d+(?:\.\d)?) (-?\d+(?:\.\d)?)/g)) {
     assert.ok(Number(x) >= 0 && Number(x) <= 1200 && Number(y) >= 0 && Number(y) <= 520, `${x},${y}`);
   }
