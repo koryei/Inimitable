@@ -150,6 +150,7 @@ Plain Node scripts with no dependencies. The agent runs them for you, and you ca
 | `scripts/inline.mjs <folder>` | Folds a finished page, with its styles, script and fonts, into one file you can send. | `--out page.html` |
 | `scripts/lib-add.mjs add <source> <item>` | Pulls real source from Bencho, BoardUI, Aceternity or any shadcn registry. Files only, with the licence notice. | `--dry-run`, `--out` |
 | `scripts/dotify.mjs <image or svg>` | Turns a picture or drawn SVG into dithered, halftone, hex-dot or ASCII art for a hero object. | `--invert` |
+| `scripts/swap.mjs <url or file>` | The swap-the-name test. With the product name removed, does the first screen still use the nouns of the product's own subject, and does its artwork name them? It catches a page where only the skeleton is the product's own. It cannot judge the picture. | `--nouns`, `--name`, `--typographic` |
 | `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100, with what cost points. | |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal program at a set width in a real pseudo-terminal and captures its text and an image. | |
 

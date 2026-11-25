@@ -65,6 +65,7 @@ Plain Node 22+ scripts in `scripts/`, no installs, using the Chrome on the machi
 | `scripts/lib-add.mjs add bencho <item>` | Pulls real source from Bencho, BoardUI, Aceternity or any shadcn registry (files only, with a licence notice and the packages to install). See `libraries.md` |
 | `scripts/craft.mjs <url or file> [--shots dir]` | Hovers every control with a real pointer and diffs both the computed style and the pixels, so a control that ignores the pointer, or answers it invisibly, is caught; also flags transitions on layout properties and motion that ignores the reduced-motion setting |
 | `scripts/dotify.mjs <image or svg> --mode hex` | Turns any picture or drawn SVG into dithered, halftone, hex-dot or ASCII art for a hero object |
+| `scripts/swap.mjs <url or file> --nouns "clause,redline" --name Marrow` | The swap-the-name test: with the product name removed, does the first screen still use the product's own nouns, and does its artwork name the artifact? Refuses nouns that fit any product. Catches a page where only the skeleton is owned |
 | `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100 |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal command at a given width and captures text and image (needs Python 3) |
 
