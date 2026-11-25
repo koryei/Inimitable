@@ -82,3 +82,11 @@ test('the card hero passes once its card and chips are about the product, and no
   assert.equal(r.pass, true, JSON.stringify(r.reasons));
   assert.ok(r.found.headline.includes('clause') && r.found.artwork.includes('redline'));
 });
+
+test('a product picture built from plain HTML counts as artwork, and a bare text hero still does not', { skip }, async () => {
+  const built = await swap(fixture('swap-html-artwork.html'), { nouns: ['clause', 'redline', 'contract'] });
+  assert.equal(built.pass, true, JSON.stringify(built.reasons));
+  assert.ok(built.found.artwork.includes('redline'));
+  const bare = await swap(fixture('swap-generic.html'), { nouns: ['clause', 'redline'] });
+  assert.equal(bare.pass, false);
+});

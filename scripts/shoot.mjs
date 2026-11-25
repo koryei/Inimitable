@@ -9,7 +9,8 @@
 //                 (click a tab, open a menu). It may be async: --eval "(async () => { ... })()"
 //   --slices      instead of one image per width, save one image per screenful while scrolling,
 //                 so scroll-triggered content shows and tall pages stay legible
-//   --full        one tall image of the whole page (very tall pages are capped at 16,000 px)
+//   --full        one tall image of the whole page (very tall pages are capped at 16,000 px); the page is scrolled through
+//                 first, so sections that reveal on scroll are in the picture
 //
 // Prints one line per width: file, whether the page scrolls sideways, and console errors.
 // Exit code 1 when any width scrolls sideways or logs an error, so it can gate a run.
@@ -39,6 +40,19 @@ const OVERFLOW = `(() => {
   }
   return { scrollWidth: root.scrollWidth, clientWidth: root.clientWidth, sideways: root.scrollWidth > root.clientWidth + 1, wide };
 })()`;
+
+// Scroll through the page the way a person would, so content that reveals on scroll is revealed, then return to the top.
+// A full-page picture taken without this shows every scroll-revealed section blank.
+export async function revealAll(page, step = 500, pause = 110) {
+  const total = await page.evaluate('document.documentElement.scrollHeight');
+  for (let y = 0; y <= total; y += step) {
+    await page.evaluate(`window.scrollTo(0, ${y})`);
+    await new Promise((r) => setTimeout(r, pause));
+  }
+  await new Promise((r) => setTimeout(r, 900));
+  await page.evaluate('window.scrollTo(0, 0)');
+  await new Promise((r) => setTimeout(r, 300));
+}
 
 export async function shoot(target, options = {}) {
   const {
@@ -77,7 +91,10 @@ export async function shoot(target, options = {}) {
           extra.push(sliceFile);
         }
         await page.evaluate('window.scrollTo(0, 0)');
-      } else writeFileSync(file, await page.screenshot({ fullPage: full }));
+      } else {
+        if (full) await revealAll(page);
+        writeFileSync(file, await page.screenshot({ fullPage: full }));
+      }
       results.push({ width: size.width, file: slices ? extra[0] : file, slices: extra, ...overflow, errors: [...page.logs] });
       await page.close();
     }

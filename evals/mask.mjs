@@ -5,7 +5,7 @@
 //
 // Writes <label>-1440-s1.png (the first screen), -s2.png and -s3.png (the next two screens down) and <label>-390-s1.png
 // (the first screen on a phone). Every occurrence of the name in the page's text, labels, alt text and title is replaced
-// with a block of the same width in characters. With --blur-text, all text is blurred as well, so the judge sees
+// with a block of the same width in characters (whole words only, so "Tern" does not eat "pattern"). With --blur-text, all text is blurred as well, so the judge sees
 // only composition, ground, colour and artwork: what a page looks like when its words are taken away.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -14,7 +14,7 @@ import { isMain, parseArgs } from '../scripts/lib/args.mjs';
 import { launch, openPage, toUrl } from '../scripts/lib/chrome.mjs';
 
 export const MASK = (name, blur) => `(() => {
-  const re = new RegExp(${JSON.stringify(name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}, 'gi');
+  const re = new RegExp('\\\\b' + ${JSON.stringify(name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))} + '\\\\b', 'gi');
   const block = (m) => '\\u2592'.repeat(m.length);
   let masked = 0;
   const walker = document.createTreeWalker(document.documentElement, NodeFilter.SHOW_TEXT);
