@@ -7,7 +7,7 @@
 - **A few sizes from a scale, two weights** (400 and 500; 600 at most for rare emphasis). No 700 to 900 headings. No gradient text.
 - **Hierarchy comes from size and colour, not weight.**
 - **Sentence case.** `NAVIGATION` and `PAID THIS MONTH` with wide tracking become `Navigation` and `Paid this month`.
-- **Small text never gets negative tracking.** If small text is hard to read, make it bigger, a little heavier, or looser. Tight tracking is for display text only.
+- **Small text never gets negative tracking.** If small text is hard to read, make it bigger, a little heavier, or looser. Tight tracking is for display text only, and the amount depends on the size: see the measured table in `house-rules.md`.
 - **Numbers use tabular figures** and one format across the screen.
 - **No italic for emphasis.**
 - **Line length 45 to 75 characters** for running text; line height 1.45 to 1.6 for body.

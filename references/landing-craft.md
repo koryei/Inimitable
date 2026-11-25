@@ -50,9 +50,9 @@ Add `--motes` for faint specks that drift very slowly, like dust in a beam. Pale
 
 **What good pages do.** A headline of 100 to 130 px at tight tracking next to metadata in 12 to 14 px mono. Nothing in between does much work.
 
-**Why it works.** Hierarchy is relative (see `principles.md` 2). A very large step is decisive: the page has one thing to read first, and everything else is clearly secondary. Tight tracking (-0.04 to -0.06em) at display size makes the word one shape, so it reads at a glance. Small mono for metadata separates *facts* from *voice*.
+**Why it works.** Hierarchy is relative (see `principles.md` 2). A very large step is decisive: the page has one thing to read first, and everything else is clearly secondary. Tight tracking makes the word one shape, so it reads at a glance, but how tight depends on the size: -0.055em is right at 110 to 130 px and too tight at 48 px, where it leaves letters about 1 px apart (`house-rules.md`, measured). Small mono for metadata separates *facts* from *voice*.
 
-**How.** `.display` is `clamp(3rem, 8.4vw, 8.25rem)`, line-height 0.94, letter-spacing -0.055em, light weight (400). The two-tone headline (second line in `--ink-3`) adds a second level without a second size. Use a serif once, large, for a number or a numeral (`.big`, `.step .n`, `.proof b`).
+**How.** `.display` is `clamp(3rem, 8.4vw, 8.25rem)`, line-height 0.94, light weight (400), with tracking that steps from -0.03em on a phone to -0.055em above 1280 px, following the measured limits in `house-rules.md`. The two-tone headline (second line in `--ink-3`) adds a second level without a second size. Use a serif once, large, for a number or a numeral (`.big`, `.step .n`, `.proof b`).
 
 **Rules.** Never tighten small text. Two weights at most. The headline is two lines on desktop, three on a small phone.
 

@@ -59,7 +59,7 @@ main:focus { outline: none; }
 /* Page */
 main { max-width: 90rem; padding: 2rem; }
 .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-h1 { font-size: 1.75rem; line-height: 2rem; font-weight: 500; letter-spacing: -0.02em; }
+h1 { font-size: 1.75rem; line-height: 2rem; font-weight: 500; letter-spacing: -0.01em; }
 .head p { margin-top: 0.25rem; color: var(--ink-2); }
 .actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
 
@@ -76,7 +76,7 @@ h1 { font-size: 1.75rem; line-height: 2rem; font-weight: 500; letter-spacing: -0
 .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1rem; }
 .kpi { padding: 1.5rem; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--card); }
 .k { font-size: 0.75rem; line-height: 1rem; color: var(--ink-3); }
-.v { margin: 0.5rem 0 0.25rem; font-size: 1.75rem; line-height: 2rem; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.v { margin: 0.5rem 0 0.25rem; font-size: 1.75rem; line-height: 2rem; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
 .d { font-size: 0.75rem; line-height: 1rem; color: var(--ink-2); }
 
 .duo { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1rem; margin-bottom: 1rem; }

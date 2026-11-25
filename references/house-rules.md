@@ -78,7 +78,20 @@ Semantic colour only carries meaning: positive `#4cc38a` (dark) / `#16a34a` (lig
 | Page title | 28 to 36 | 1.15 | 400 to 500 |
 | Hero headline | 56 to 72 desktop, 36 to 44 phone | 1.02 to 1.08 | 400 to 500 |
 
-Letter spacing is 0 under 16 px. Tight tracking (-0.02em from 40 px, -0.03em from 56 px) is for display text only. Numbers use tabular figures and one format across the screen. Sentence case everywhere.
+Letter spacing is 0 under 16 px. Tight tracking is for display text only, and **how tight depends on the size**, because the same value leaves a wide gap between letters at 130 px and almost none at 40 px. Numbers use tabular figures and one format across the screen. Sentence case everywhere.
+
+Tightest tracking by size, measured (`node evals/tracking.mjs`, which draws every neighbouring letter pair of six real headlines in Chrome and measures the gap between their ink; the limit is the tightest value at which the 10th-percentile gap is still 2 px wide and almost no pairs touch; the 2 px is a choice, not a law):
+
+| Size | Geist 400 | Instrument Serif 400 |
+| --- | --- | --- |
+| up to 24 px | 0 | 0 |
+| 32 px | -0.02em | 0 |
+| 40 to 48 px | -0.03em | 0 |
+| 64 px | -0.04em | 0 |
+| 80 to 96 px | -0.055em | 0 |
+| 128 px and up | -0.06em | -0.01em for numerals only |
+
+Use less than the limit, never more. The sans takes tight tracking well, which is why tracked-in headlines suit it. The serif is drawn tightly already, so it takes none: at -0.03em about one pair in five touches. Another face needs its own run (`node evals/tracking.mjs --font "Name" --css fonts.css`). The landing starter follows this table in steps by width, and `test/tracking.test.mjs` holds it to the measurement at six widths, so a value taken from a reference at one size is not copied to another. These numbers say where letters begin to touch, not what looks best, and they are for a regular weight: a heavier weight needs more room.
 
 Families by character:
 
