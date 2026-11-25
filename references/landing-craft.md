@@ -4,6 +4,10 @@ A good landing page is not a layout with a nice colour. It is a handful of decis
 
 Start every landing page with `node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette name] [--shape rays|bowl|blob|...] [--hero split] [--motes]`. `--hero split` puts the headline beside the one object only this product has (a drawing, the real screen, a diagram). (An app screen is a different starter: `--kind app`, see `surfaces/web-app.md`.) For a short brief with few facts, add `--minimal`: it keeps the hero, the steps, the closing call and the footer, and removes the ticker, product, features and proof sections together with their links, so nothing is left to delete. To deliver a single file, run `node scripts/inline.mjs <folder> --out page.html`. It gives you a page that already makes these decisions and already passes every check. Your job is then to replace the placeholder content with the product's own and to push the direction until it could only be this product.
 
+## Before the scaffold: the concept
+
+The starter gives a page that already works. It does not give a page that is already yours: the skeleton here (floating nav, big headline, two buttons, a product frame) is the same genre skeleton every product in a category uses. Write the concept first (`direction.md`): the product's native artifact, the first screen without the category word, and **one** signature, an artwork or an interaction, with everything else calm. Choose the ground on purpose (decision 1) and let the signature be built from the product's own subject: the artifact drawn in code, a duotone of its subject (`assets/recipes/duotone.mjs`), a diagram that is the product's real structure. Then scaffold.
+
 ## The ten decisions
 
 ### 1. The ground is light, not colour

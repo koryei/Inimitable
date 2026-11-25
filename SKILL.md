@@ -26,7 +26,7 @@ One fixed run for every request. Do the steps in order. Each step names the file
 | --- | --- | --- | --- |
 | 1 | **Read** | Find the project's design rules, establish what is real, see the screens running, measure the drift | [references/read.md](references/read.md) |
 | 2 | **Decide the mode** | Persuade, Operate, Read, Experience or Terminal: what the person is doing here | [references/modes.md](references/modes.md) |
-| 3 | **Fix the direction** | Five lines: product, character, world, moments, signature. From the project's rules if it has them | [references/direction.md](references/direction.md), [devices.md](references/devices.md) |
+| 3 | **Fix the direction** | The concept in three lines (native artifact, the page without its category word, one signature, and why this ground), then five lines: product, character, world, moments, signature. From the project's rules if it has them | [references/direction.md](references/direction.md), [devices.md](references/devices.md) |
 | 4 | **Branch** | Existing screen: repair layer by layer. New screen: build around one star. **A new landing page starts from `scripts/scaffold.mjs`**, not from a blank file | [fix.md](references/fix.md) or [build-new.md](references/build-new.md) |
 | 5 | **Build** | One section at a time, from the project's own parts, with every state | [build.md](references/build.md), [components.md](references/components.md), [motion.md](references/motion.md), [hover.md](references/hover.md), [materials.md](references/materials.md) |
 | 6 | **Gate** | The project's checks, then measured design checks | [references/gate.md](references/gate.md) |
@@ -48,7 +48,8 @@ Also load, as the work needs them: the surface file for the mode ([web-app](refe
 8. **Look before you show.** Render the real screen at 320, 390, 1440 and 2560 px (terminal: 60 and 120 columns). Do not claim a width looks fine if you did not render it.
 9. **Measure, do not guess.** Run the scripts. The report's numbers come from them.
 10. **Be honest.** If a check fails, say so with the output. If a step was skipped, say that. If something is left over, list it.
-11. **Every control answers.** Each interactive element gets a designed hover and a press state, and a page gets one entrance. Look at the hover state, not only the resting one.
+11. **Own the artwork, not only the skeleton.** A page is replaceable when only its layout is its own. Write the concept (`direction.md`) before the first scaffold, choose one signature, keep the rest calm, and pass the swap-the-name test at the gate.
+12. **Every control answers.** Each interactive element gets a designed hover and a press state, and a page gets one entrance. Look at the hover state, not only the resting one.
 
 ## Tools
 

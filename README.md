@@ -111,7 +111,7 @@ Review this screen against our brand guide.
 | --- | --- | --- |
 | 1 | **Read** | Finds your design rules, watches the screens run and measures the drift. |
 | 2 | **Decide the mode** | Persuade, Operate, Read, Experience or Terminal: what the person is doing here. |
-| 3 | **Fix the direction** | Five lines on how it should feel and what it must never look like. |
+| 3 | **Fix the direction** | A three-line concept (what the product makes, what the page shows without its category word, one signature), then five lines on how it should feel and what it must never look like. |
 | 4 | **Branch** | Repairs an existing screen layer by layer, or builds a new one around one star. |
 | 5 | **Build** | One section at a time, from your own components, with every state designed. |
 | 6 | **Gate** | Runs your lint, types and tests, then measures contrast, target size and tells. |

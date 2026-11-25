@@ -12,6 +12,7 @@ General lessons (a tell the list missed, a rule that backfired, a check that wou
 
 ## What is worth recording
 
+- The concept (the three lines from `direction.md`) and which ground was chosen and why, so a later run extends the idea instead of replacing it.
 - A decision a future run would otherwise reverse (accent colour reserved for live states).
 - A surprise (a font that renders wrong on Windows; a component that cannot take a prop).
 - A correction from the person, with the reason.

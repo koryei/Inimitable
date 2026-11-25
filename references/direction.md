@@ -1,6 +1,31 @@
 # Step 3: Fix the direction
 
-The direction is five short lines written before anything is edited. It is what keeps forty small decisions pointing the same way. Write it from the product in front of you, never from what is fashionable.
+The direction is a three-line concept and five short lines, written before anything is edited or scaffolded. It is what keeps forty small decisions pointing the same way. Write it from the product in front of you, never from what is fashionable.
+
+## First: the concept (three lines)
+
+A page is replaceable when only its skeleton is its own. For a landing page the skeleton is now a genre: a thin nav with one dark button, a small trust line, a centred two-line headline, a muted subhead, two buttons, a product card cropped at the fold, a logo strip. Nearly every product in a category has it, which is why it is safe to keep. What a visitor remembers is what sits behind and beside it: the artwork, the ground, one thing that moves. Decide that first, from the subject inventory, before the scaffold and before any colour.
+
+Answer in one line each:
+
+1. **Native artifact.** What does this product actually produce or handle? A marked-up contract, a strip log of drill cores, a tide table, a receipt, a rota, a message that dissolves. Not "a dashboard", not "insights", not "your data".
+2. **Moment of value.** The one instant the person gets what they came for, as it would look on a screen: the clause that deviates, the layer boundary at 14 m, the shift that has no cover.
+3. **Without the category word.** Describe the first screen without "AI", "platform", "CRM", "workflow", "dashboard", "all-in-one" or the product's category. What is on it? If the answer is "a headline and a product card", you have only the skeleton.
+4. **Signature.** Choose **one**: an artwork (the artifact drawn large, a ground made from it, a duotone of its subject) or an interaction (one thing that answers the pointer in a way only this product would). Everything else stays calm: the skeleton, the type, the scale.
+
+Then pick the **ground on purpose**: lit (the soft grainy gradient), flat colour, a dark framed panel, a duotone, or the artifact itself. The lit gradient is the default of machine-built pages now, so it needs a reason of its own (`landing-craft.md` decision 1, `directions.md`). One clause is enough: *lit, because the product is about light on water*.
+
+Write the concept as three lines and keep it where the run can see it (the top of the report, and the project's notes in the Log step):
+
+```text
+Artifact: a core-sample strip log, at the moment a layer boundary is marked.
+Without the category word: a strip log drawn large, depth ticks down the side, the headline set beside it.
+Signature: the strip log, drawn in code and set in one colour. Ground: flat, because the log is the picture. Everything else calm.
+```
+
+How much of this applies depends on the mode (`modes.md`). Persuade and Experience need all of it. Operate needs the first two lines in miniature: the artifact decides the key figure and the empty state. Read and Terminal need only line one. When the project has design rules they set the colours, type and ground; the concept still decides what the page shows and where.
+
+**The swap-the-name test comes at the gate** (`gate.md`): remove the product name and check that the first screen still says something only this product could say. If you cannot name the artifact in one line, the page will fail it, so do not scaffold yet.
 
 ## When the project has design rules
 
@@ -17,6 +42,8 @@ Draft a direction and a few rules from the subject inventory (`read.md`), **show
 `directions.md` is a library of committed looks (Instrument dark and light, Blueprint, Horizon, Dithered data, Warm editorial) with their palettes, devices and recipes. Pick the closest to the product, then make it this product's own with the subject inventory. When a direction commits to a **device** that the anti-slop list would normally remove (small uppercase mono labels, a gradient surface), name it in the direction. Name at most four devices, use them consistently, and pass them to the scanner with `--allow` when you run the gate.
 
 ## The five lines
+
+The concept said what the page shows. These five say how it should feel.
 
 - **Product.** What it does and for whom, in one plain sentence.
 - **Character.** Two or three concrete words (*calm, exact, a little warm*; *fast, technical, playful*). Not allowed: clean, modern, sleek, minimal, premium. They describe every template.
