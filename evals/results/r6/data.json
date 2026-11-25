@@ -1,0 +1,345 @@
+{
+ "scores": {
+  "12-plain-landing/baseline": {
+   "score": 75,
+   "breakdown": {
+    "tellKinds": 1,
+    "tellInstances": 1,
+    "checkProblems": 4,
+    "driftFlags": 7,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "tells": [
+    "Coloured glow"
+   ],
+   "problems": [
+    "contrast|p.caption",
+    "touch target|a#top.mark",
+    "touch target|a",
+    "touch target|button"
+   ],
+   "drift": [
+    "9 working font sizes under 40 px (a scale needs about 7 or fewer)",
+    "5 display sizes at 40 px and up (keep to about 4: headline, numeral, statement, price)",
+    "weights 700 in use (heavy)",
+    "4 font weights in use",
+    "only 67% of spacing values sit on the 4 px grid",
+    "off-grid spacing: 3, 6, 10, 14, 18, 22, 26",
+    "4 colour hues in use (0, 30, 90, 150 degrees; an accent plus red and green for meaning is fine)"
+   ],
+   "feel": 33,
+   "feelPoints": {
+    "entrance": 0,
+    "scroll": 0,
+    "hover": 18,
+    "ground": 0,
+    "type": 5,
+    "grain": 10
+   },
+   "entrance": 0,
+   "scroll": 0,
+   "hover": "9/10",
+   "ground": 0,
+   "grain": 3.39,
+   "typeRatio": 5.1,
+   "loops": 0,
+   "loopsReduced": 0
+  },
+  "12-plain-landing/skilled": {
+   "score": 94,
+   "breakdown": {
+    "tellKinds": 0,
+    "tellInstances": 0,
+    "checkProblems": 0,
+    "driftFlags": 3,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "tells": [],
+   "problems": [],
+   "drift": [
+    "only 80% of spacing values sit on the 4 px grid",
+    "off-grid spacing: 3, 6, 10, 14, 18, 57.6, 5.44, 7.2, 86.4",
+    "7 different neutral text colours (aim for three roles per surface)"
+   ],
+   "feel": 77,
+   "feelPoints": {
+    "entrance": 15,
+    "scroll": 12,
+    "hover": 20,
+    "ground": 15,
+    "type": 5,
+    "grain": 10
+   },
+   "entrance": 6,
+   "scroll": 10,
+   "hover": "12/12",
+   "ground": 14,
+   "grain": 3,
+   "typeRatio": 21.6,
+   "loops": 0,
+   "loopsReduced": 0
+  },
+  "13-native-artifact/baseline": {
+   "score": 38,
+   "breakdown": {
+    "tellKinds": 1,
+    "tellInstances": 28,
+    "checkProblems": 13,
+    "driftFlags": 8,
+    "sideways": true,
+    "consoleErrors": false
+   },
+   "tells": [
+    "Uppercase tracked label"
+   ],
+   "problems": [
+    "small text|span.label",
+    "touch target|a.brand",
+    "touch target|a.btn",
+    "touch target|button#netBtn",
+    "touch target|input#from",
+    "touch target|input#to",
+    "touch target|button#reset.reset",
+    "touch target|button#sign.b2",
+    "touch target|button#pdf.b2",
+    "touch target|button#csv.b2",
+    "layout|page",
+    "small text|span.tag",
+    "small text|small"
+   ],
+   "drift": [
+    "19 working font sizes under 40 px (a scale needs about 7 or fewer)",
+    "text smaller than 12 px: 10, 10.5, 11, 11.5",
+    "weights 700 in use (heavy)",
+    "5 font weights in use",
+    "3 proportional font families in use (one family plus one partner is the rule; a mono for code or figures is extra)",
+    "5 different corner radii",
+    "only 41% of spacing values sit on the 4 px grid",
+    "off-grid spacing: 3, 6, 7, 9, 10, 11, 14, 18, 22, 26, 30, 34, 38, 54, 110"
+   ],
+   "feel": 50,
+   "feelPoints": {
+    "entrance": 17.5,
+    "scroll": 0,
+    "hover": 11,
+    "ground": 6,
+    "type": 5,
+    "grain": 10
+   },
+   "entrance": 7,
+   "scroll": 0,
+   "hover": "8/14",
+   "ground": 4,
+   "grain": 1.07,
+   "typeRatio": 6.6,
+   "loops": 0,
+   "loopsReduced": 0
+  },
+  "13-native-artifact/skilled": {
+   "score": 90,
+   "breakdown": {
+    "tellKinds": 0,
+    "tellInstances": 0,
+    "checkProblems": 0,
+    "driftFlags": 5,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "tells": [],
+   "problems": [],
+   "drift": [
+    "8 working font sizes under 40 px (a scale needs about 7 or fewer)",
+    "6 different corner radii",
+    "only 89% of spacing values sit on the 4 px grid",
+    "off-grid spacing: 10, 14, 6.91, 59.19",
+    "7 different neutral text colours (aim for three roles per surface)"
+   ],
+   "feel": 89,
+   "feelPoints": {
+    "entrance": 25,
+    "scroll": 14.399999999999999,
+    "hover": 20,
+    "ground": 15,
+    "type": 5,
+    "grain": 10
+   },
+   "entrance": 12,
+   "scroll": 12,
+   "hover": "17/17",
+   "ground": 15,
+   "grain": 3,
+   "typeRatio": 21.6,
+   "loops": 0,
+   "loopsReduced": 0
+  },
+  "14-plain-scheduling/baseline": {
+   "score": 17,
+   "breakdown": {
+    "tellKinds": 3,
+    "tellInstances": 50,
+    "checkProblems": 19,
+    "driftFlags": 8,
+    "sideways": true,
+    "consoleErrors": false
+   },
+   "tells": [
+    "Heavy heading",
+    "Negative tracking on small text",
+    "Uppercase tracked label"
+   ],
+   "problems": [
+    "contrast|span#statustxt",
+    "contrast|div.h",
+    "contrast|button.x",
+    "small text|b",
+    "contrast|b",
+    "contrast|span",
+    "small text|span",
+    "contrast|span.after",
+    "contrast|a.btn",
+    "touch target|a.logo",
+    "touch target|a.btn",
+    "touch target|button.x",
+    "touch target|button#reset",
+    "touch target|button",
+    "touch target|button.sw",
+    "touch target|input#n",
+    "small text|span.ex",
+    "small text|small",
+    "small text|div.sub"
+   ],
+   "drift": [
+    "16 working font sizes under 40 px (a scale needs about 7 or fewer)",
+    "text smaller than 12 px: 10, 11",
+    "weights 700, 800 in use (heavy)",
+    "5 font weights in use",
+    "13 different corner radii",
+    "only 34% of spacing values sit on the 4 px grid",
+    "off-grid spacing: 1, 3, 5, 6, 7, 9, 10, 14, 18, 22, 26, 30, 34, 86.4, 21.5",
+    "5 colour hues in use (0, 30, 60, 90, 180 degrees; an accent plus red and green for meaning is fine)"
+   ],
+   "feel": 43,
+   "feelPoints": {
+    "entrance": 5,
+    "scroll": 0,
+    "hover": 8,
+    "ground": 15,
+    "type": 5,
+    "grain": 10
+   },
+   "entrance": 2,
+   "scroll": 0,
+   "hover": "30/72",
+   "ground": 10,
+   "grain": 4.89,
+   "typeRatio": 12.4,
+   "loops": 0,
+   "loopsReduced": 0
+  },
+  "14-plain-scheduling/skilled": {
+   "score": 84,
+   "breakdown": {
+    "tellKinds": 0,
+    "tellInstances": 0,
+    "checkProblems": 1,
+    "driftFlags": 7,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "tells": [],
+   "problems": [
+    "contrast|span.shift-t"
+   ],
+   "drift": [
+    "10 working font sizes under 40 px (a scale needs about 7 or fewer)",
+    "5 display sizes at 40 px and up (keep to about 4: headline, numeral, statement, price)",
+    "weights 700 in use (heavy)",
+    "10 different corner radii",
+    "only 80% of spacing values sit on the 4 px grid",
+    "off-grid spacing: 1, 5, 6, 10, 14, 18, 5.18, 86.4, 50.02, 19.92, 72.08",
+    "7 different neutral text colours (aim for three roles per surface)"
+   ],
+   "feel": 77,
+   "feelPoints": {
+    "entrance": 17.5,
+    "scroll": 9.6,
+    "hover": 20,
+    "ground": 15,
+    "type": 5,
+    "grain": 10
+   },
+   "entrance": 7,
+   "scroll": 8,
+   "hover": "11/11",
+   "ground": 13,
+   "grain": 10.53,
+   "typeRatio": 21.6,
+   "loops": 0,
+   "loopsReduced": 0
+  }
+ },
+ "blindKey": {
+  "judgeA1": {
+   "pair1": {
+    "brief": "12-plain-landing",
+    "A": "baseline",
+    "B": "skilled"
+   },
+   "pair2": {
+    "brief": "13-native-artifact",
+    "A": "skilled",
+    "B": "baseline"
+   },
+   "pair3": {
+    "brief": "14-plain-scheduling",
+    "A": "skilled",
+    "B": "baseline"
+   }
+  },
+  "judgeA2": {
+   "pair1": {
+    "brief": "12-plain-landing",
+    "A": "skilled",
+    "B": "baseline"
+   },
+   "pair2": {
+    "brief": "13-native-artifact",
+    "A": "baseline",
+    "B": "skilled"
+   },
+   "pair3": {
+    "brief": "14-plain-scheduling",
+    "A": "skilled",
+    "B": "baseline"
+   }
+  },
+  "judgeB": {
+   "P1": {
+    "brief": "12-plain-landing",
+    "arm": "skilled"
+   },
+   "P2": {
+    "brief": "12-plain-landing",
+    "arm": "baseline"
+   },
+   "P3": {
+    "brief": "13-native-artifact",
+    "arm": "baseline"
+   },
+   "P4": {
+    "brief": "14-plain-scheduling",
+    "arm": "skilled"
+   },
+   "P5": {
+    "brief": "14-plain-scheduling",
+    "arm": "baseline"
+   },
+   "P6": {
+    "brief": "13-native-artifact",
+    "arm": "skilled"
+   }
+  }
+ }
+}

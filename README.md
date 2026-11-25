@@ -196,7 +196,9 @@ Each brief was built twice by the same model, once with no skill and once with i
 
 Across the first three rounds the skill won 9 of 12 comparisons, with a mean mechanical score of 96 against 62. On a later plain brief that never mentioned how it would be judged, the motion and hover score was 75 with the skill and 31 without.
 
-The limits are real: one reviewer, a round that was not blind, and both sides on the same model. The skill lost two comparisons in the first round, because it made clean pages where the other side drew something memorable. The guide and recipes for that one rich moment came from those losses. [Read all five rounds.](evals/results)
+In round 6 the comparison was blind, with the product name masked and two judge agents, and it went the other way on distinctiveness: the skilled pages scored 89 against 43 on the mechanical checks, but the judges found the baseline pages more ownable and more memorable in all six comparisons, because the three skilled pages shared one frame. The write-up says what that means and what to change.
+
+The limits are real: one reviewer in the early rounds, a round that was not blind, and both sides on the same model. The skill lost two comparisons in the first round, because it made clean pages where the other side drew something memorable. The guide and recipes for that one rich moment came from those losses. [Read all six rounds.](evals/results)
 
 ## Questions
 

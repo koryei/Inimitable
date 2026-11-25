@@ -55,6 +55,10 @@ A page's visual score is the sum (out of 50). Judge blind where possible: shuffl
 4. Write the round in `results/YYYY-MM-DD-rN.md`: scores per brief and arm, what the skilled arm still did badly, what in the skill caused it, and the edits made.
 5. Re-run the briefs where the skill changed.
 
+## Judging distinctiveness blind
+
+`mask.mjs <page> --name <product> --out dir --label A` renders a page with the product name removed from its text, labels and title (add `--blur-text` to blur every word, so a judge sees only composition, ground and artwork). Give a fresh judge agent, one that built neither page, the masked shots of both arms with a plain description of the product, and ask which page could more easily belong to a different product, which is more memorable, and for an ownability score from 1 to 5. Randomise A and B for each judge, keep the key outside the folder the judge can read, and run more than one judge. `tracking.mjs` measures how tight display type can be set before letters touch.
+
 ## Why two arms
 
 Without the baseline you cannot tell whether the skill helped or the model is simply good. Without the skilled arm's own report you cannot tell why it fell short. Both are needed to improve the skill rather than admire it.
