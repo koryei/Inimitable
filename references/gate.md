@@ -12,6 +12,8 @@ Find them (`package.json` scripts, `Makefile`, CI config, `CLAUDE.md`): usually 
 
 ## Half two: design checks, measured
 
+These checks find faults in a design you have already chosen. Do not design toward the score: a page can pass all of them and be forgettable. When a check argues with a choice the concept made on purpose, fix contrast, size and overflow without argument, and keep the choice.
+
 | Check | Command | Passes when |
 | --- | --- | --- |
 | Drift | `node scripts/drift.mjs <screen> --against before.json` | font sizes, weights, radii, colour hues and off-grid values are the same or lower than before, and within the scale |

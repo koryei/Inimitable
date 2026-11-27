@@ -4,6 +4,8 @@ Default numbers and rules for when a project has none of its own. If the project
 
 ## The ten rules
 
+Rules 3, 4 and 8 are written for working screens. A page that persuades may use heavier weights, more than one strong colour and a drawn texture when its concept says why (`anti-slop.md`, "Pages that persuade").
+
 1. **One spacing grid.** Every margin, padding, gap and fixed height is a multiple of 4. Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128.
 2. **One neutral ramp.** Background, raised surface, border and text all come from a single tinted grey ramp. Three text roles: primary, secondary, muted.
 3. **One accent, used rarely.** It marks the primary action, the selection, or the one number that matters. If the brand has no accent, the star of a screen is made with size and contrast instead.
@@ -91,7 +93,7 @@ Tightest tracking by size, measured (`node evals/tracking.mjs`, which draws ever
 | 80 to 96 px | -0.055em | 0 |
 | 128 px and up | -0.06em | -0.01em for numerals only |
 
-Use less than the limit, never more. The sans takes tight tracking well, which is why tracked-in headlines suit it. The serif is drawn tightly already, so it takes none: at -0.03em about one pair in five touches. Another face needs its own run (`node evals/tracking.mjs --font "Name" --css fonts.css`). The landing starter follows this table in steps by width, and `test/tracking.test.mjs` holds it to the measurement at six widths, so a value taken from a reference at one size is not copied to another. These numbers say where letters begin to touch, not what looks best, and they are for a regular weight: a heavier weight needs more room.
+Use less than the limit, never more. The sans takes tight tracking well, which is why tracked-in headlines suit it. The serif is drawn tightly already, so it takes none: at -0.03em about one pair in five touches. Another face needs its own run (`node evals/tracking.mjs --font "Name" --css fonts.css`). The landing starter follows this table in steps by width, and `test/tracking.test.mjs` holds it to the measurement at six widths, so a value taken from a reference at one size is not copied to another. These numbers say where letters begin to touch, not what looks best, and they are for a regular weight: a heavier weight needs more room. `scaffold --kind base` writes measured tracking for the voice and weight you choose, and `test/base.test.mjs` holds it to the measurement.
 
 Families by character:
 

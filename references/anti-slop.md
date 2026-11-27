@@ -8,6 +8,17 @@ A third caution: a tell can be a **choice**. When the project's direction (`dire
 
 Two cautions. First, removing a tell leaves space: never fill that space with a different trend (glass, grain, neon, bento boxes). Fill it with scale, real content or nothing. Second, a tell that is part of the project's own brand guide is not a tell for that project. Keep it and say so.
 
+## Pages that persuade
+
+Much of this list describes a **working screen**, where calm helps a person work. A landing page or a showpiece (Persuade and Experience modes) has the opposite job: to be remembered. In blind comparisons, pages that followed the working-screen rules here read as one quiet template, while pages that broke them were remembered. On a page marked `<html data-mode="persuade">` (or `experience`), these are **choices made in the concept**, not tells:
+
+- headline weight 800 or 900, a condensed or italic display face, a full stop in a headline
+- small capitals with wide tracking, used as part of the voice
+- a strong coloured ground, more than one strong colour, hard shadows, a drawn texture that carries the material
+- a headline over three lines, when the lines are the layout
+
+`signs.mjs` and `drift.mjs` read the mark and stop flagging heavy weights and tracked capitals. Everything else in this file still holds, and so do contrast, target size, overflow and honesty. A choice is made once and used with purpose; five unrelated effects are still noise.
+
 ## Surfaces and colour
 
 - `[scan]` Violet-to-blue, violet-to-pink or any hue-to-hue gradient on backgrounds, cards, buttons or the active nav item → one neutral surface, accent only where it means something. **Exception:** a lit ground in one temperature family with grain, licensed by the direction (`materials.md`), is a material, not a tell. A rainbow is still a rainbow.

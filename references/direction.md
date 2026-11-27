@@ -1,10 +1,10 @@
 # Step 3: Fix the direction
 
-The direction is a five-line concept and five short lines, written before anything is edited or scaffolded. It is what keeps forty small decisions pointing the same way. Write it from the product in front of you, never from what is fashionable.
+The direction is a seven-line concept and five short lines, written before anything is edited or scaffolded. It is what keeps forty small decisions pointing the same way. Write it from the product in front of you, never from what is fashionable.
 
-## First: the concept (five lines)
+## First: the concept (seven lines)
 
-A page is replaceable when only its words and its picture are its own. A strong picture inside the usual frame (a thin nav with one dark button, a headline beside a card, three steps, a closing panel) still reads as one more template: in round 6 of the evals, judges called every skilled page interchangeable for exactly that reason, while pages that carried the product's own material from top to bottom were the ones they remembered. Decide what the page shows, **how it is laid out and what it is made of**, from the subject inventory, before the scaffold and before any colour.
+A page is replaceable when only its words and its picture are its own. A strong picture inside the usual frame (a thin nav with one dark button, a headline beside a card, three steps, a closing panel) still reads as one more template: in round 6 of the evals, judges called every skilled page interchangeable for exactly that reason, while pages that carried the product's own material from top to bottom were the ones they remembered. Decide what the page shows, **what its headline does, what voice it speaks in, how it is laid out and what it is made of**, from the subject inventory, before the scaffold and before any colour.
 
 Answer in order:
 
@@ -24,14 +24,28 @@ Answer in order:
 
 5. **Material.** One thing the artifact is made of: its scale, rule, unit, mark or texture. Draw it in the page itself, on the first screen and in at least two more places, or as one line that runs down the page. Mark each with `data-device="name"`. It has to mean something (a scale that reads real or example values, a rule that separates real parts). A texture sprinkled for decoration is not a material.
 
+6. **Headline.** One move that only this product's headline could make: a word struck out and replaced, a figure set into the line, a break that follows the artifact, a mark the artifact itself uses. The words alone being specific is not a move. If the artifact has no gesture, the move is scale: set the headline far larger than feels safe and let it be the layout.
+7. **Voice.** The face, the weight, the case and how loud the page is. Decide all four from the artifact's world, then pass the first two to the scaffold.
+
+   | `--voice` | Face | It sounds like | Weight range |
+   | --- | --- | --- | --- |
+   | `sans` | Geist | an instrument, a tool | 100 to 900 |
+   | `grotesk` | Bricolage Grotesque | a poster, a shopfront, something made by hand | 200 to 800 |
+   | `serif` | Newsreader, with italic | print: a document, a journal, a letter | 200 to 800 |
+   | `condensed` | Big Shoulders Display | signage, a timetable, a crate stencil | 100 to 900 |
+
+   A regular weight, in sentence case, on a pale neutral ground is what a page gets when nobody decides. It can be right; if you land on all three, write the reason beside this line.
+
 Then pick the **ground on purpose**: lit (the soft grainy gradient), flat colour, a dark framed panel, a duotone, or the artifact itself. The lit gradient is the default of machine-built pages now, so it needs a reason of its own (`landing-craft.md` decision 1, `directions.md`).
 
-Write it as five lines and keep it where the run can see it (the top of the report, and the project's notes in the Log step). An example, for a harbour tide app:
+Write it as seven lines and keep it where the run can see it (the top of the report, and the project's notes in the Log step). An example, for a harbour tide app:
 
 ```text
 Artifact: a tide curve for one day, at the moment the water is high enough to launch.
 Without the category word: one curve across the whole screen, the launch window shaded on it, the headline riding above.
 Signature: the curve answers the pointer with the depth at that hour. Ground: flat deep water blue, because the curve is the picture.
+Headline: the line sits on the curve, and the word "launch" rides at the height of high water.
+Voice: condensed, 800, capitals, loud, like a harbour notice board.
 Layout: across. Every section sits on the same hour axis; there is no card and no panel.
 Material: the hour ticks, on the curve, under each section heading and along the footer.
 ```

@@ -5,7 +5,7 @@ Short. Written for the person who asked, in plain words, with whatever *they* wo
 ## Always include
 
 - **The mode** used (one word) and the direction (one sentence).
-- **The concept** for a new Persuade or Experience screen: the five lines from `direction.md`.
+- **The concept** for a new Persuade or Experience screen: the seven lines from `direction.md`.
 - **The swap test**, one line: what the first screen says that only this product could say, or what it still lacks (`gate.md`).
 - **What changed**, a few lines, grouped by what the person will notice, not by file.
 - **Anything left over**, honestly: what you could not fix and why, what you did not touch on purpose.
