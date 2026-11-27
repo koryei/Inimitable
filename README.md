@@ -111,7 +111,7 @@ Review this screen against our brand guide.
 | --- | --- | --- |
 | 1 | **Read** | Finds your design rules, watches the screens run and measures the drift. |
 | 2 | **Decide the mode** | Persuade, Operate, Read, Experience or Terminal: what the person is doing here. |
-| 3 | **Fix the direction** | A three-line concept (what the product makes, what the page shows without its category word, one signature), then five lines on how it should feel and what it must never look like. |
+| 3 | **Fix the direction** | A five-line concept (what the product makes, what the page shows without its category word, one signature, a layout taken from that artifact, one material that runs through), then five lines on how it should feel and what it must never look like. |
 | 4 | **Branch** | Repairs an existing screen layer by layer, or builds a new one around one star. |
 | 5 | **Build** | One section at a time, from your own components, with every state designed. |
 | 6 | **Gate** | Runs your lint, types and tests, then measures contrast, target size and tells. |
@@ -121,15 +121,17 @@ Review this screen against our brand guide.
 
 ## Start from a tested page
 
-A blank file is how a page ends up static and generic. For a new screen the agent starts from one of two complete starters, then makes it the product’s own. Both pass every check in the skill, in dark and light, at all four widths.
+A blank file loses the craft, and a finished template loses the identity. So a new landing page starts from a base with tested type, controls and motion and no layout, and the agent builds the layout from the product’s own artifact. There are also two complete starters for when the standard shape is what you want. All of them pass the skill’s craft checks.
 
 ```bash
-node scripts/scaffold.mjs my-page --theme light --palette ember --shape contour
+node scripts/scaffold.mjs my-page --kind base --theme light
+node scripts/scaffold.mjs my-standard-page --theme light --palette ember --shape contour
 node scripts/scaffold.mjs my-app --kind app --theme dark
 ```
 
 | Starter | What you get |
 | --- | --- |
+| **Base** (`--kind base`) | Type with tracking set by size, buttons and links with hover and press, focus styles, colour, the motion kit and fonts. `page.css` is empty: the frame is yours. |
 | **Landing page** | A lit grainient ground, a floating nav, a product frame, an uneven bento, steps, one big number, a closing call and a footer. The motion kit is wired in: ordered entrance, scroll reveals, count-up, and a hover and press state on every control. |
 | **App screen** (`--kind app`) | A sidebar that becomes a menu on a phone, a page header with one primary action, four key numbers, one chart, a table whose status is a word and a dot, and an empty state that says what to do. |
 
@@ -150,11 +152,12 @@ Plain Node scripts with no dependencies. The agent runs them for you, and you ca
 | `scripts/signs.mjs <url or file>` | Finds tells in the rendered page: hue gradients, glows, emoji, hype words, unverified claims, looping animation and more. | `--allow` licenses a device your committed direction uses on purpose |
 | `scripts/check.mjs <url or file>` | Reads WCAG contrast from the rendered pixels, so gradients, images and pseudo-element backgrounds are judged too. Also checks touch targets, small text, missing names, focus styles, layout shift and document basics. | `--widths` |
 | `scripts/craft.mjs <url or file>` | Hovers every control with a real pointer and diffs the result, so a control that ignores the pointer is caught, not missed. Also flags layout-property transitions and motion that ignores the reduced-motion setting. | `--shots` writes a rest and hover crop per control |
-| `scripts/scaffold.mjs <folder>` | Starts a landing page or an app screen from a tested starter. | `--kind`, `--theme`, `--palette`, `--shape`, `--ground`, `--hero`, `--art`, `--minimal` |
+| `scripts/scaffold.mjs <folder>` | Starts a base with no layout, a landing page or an app screen. | `--kind`, `--theme`, `--palette`, `--shape`, `--ground`, `--hero`, `--art`, `--minimal` |
 | `scripts/inline.mjs <folder>` | Folds a finished page, with its styles, script and fonts, into one file you can send. | `--out page.html` |
 | `scripts/lib-add.mjs add <source> <item>` | Pulls real source from Bencho, BoardUI, Aceternity or any shadcn registry. Files only, with the licence notice. | `--dry-run`, `--out` |
 | `scripts/dotify.mjs <image or svg>` | Turns a picture or drawn SVG into dithered, halftone, hex-dot, engraved-line or ASCII art for a hero object. | `--mode`, `--invert`, `--fill`, `--bg` |
 | `scripts/swap.mjs <url or file>` | The swap-the-name test. With the product name removed, does the first screen still use the nouns of the product's own subject, and does its artwork name them? It catches a page where only the skeleton is the product's own. It cannot judge the picture. | `--nouns`, `--name`, `--typographic` |
+| `scripts/frame.mjs <page> …` | The frame check. Is the skeleton different from the landing starter and from sibling pages, and does one material run through the page? It compares structure, so a pass does not mean the page is memorable. | `--no-starter`, `--no-device`, `--threshold` |
 | `scripts/score.mjs <url or file>` | Runs every check and prints one score out of 100, with what cost points. | |
 | `scripts/term-shot.mjs -- <command>` | Runs a terminal program at a set width in a real pseudo-terminal and captures its text and an image. | |
 

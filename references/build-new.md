@@ -16,9 +16,9 @@ The brand decides. It does not have to be a colour. A brand that is black and gr
 
 ## Steps
 
-Before step 1, check that the concept exists (`direction.md`: native artifact, the page without its category word, one signature, and why this ground). The star below is usually the signature. If the concept is missing, write it now; a scaffold without it produces the genre page every product in the category already has.
+Before step 1, check that the concept exists (`direction.md`: native artifact, the page without its category word, one signature and why this ground, layout, material). The star below is usually the signature. If the concept is missing, write it now; a scaffold without it produces the genre page every product in the category already has.
 
-For a working app screen (dashboard, list, settings), run `node scripts/scaffold.mjs <folder> --kind app` instead (`surfaces/web-app.md`). For a landing page, run `node scripts/scaffold.mjs <folder>` first (`landing-craft.md`), then follow the steps below to replace and push it. The starter already carries the structure, the motion and the hover states; your job is the star, the words, the facts and the one thing only this product has.
+For a working app screen (dashboard, list, settings), run `node scripts/scaffold.mjs <folder> --kind app` instead (`surfaces/web-app.md`). For a landing page, run `node scripts/scaffold.mjs <folder> --kind base` first. It carries the type, controls, motion and hover states and **no layout**: write `page.css` from concept lines 4 and 5, and use the motion kit and recipes as parts (`landing-craft.md`). Use the full landing starter (`--kind landing`) only when the brief asks for the standard page or there is no time to compose one, and say so in the report, because its frame is shared.
 
 1. **Name the star** in one sentence, and say why it belongs to this product (use the subject inventory from Read).
 2. **Write the screen's argument**, one line: who arrives, what they need to leave with, what they do next.

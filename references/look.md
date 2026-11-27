@@ -22,7 +22,7 @@ Go through the images in this order and write down every problem:
 6. **Small screens.** Wrapping, overlaps, cut-off text, unreachable controls, text under 12 px.
 7. **Big screens.** Lines of text too long, content floating in a sea of space, blown-up UI.
 8. **The tells.** Read `anti-slop.md` against the picture one more time.
-9. **The template check.** Would this screen still fit a competitor if the name were swapped?
+9. **The template check.** Would this screen still fit a competitor if the name were swapped? With the words blurred, would you still know whose it is, below the first screen too?
 
 ## Feels cheap
 
