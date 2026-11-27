@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Example: a page with its own frame and one material running down it</title>
+<style>
+body { margin: 0; font: 16px/1.5 Georgia, serif; background: #fff; color: #111; }
+.ruler { position: fixed; left: 0; top: 0; bottom: 0; width: 3rem; background: repeating-linear-gradient(#111 0 1px, transparent 1px 12px); }
+header, main, footer { margin-left: 5rem; }
+h1 { font-size: 80px; font-weight: 400; margin: 40px 0; max-width: 12ch; }
+.log { width: 900px; height: 320px; border-bottom: 4px solid #111; }
+section { min-height: 320px; padding: 40px 0; }
+a.go { display: inline-block; padding: 12px 20px; background: #111; color: #fff; }
+</style>
+</head>
+<body>
+<i data-device="tick" style="display:block;width:20px;height:20px;background:#111;margin-left:5rem"></i>
+<header><a href="#a">Example</a></header>
+<main>
+  <section><h1>Depth, layer by layer</h1><figure class="log" role="img" aria-label="Example data: a log"></figure></section>
+  <section><h2>How a sample is read</h2><p>Example text about a sample.</p></section>
+  <section><h2>What is signed</h2><p>Example text about signing.</p><a class="go" href="#a">Start</a></section>
+</main>
+<footer>Example</footer>
+</body>
+</html>

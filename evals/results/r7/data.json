@@ -1,0 +1,443 @@
+{
+ "scores": {
+  "12-plain-landing/baseline": {
+   "score": 75,
+   "breakdown": {
+    "tellKinds": 1,
+    "tellInstances": 1,
+    "checkProblems": 4,
+    "driftFlags": 7,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "feel": 33,
+   "hover": "9/10"
+  },
+  "12-plain-landing/skilled": {
+   "score": 100,
+   "breakdown": {
+    "tellKinds": 0,
+    "tellInstances": 0,
+    "checkProblems": 0,
+    "driftFlags": 0,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "feel": 79,
+   "hover": "11/11"
+  },
+  "13-native-artifact/baseline": {
+   "score": 38,
+   "breakdown": {
+    "tellKinds": 1,
+    "tellInstances": 28,
+    "checkProblems": 13,
+    "driftFlags": 8,
+    "sideways": true,
+    "consoleErrors": false
+   },
+   "feel": 50,
+   "hover": "8/14"
+  },
+  "13-native-artifact/skilled": {
+   "score": 98,
+   "breakdown": {
+    "tellKinds": 0,
+    "tellInstances": 0,
+    "checkProblems": 0,
+    "driftFlags": 1,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "feel": 66,
+   "hover": "3/3"
+  },
+  "14-plain-scheduling/baseline": {
+   "score": 17,
+   "breakdown": {
+    "tellKinds": 3,
+    "tellInstances": 50,
+    "checkProblems": 19,
+    "driftFlags": 8,
+    "sideways": true,
+    "consoleErrors": false
+   },
+   "feel": 43,
+   "hover": "30/72"
+  },
+  "14-plain-scheduling/skilled": {
+   "score": 100,
+   "breakdown": {
+    "tellKinds": 0,
+    "tellInstances": 0,
+    "checkProblems": 0,
+    "driftFlags": 0,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "feel": 61,
+   "hover": "7/7"
+  },
+  "15-held-out/baseline": {
+   "score": 77,
+   "breakdown": {
+    "tellKinds": 1,
+    "tellInstances": 2,
+    "checkProblems": 2,
+    "driftFlags": 8,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "feel": 35,
+   "hover": "21/28"
+  },
+  "15-held-out/skilled": {
+   "score": 81,
+   "breakdown": {
+    "tellKinds": 1,
+    "tellInstances": 105,
+    "checkProblems": 0,
+    "driftFlags": 3,
+    "sideways": false,
+    "consoleErrors": false
+   },
+   "feel": 73,
+   "hover": "25/25"
+  }
+ },
+ "frame": {
+  "skilled": {
+   "pages": [
+    {
+     "page": "12-plain-landing-skilled",
+     "traits": {
+      "nav": "plain",
+      "composition": "art below",
+      "align": "left",
+      "container": "full bleed",
+      "sequence": [
+       "steps",
+       "text",
+       "big number"
+      ],
+      "button": "rounded",
+      "headlineFont": "serif",
+      "ground": "light"
+     },
+     "device": {
+      "pass": true,
+      "found": [
+       {
+        "name": "change-bar",
+        "sections": 3,
+        "firstScreen": true,
+        "runsThrough": false,
+        "pass": true
+       }
+      ],
+      "reason": null
+     }
+    },
+    {
+     "page": "13-native-artifact-skilled",
+     "traits": {
+      "nav": "bar",
+      "composition": "art beside",
+      "align": "left",
+      "container": "full bleed",
+      "sequence": [
+       "table",
+       "picture",
+       "text",
+       "big number"
+      ],
+      "button": "rounded",
+      "headlineFont": "sans",
+      "ground": "light"
+     },
+     "device": {
+      "pass": true,
+      "found": [
+       {
+        "name": "depth-scale",
+        "sections": 6,
+        "firstScreen": true,
+        "runsThrough": true,
+        "pass": true
+       }
+      ],
+      "reason": null
+     }
+    },
+    {
+     "page": "14-plain-scheduling-skilled",
+     "traits": {
+      "nav": "plain",
+      "composition": "art below",
+      "align": "left",
+      "container": "open",
+      "sequence": [
+       "text",
+       "picture",
+       "steps",
+       "big number",
+       "closing line"
+      ],
+      "button": "rounded",
+      "headlineFont": "sans",
+      "ground": "light"
+     },
+     "device": {
+      "pass": true,
+      "found": [
+       {
+        "name": "cant-work-hatch",
+        "sections": 3,
+        "firstScreen": true,
+        "runsThrough": false,
+        "pass": true
+       }
+      ],
+      "reason": null
+     }
+    },
+    {
+     "page": "15-held-out-skilled",
+     "traits": {
+      "nav": "plain",
+      "composition": "art below",
+      "align": "left",
+      "container": "inset panel",
+      "sequence": [
+       "steps",
+       "picture",
+       "picture",
+       "price",
+       "closing line"
+      ],
+      "button": "rounded",
+      "headlineFont": "sans",
+      "ground": "light"
+     },
+     "device": {
+      "pass": true,
+      "found": [
+       {
+        "name": "quarters",
+        "sections": 6,
+        "firstScreen": true,
+        "runsThrough": false,
+        "pass": true
+       }
+      ],
+      "reason": null
+     }
+    }
+   ],
+   "pairs": [
+    {
+     "a": "12-plain-landing-skilled",
+     "b": "13-native-artifact-skilled",
+     "score": 0.48
+    },
+    {
+     "a": "12-plain-landing-skilled",
+     "b": "14-plain-scheduling-skilled",
+     "score": 0.64
+    },
+    {
+     "a": "12-plain-landing-skilled",
+     "b": "15-held-out-skilled",
+     "score": 0.57
+    },
+    {
+     "a": "13-native-artifact-skilled",
+     "b": "14-plain-scheduling-skilled",
+     "score": 0.39
+    },
+    {
+     "a": "13-native-artifact-skilled",
+     "b": "15-held-out-skilled",
+     "score": 0.32
+    },
+    {
+     "a": "14-plain-scheduling-skilled",
+     "b": "15-held-out-skilled",
+     "score": 0.69
+    }
+   ],
+   "starter": [
+    {
+     "page": "12-plain-landing-skilled",
+     "starter": "card",
+     "score": 0.29
+    },
+    {
+     "page": "13-native-artifact-skilled",
+     "starter": "split",
+     "score": 0.42
+    },
+    {
+     "page": "14-plain-scheduling-skilled",
+     "starter": "card",
+     "score": 0.32
+    },
+    {
+     "page": "15-held-out-skilled",
+     "starter": "card",
+     "score": 0.35
+    }
+   ]
+  },
+  "baseline": {
+   "pages": [
+    {
+     "page": "12-plain-landing-baseline",
+     "traits": {
+      "nav": "plain",
+      "composition": "art below",
+      "align": "left",
+      "container": "open",
+      "sequence": [
+       "big number"
+      ],
+      "button": "square",
+      "headlineFont": "serif",
+      "ground": "tinted"
+     },
+     "device": {
+      "pass": false,
+      "found": [],
+      "reason": "no element is marked data-device: name the material in the concept and draw it in the page"
+     }
+    },
+    {
+     "page": "13-native-artifact-baseline",
+     "traits": {
+      "nav": "plain",
+      "composition": "art below",
+      "align": "left",
+      "container": "open",
+      "sequence": [
+       "picture",
+       "columns",
+       "text",
+       "picture",
+       "big number"
+      ],
+      "button": "square",
+      "headlineFont": "serif",
+      "ground": "tinted"
+     },
+     "device": {
+      "pass": false,
+      "found": [],
+      "reason": "no element is marked data-device: name the material in the concept and draw it in the page"
+     }
+    },
+    {
+     "page": "14-plain-scheduling-baseline",
+     "traits": {
+      "nav": "bar",
+      "composition": "art below",
+      "align": "left",
+      "container": "open",
+      "sequence": [
+       "text",
+       "text",
+       "cards",
+       "price"
+      ],
+      "button": "pill",
+      "headlineFont": "sans",
+      "ground": "tinted"
+     },
+     "device": {
+      "pass": false,
+      "found": [],
+      "reason": "no element is marked data-device: name the material in the concept and draw it in the page"
+     }
+    },
+    {
+     "page": "15-held-out-baseline",
+     "traits": {
+      "nav": "plain",
+      "composition": "art below",
+      "align": "left",
+      "container": "full bleed",
+      "sequence": [
+       "text",
+       "text",
+       "text",
+       "table",
+       "price",
+       "closing line"
+      ],
+      "button": "rounded",
+      "headlineFont": "sans",
+      "ground": "light"
+     },
+     "device": {
+      "pass": false,
+      "found": [],
+      "reason": "no element is marked data-device: name the material in the concept and draw it in the page"
+     }
+    }
+   ],
+   "pairs": [
+    {
+     "a": "12-plain-landing-baseline",
+     "b": "13-native-artifact-baseline",
+     "score": 0.72
+    },
+    {
+     "a": "12-plain-landing-baseline",
+     "b": "14-plain-scheduling-baseline",
+     "score": 0.4
+    },
+    {
+     "a": "12-plain-landing-baseline",
+     "b": "15-held-out-baseline",
+     "score": 0.4
+    },
+    {
+     "a": "13-native-artifact-baseline",
+     "b": "14-plain-scheduling-baseline",
+     "score": 0.47
+    },
+    {
+     "a": "13-native-artifact-baseline",
+     "b": "15-held-out-baseline",
+     "score": 0.46
+    },
+    {
+     "a": "14-plain-scheduling-baseline",
+     "b": "15-held-out-baseline",
+     "score": 0.48
+    }
+   ],
+   "starter": [
+    {
+     "page": "12-plain-landing-baseline",
+     "starter": "card",
+     "score": 0.24
+    },
+    {
+     "page": "13-native-artifact-baseline",
+     "starter": "card",
+     "score": 0.29
+    },
+    {
+     "page": "14-plain-scheduling-baseline",
+     "starter": "card",
+     "score": 0.29
+    },
+    {
+     "page": "15-held-out-baseline",
+     "starter": "card",
+     "score": 0.25
+    }
+   ]
+  }
+ }
+}

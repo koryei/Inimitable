@@ -1,0 +1,12 @@
+Artifact: one contract clause that departs from the firm's position: their words struck through, the suggested words underlined, the position noted in the margin, and a lawyer's Accept or Reject.
+Without the category word: a sheet of contract clauses with red marks, the firm's own rule beside each mark, and two buttons that only a person can press.
+Signature: the redline answers the reader. Accept settles the new wording into ink, Reject keeps the original, undecided stays red. Ground: flat paper, because the artifact is a sheet and red must mean only "a change".
+Layout: a sheet. Three shared columns run down the whole page (lead for clause numbers, text, margin for notes and decisions); the headline and every section hang on them.
+Material: the change bar drafters rule beside an altered line. Red where a decision is waiting, ink once taken; it recurs beside the lawyer's part and beside the trial.
+
+Product: Marrow reads contracts for small law firms, marks departures from the firm's standard positions and drafts a redline for a lawyer to decide.
+Character: exact, quiet, accountable.
+World: paper, ink, the red pen, the margin.
+Moments: the example clauses on the first screen.
+Signature detail: the change bar.
+Must not look like: a software dashboard or a chat window with a gradient behind it.

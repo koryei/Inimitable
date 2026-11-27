@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coreline: log the core, the strip log draws itself</title>
+<meta name="description" content="Coreline is a field-logging app for geologists who log drill core. Log a core run on your phone, offline. The strip log is drawn from the samples.">
+<style>
+:root{
+  --paper:#EEE9DB;
+  --sheet:#FBFAF5;
+  --ink:#1A1B19;
+  --ink2:#55564F;
+  --line:rgba(26,27,25,.2);
+  --grid:rgba(26,27,25,.055);
+  --signal:#F26B1D;
+  --stamp:#1E4C8F;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--signal);color:var(--ink)}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+.mono{font-family:var(--mono)}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* page depth ruler */
+.ruler{position:fixed;left:0;top:0;bottom:0;width:34px;z-index:5;pointer-events:none;display:none}
+.ruler i{position:absolute;right:0;top:0;bottom:0;width:9px;
+  background:repeating-linear-gradient(to bottom,var(--ink) 0 1px,transparent 1px 12px);opacity:.55}
+.ruler b{position:absolute;right:0;top:0;bottom:0;width:18px;
+  background:repeating-linear-gradient(to bottom,var(--ink) 0 1.5px,transparent 1.5px 60px);opacity:.75}
+.ruler s{position:absolute;left:4px;top:0;width:0;height:0;border-left:14px solid var(--signal);border-top:7px solid transparent;border-bottom:7px solid transparent;filter:drop-shadow(0 0 0 var(--ink));transition:transform .08s linear}
+@media(min-width:1100px){.ruler{display:block}}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.01em}
+.brand svg{display:block}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;background:var(--signal);color:var(--ink);
+  border:1.5px solid var(--ink);padding:14px 22px;font-weight:650;font-size:17px;text-decoration:none;cursor:pointer;
+  box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s;line-height:1.1;border-radius:2px
+}
+.btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+.btn.sm{padding:10px 16px;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
+.btn.big{font-size:20px;padding:18px 28px}
+.btn svg{flex:none}
+
+/* hero */
+.hero{padding:34px 0 26px}
+.eyebrow{display:flex;flex-wrap:wrap;gap:10px 22px;margin:0 0 22px}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(46px,8.2vw,112px);line-height:.96;letter-spacing:-.035em;margin:0;max-width:16ch}
+h1 em{font-style:italic;display:block;color:var(--ink);position:relative;width:fit-content}
+h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.07em;background:var(--signal);transform-origin:left;animation:draw 1.4s .6s cubic-bezier(.2,.7,.2,1) backwards}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:34px;margin-top:6px}
+.lede{max-width:46ch;font-size:20px;line-height:1.45;margin:30px 0 0}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;margin-top:30px}
+.cta-row p{margin:0;font-family:var(--mono);font-size:13px;color:var(--ink2);max-width:34ch}
+.bench-intro{display:flex;align-items:center;gap:14px;margin:54px 0 20px;flex-wrap:wrap}
+.bench-intro .rule{flex:1;min-width:40px;height:1px;background:var(--ink)}
+.tag{display:inline-block;font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;border:1.5px dashed var(--ink);padding:3px 8px;background:repeating-linear-gradient(135deg,rgba(242,107,29,.22) 0 6px,transparent 6px 12px);line-height:1.35}
+
+.bench{display:grid;gap:36px;grid-template-columns:minmax(0,1fr);align-items:start}
+@media(min-width:960px){.bench{grid-template-columns:350px minmax(0,1fr);gap:44px}}
+
+/* phone */
+.phone{width:100%;max-width:350px;margin:0 auto;background:var(--ink);border-radius:40px;padding:11px;position:relative}
+.phone::before{content:"";position:absolute;top:19px;left:50%;width:70px;height:6px;border-radius:3px;background:#3a3b37;transform:translateX(-50%);z-index:2}
+.screen{background:var(--sheet);border-radius:30px;padding:34px 16px 18px;position:relative;overflow:hidden}
+.ph-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.ph-head h2{font-family:var(--serif);font-size:20px;margin:0;font-weight:600}
+.net{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1.5px solid var(--ink);padding:9px 11px;margin-bottom:14px;background:#fff;font-size:13.5px;line-height:1.3}
+.net .dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--ink);display:inline-block;margin-right:8px;vertical-align:-1px;flex:none}
+.net.on .dot{background:#2F8F4E;border-color:#2F8F4E}
+.net.off .dot{background:transparent}
+.net.sync .dot{background:var(--signal);border-color:var(--signal)}
+.net button{border:1.5px solid var(--ink);background:var(--paper);padding:6px 10px;font-size:13px;cursor:pointer;white-space:nowrap;font-weight:600;border-radius:2px}
+.net button:hover{background:#fff}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+fieldset[disabled]{opacity:.45}
+.fld{margin-bottom:14px}
+.fld > .label,.fld > label.label{display:block;margin-bottom:6px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.num{width:100%;border:1.5px solid var(--ink);background:#fff;padding:9px 10px;font-family:var(--mono);font-size:18px;border-radius:2px}
+.num span{color:var(--ink2)}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{position:relative;display:block}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opt > span{display:flex;align-items:center;gap:9px;border:1.5px solid var(--line);background:#fff;padding:7px 8px;font-size:14px;line-height:1.1;min-height:44px;border-radius:2px}
+.opt input:checked + span{border-color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink);background:#fff;font-weight:650}
+.opt input:focus-visible + span{outline:3px solid var(--stamp);outline-offset:2px}
+.opt svg{flex:none;display:block}
+.cols{display:flex;gap:6px;flex-wrap:wrap}
+.cols .opt > span{padding:0;width:42px;height:42px;justify-content:center;border-radius:50%}
+.cols .opt .sw{display:block;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink)}
+.cols .opt input:checked + span{box-shadow:inset 0 0 0 1.5px var(--ink),0 0 0 2px var(--sheet),0 0 0 3.5px var(--ink)}
+.colname{font-family:var(--mono);font-size:12.5px;margin-top:8px;color:var(--ink2)}
+.photo{width:100%;display:flex;align-items:center;gap:10px;border:1.5px dashed var(--ink);background:transparent;padding:10px;cursor:pointer;min-height:44px;text-align:left;border-radius:2px;font-size:14px}
+.photo[aria-pressed=true]{border-style:solid;background:#fff;font-weight:650}
+.photo .ph-box{width:28px;height:28px;border:1.5px solid var(--ink);background:var(--paper);display:grid;place-items:center;flex:none}
+.save{width:100%;justify-content:center;font-size:16px;box-shadow:3px 3px 0 var(--ink)}
+.save[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none}
+.msg{min-height:20px;font-size:13px;margin:10px 0 0;color:var(--ink2);font-family:var(--mono);line-height:1.35}
+.msg.err{color:#A3260F}
+.reset{background:none;border:0;padding:0;font-size:13px;text-decoration:underline;cursor:pointer;color:var(--ink2);font-family:var(--mono)}
+
+/* sheet */
+.sheet{margin:0;background:var(--sheet);border:1.5px solid var(--ink);position:relative;min-width:0}
+.sheet::before,.sheet::after{content:"";position:absolute;width:16px;height:16px;border:1.5px solid var(--ink);background:var(--paper)}
+.sheet::before{left:-9px;top:-9px;border-width:0 1.5px 1.5px 0}
+.sheet::after{right:-9px;bottom:-9px;border-width:1.5px 0 0 1.5px}
+.title-block{display:grid;grid-template-columns:1.4fr 1fr;border-bottom:1.5px solid var(--ink)}
+.title-block > div{padding:12px 16px}
+.title-block > div + div{border-left:1.5px solid var(--ink)}
+.title-block h3{margin:2px 0 0;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.01em;line-height:1.1}
+.title-block .meta{font-family:var(--mono);font-size:13px;margin-top:3px}
+.tb-right{display:flex;flex-direction:column;justify-content:space-between;gap:8px;align-items:flex-start}
+.strip-box{padding:6px 10px 0;position:relative}
+.strip-box svg{display:block;width:100%;height:auto;overflow:visible}
+.iv{animation:ivin .55s cubic-bezier(.2,.7,.2,1) backwards}
+@keyframes ivin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.sheet-foot{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center;justify-content:space-between;border-top:1.5px solid var(--ink);padding:14px 16px;min-height:84px}
+.state{font-size:14px;max-width:34ch;line-height:1.35}
+.state strong{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px}
+.stamp{display:inline-block;border:3px solid var(--stamp);color:var(--stamp);padding:6px 14px 7px;transform:rotate(-4deg);font-family:var(--mono);text-align:center;border-radius:4px;line-height:1.15;animation:stampin .35s cubic-bezier(.3,1.6,.5,1) both;box-shadow:inset 0 0 0 1.5px var(--sheet),inset 0 0 0 2.5px var(--stamp)}
+.stamp b{display:block;font-size:22px;letter-spacing:.14em}
+.stamp small{font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+@keyframes stampin{from{transform:rotate(-4deg) scale(1.9);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:1}}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.b2{border:1.5px solid var(--ink);background:#fff;padding:9px 14px;font-weight:600;font-size:15px;cursor:pointer;border-radius:2px;display:inline-flex;gap:8px;align-items:center;min-height:42px}
+.b2:hover{background:var(--paper)}
+.b2.primary{background:var(--ink);color:var(--sheet)}
+.b2.primary:hover{background:#34352f}
+.b2[disabled]{opacity:.45;cursor:not-allowed}
+
+/* sections */
+section{padding:92px 0 0}
+.sec-head{display:grid;gap:14px;margin-bottom:38px}
+h2.h{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5vw,62px);line-height:1;letter-spacing:-.03em;margin:0;max-width:18ch}
+.sec-head p{margin:0;max-width:52ch;font-size:19px}
+.rail{display:grid;gap:0;grid-template-columns:repeat(4,minmax(0,1fr));border:1.5px solid var(--ink);background:var(--sheet)}
+.rail article{padding:22px 20px 26px;border-right:1.5px solid var(--ink);position:relative}
+.rail article:last-child{border-right:0}
+.rail .n{font-family:var(--mono);font-size:13px;color:var(--ink2);display:flex;justify-content:space-between}
+.rail h3{font-family:var(--serif);font-size:25px;font-weight:600;line-height:1.1;margin:18px 0 10px;letter-spacing:-.01em}
+.rail p{margin:0;font-size:16px;color:#33342f}
+.rail svg{display:block;margin-top:2px}
+@media(max-width:980px){.rail{grid-template-columns:1fr 1fr}.rail article:nth-child(2){border-right:0}.rail article:nth-child(-n+2){border-bottom:1.5px solid var(--ink)}}
+@media(max-width:560px){.rail{grid-template-columns:1fr}.rail article{border-right:0;border-bottom:1.5px solid var(--ink)}.rail article:last-child{border-bottom:0}}
+
+.legend{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;border:1.5px solid var(--ink);background:var(--sheet)}
+.legend figure{margin:0;border-right:1.5px solid var(--ink)}
+.legend figure:last-child{border-right:0}
+.legend svg{display:block;width:100%;height:auto;border-bottom:1.5px solid var(--ink)}
+.legend figcaption{padding:10px 12px;font-family:var(--serif);font-size:19px;font-weight:600}
+@media(max-width:900px){.legend{grid-template-columns:repeat(3,1fr)}.legend figure:nth-child(3){border-right:0}.legend figure:nth-child(-n+3){border-bottom:1.5px solid var(--ink)}}
+.split{display:grid;gap:40px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:960px){.split{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:start}}
+.pair-sheets{display:grid;gap:30px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.mini .title-block h3{font-size:21px}
+.mini .sheet-foot{min-height:78px}
+.pair-sheets .cap{font-family:var(--mono);font-size:12px;color:var(--ink2);margin-top:10px}
+
+.price{display:grid;grid-template-columns:1fr auto 1fr;border:1.5px solid var(--ink);background:var(--sheet);align-items:stretch}
+.price > div{padding:28px 28px 30px}
+.price .mid{border-left:1.5px solid var(--ink);border-right:1.5px solid var(--ink);display:grid;place-items:center;padding:0 22px;font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2)}
+.price .big-n{font-family:var(--serif);font-size:clamp(54px,8vw,96px);line-height:1;letter-spacing:-.04em;margin:10px 0 6px}
+.price .big-n small{font-family:var(--sans);font-size:18px;letter-spacing:0;font-weight:500;color:var(--ink2)}
+.price p{margin:0;font-size:17px}
+@media(max-width:760px){.price{grid-template-columns:1fr}.price .mid{border:0;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:10px}}
+.final{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;margin-top:34px}
+.final p{margin:0;max-width:40ch}
+
+footer{margin-top:110px;border-top:1.5px solid var(--ink);padding:26px 0 44px;background:var(--ink);color:var(--paper)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px 40px;justify-content:space-between;align-items:baseline}
+footer .brand{color:var(--paper);font-size:22px}
+footer p{margin:0;font-family:var(--mono);font-size:13px;color:#cfcab9}
+footer .made{font-family:var(--serif);font-size:22px;color:var(--paper)}
+
+@media(max-width:620px){
+  body{font-size:16px;overflow-x:hidden}
+  .title-block h3{font-size:23px}
+  .wrap{padding:0 18px}
+  .lede{font-size:18px}
+  .title-block{grid-template-columns:1fr}
+  .title-block > div + div{border-left:0;border-top:1.5px solid var(--ink)}
+  .tb-right{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .btn.sm{padding:9px 12px;font-size:14px}
+  .brand{font-size:22px}
+  section{padding-top:70px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff}
+  .no-print,.ruler,header,section:not(#hero),footer,.bench-intro{display:none!important}
+  .hero-copy{display:none!important}
+  .bench{display:block}
+  .sheet{border-color:#000}
+  .sheet::before,.sheet::after{display:none}
+  .iv{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- hatch patterns, shared by every drawing on the page -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="h-sand" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="2.2" r=".9" fill="#1A1B19"/><circle cx="6.5" cy="6.7" r=".9" fill="#1A1B19"/><circle cx="7" cy="1.6" r=".5" fill="#1A1B19"/></pattern>
+    <pattern id="h-shale" width="12" height="7" patternUnits="userSpaceOnUse"><path d="M0 1.5H12M0 5.5H12" stroke="#1A1B19" stroke-width=".9" fill="none"/></pattern>
+    <pattern id="h-lime" width="18" height="12" patternUnits="userSpaceOnUse"><path d="M0 .5H18M0 6.5H18M.5 0V6.5M9.5 6.5V12" stroke="#1A1B19" stroke-width=".9" fill="none"/></pattern>
+    <pattern id="h-gran" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M3 1V5M1 3H5M10 8V12M8 10H12" stroke="#1A1B19" stroke-width="1" fill="none"/></pattern>
+    <pattern id="h-cong" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="5.5" cy="5.5" r="3.4" fill="none" stroke="#1A1B19" stroke-width=".95"/><circle cx="15" cy="13.5" r="2.4" fill="none" stroke="#1A1B19" stroke-width=".95"/><circle cx="15.5" cy="3.5" r="1.2" fill="#1A1B19"/><circle cx="4" cy="15" r="1.3" fill="#1A1B19"/></pattern>
+    <pattern id="h-mud" width="14" height="9" patternUnits="userSpaceOnUse"><path d="M1 2H6M8 6.5H13" stroke="#1A1B19" stroke-width="1.1" fill="none"/></pattern>
+  </defs>
+</svg>
+
+<div class="ruler no-print" aria-hidden="true"><i></i><b></b><s id="rulerMark"></s></div>
+
+<header class="no-print">
+  <div class="wrap top">
+    <a class="brand" href="#hero" aria-label="Coreline">
+      <svg width="22" height="34" viewBox="0 0 22 34" aria-hidden="true">
+        <rect x="1" y="1" width="20" height="32" fill="#fff" stroke="#1A1B19" stroke-width="1.5"/>
+        <rect x="1" y="1" width="20" height="9" fill="#E2CF9C"/><rect x="1" y="1" width="20" height="9" fill="url(#h-sand)" opacity=".8"/>
+        <rect x="1" y="10" width="20" height="7" fill="#A6A39B"/><rect x="1" y="10" width="20" height="7" fill="url(#h-shale)" opacity=".8"/>
+        <rect x="1" y="17" width="20" height="16" fill="#D8D6CF"/><rect x="1" y="17" width="20" height="16" fill="url(#h-lime)" opacity=".8"/>
+        <rect x="1" y="1" width="20" height="32" fill="none" stroke="#1A1B19" stroke-width="1.5"/>
+      </svg>
+      Coreline
+    </a>
+    <a class="btn sm" href="#start">Start a free project</a>
+  </div>
+</header>
+
+<main id="hero">
+<div class="wrap hero">
+  <div class="hero-copy">
+    <p class="eyebrow label"><span>Field logging for drill core</span><span>Made in Aberdeen</span></p>
+    <h1>Log the core. <em>The strip log<br>draws itself.</em></h1>
+    <p class="lede">Coreline is a field-logging app for geologists who log drill core. Record each sample of a run on your phone, offline. The strip log for the report is drawn from them.</p>
+    <div class="cta-row">
+      <a class="btn big" href="#start">Start a free project
+        <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M0 7H20M14 1l6 6-6 6" fill="none" stroke="#1A1B19" stroke-width="2"/></svg>
+      </a>
+      <p>Free for one project. Then £19 per geologist per month.</p>
+    </div>
+  </div>
+
+  <div class="bench-intro">
+    <span class="label">Try it. The phone and the log are live</span>
+    <span class="rule"></span>
+    <span class="tag">All logs and depths on this page are example data</span>
+  </div>
+
+  <div class="bench">
+    <!-- phone -->
+    <div class="phone no-print">
+      <div class="screen">
+        <div class="ph-head">
+          <h2>Log a sample</h2>
+          <span class="tag">Example</span>
+        </div>
+        <div class="net off" id="net">
+          <span><i class="dot"></i><span id="netText">Offline</span></span>
+          <button type="button" id="netBtn" aria-pressed="false">Find signal</button>
+        </div>
+        <form id="form" novalidate autocomplete="off">
+          <fieldset id="fs">
+            <legend class="vh">New sample</legend>
+            <div class="fld">
+              <span class="label" id="depthLbl">Depth, metres</span>
+              <div class="pair" role="group" aria-labelledby="depthLbl">
+                <label class="num"><span class="label" style="display:block;font-size:10.5px">from</span><input id="from" inputmode="decimal" style="border:0;width:100%;padding:0;background:transparent;font:inherit" value="12.4" aria-label="Depth from, metres"></label>
+                <label class="num"><span class="label" style="display:block;font-size:10.5px">to</span><input id="to" inputmode="decimal" style="border:0;width:100%;padding:0;background:transparent;font:inherit" value="13.6" aria-label="Depth to, metres"></label>
+              </div>
+            </div>
+            <div class="fld">
+              <span class="label" id="typeLbl">Rock type <span style="text-transform:none;letter-spacing:0">(example list)</span></span>
+              <div class="types" role="radiogroup" aria-labelledby="typeLbl" id="types"></div>
+            </div>
+            <div class="fld">
+              <span class="label" id="colLbl">Colour</span>
+              <div class="cols" role="radiogroup" aria-labelledby="colLbl" id="cols"></div>
+              <div class="colname" id="colname" aria-hidden="true"></div>
+            </div>
+            <div class="fld">
+              <span class="label" id="phLbl">Photo</span>
+              <button type="button" class="photo" id="photo" aria-pressed="false" aria-labelledby="phLbl phTxt">
+                <span class="ph-box" aria-hidden="true"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 3.5h3l1.2-2h5.6L12 3.5h3v9H1z" fill="none" stroke="#1A1B19" stroke-width="1.3"/><circle cx="8" cy="8" r="2.4" fill="none" stroke="#1A1B19" stroke-width="1.3"/></svg></span>
+                <span id="phTxt">Add a photo</span>
+              </button>
+            </div>
+            <button class="btn save" id="save" type="submit">Save sample</button>
+          </fieldset>
+        </form>
+        <p class="msg" id="msg" role="status" aria-live="polite"></p>
+        <button type="button" class="reset" id="reset">Reset the example</button>
+      </div>
+    </div>
+
+    <!-- strip log -->
+    <figure class="sheet" id="sheet" aria-label="Strip log, example data">
+      <div class="title-block">
+        <div>
+          <span class="label">Strip log</span>
+          <h3>Hole EX-01, run 1</h3>
+          <div class="meta">Depth in metres</div>
+        </div>
+        <div class="tb-right">
+          <span class="tag">Example data</span>
+          <span class="label" id="count">6 samples</span>
+        </div>
+      </div>
+      <div class="strip-box" id="strip"></div>
+      <div class="sheet-foot">
+        <div class="state" id="state"></div>
+        <div class="acts no-print">
+          <button type="button" class="b2 primary" id="sign">Sign off run</button>
+          <button type="button" class="b2" id="pdf">Export PDF</button>
+          <button type="button" class="b2" id="csv">Export CSV</button>
+        </div>
+      </div>
+    </figure>
+  </div>
+</div>
+</main>
+
+<section class="no-print" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">One run, start to finish</span>
+      <h2 class="h">From the first sample to the signed log</h2>
+    </div>
+    <div class="rail">
+      <article>
+        <div class="n"><span>01</span><span>Field</span></div>
+        <svg width="84" height="64" viewBox="0 0 84 64" aria-hidden="true"><rect x="26" y="2" width="32" height="60" rx="6" fill="#fff" stroke="#1A1B19" stroke-width="1.5"/><path d="M34 20a12 12 0 0 1 16 0M37 26a7 7 0 0 1 10 0" fill="none" stroke="#1A1B19" stroke-width="1.5"/><circle cx="42" cy="32" r="1.6" fill="#1A1B19"/><path d="M30 52L54 12" stroke="#F26B1D" stroke-width="2.5"/></svg>
+        <h3>Log on your phone, offline</h3>
+        <p>Log a core run in the field with no signal. It syncs when there is signal.</p>
+      </article>
+      <article>
+        <div class="n"><span>02</span><span>Sample</span></div>
+        <svg width="84" height="64" viewBox="0 0 84 64" aria-hidden="true"><rect x="4" y="8" width="38" height="48" fill="#E2CF9C" stroke="#1A1B19" stroke-width="1.5"/><rect x="4" y="8" width="38" height="48" fill="url(#h-cong)"/><path d="M56 8h12M62 8v48M56 56h12" stroke="#1A1B19" stroke-width="1.5" fill="none"/><path d="M74 14v8M74 40v8" stroke="#1A1B19" stroke-width="1.5"/></svg>
+        <h3>Five things per sample</h3>
+        <p>Depth from and to in metres, a rock type from your firm's own list, a colour and a photo.</p>
+      </article>
+      <article>
+        <div class="n"><span>03</span><span>Log</span></div>
+        <svg width="84" height="64" viewBox="0 0 84 64" aria-hidden="true"><rect x="8" y="2" width="30" height="14" fill="#E2CF9C" stroke="#1A1B19" stroke-width="1.5"/><rect x="8" y="2" width="30" height="14" fill="url(#h-sand)"/><rect x="8" y="16" width="30" height="20" fill="#A6A39B" stroke="#1A1B19" stroke-width="1.5"/><rect x="8" y="16" width="30" height="20" fill="url(#h-shale)"/><rect x="8" y="36" width="30" height="26" fill="#D8D6CF" stroke="#1A1B19" stroke-width="1.5"/><rect x="8" y="36" width="30" height="26" fill="url(#h-lime)"/><path d="M46 9h30M46 26h24M46 49h30" stroke="#1A1B19" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
+        <h3>The strip log draws itself</h3>
+        <p>It is drawn automatically from the samples and exports as PDF or CSV.</p>
+      </article>
+      <article>
+        <div class="n"><span>04</span><span>Sign</span></div>
+        <svg width="84" height="64" viewBox="0 0 84 64" aria-hidden="true"><g transform="rotate(-6 42 32)"><rect x="8" y="14" width="68" height="36" rx="4" fill="none" stroke="#1E4C8F" stroke-width="3"/><rect x="12.5" y="18.5" width="59" height="27" rx="2" fill="none" stroke="#1E4C8F" stroke-width="1.2"/><path d="M20 38l8-12 6 8 6-10 8 14" fill="none" stroke="#1E4C8F" stroke-width="2.2"/><path d="M54 36h12" stroke="#1E4C8F" stroke-width="2.2"/></g></svg>
+        <h3>A geologist signs each run</h3>
+        <p>Nothing is final until it is signed.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="no-print" id="types-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">Rock types</span>
+      <h2 class="h">Your firm's list, drawn your way</h2>
+      <p>Each sample takes its rock type from the firm's own list. Below is an example list with the hatching the strip log uses to draw each one.</p>
+    </div>
+    <div class="legend" id="legend" role="list"></div>
+    <p class="label" style="margin-top:14px">Example list. Yours is your firm's.</p>
+  </div>
+</section>
+
+<section class="no-print" id="sign-sec">
+  <div class="wrap split">
+    <div class="sec-head" style="margin:0">
+      <span class="label">Sign-off</span>
+      <h2 class="h">Nothing is final until it is signed</h2>
+      <p>A geologist signs off each run. Until then, a run is a draft. Once it is signed, it is a log.</p>
+      <p class="label" style="margin-top:6px">Two states of the same example run</p>
+    </div>
+    <div class="pair-sheets" id="pair"></div>
+  </div>
+</section>
+
+<section class="no-print" id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">Price</span>
+      <h2 class="h">Free for your first project</h2>
+    </div>
+    <div class="price">
+      <div>
+        <span class="label">To start</span>
+        <div class="big-n">£0</div>
+        <p>Free for one project.</p>
+      </div>
+      <div class="mid">then</div>
+      <div>
+        <span class="label">After that</span>
+        <div class="big-n">£19 <small>per geologist per month</small></div>
+        <p>Each geologist on your team.</p>
+      </div>
+    </div>
+    <div class="final" id="start">
+      <p>Open a project, log your first run, and see the strip log drawn.</p>
+      <a class="btn big" href="#start">Start a free project
+        <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M0 7H20M14 1l6 6-6 6" fill="none" stroke="#1A1B19" stroke-width="2"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="no-print">
+  <div class="wrap">
+    <a class="brand" href="#hero" aria-label="Coreline, back to top">Coreline</a>
+    <span class="made">Made in Aberdeen.</span>
+    <p>All logs, depths and figures on this page are example data.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var TYPES=[
+    {id:'sand',name:'Sandstone'},{id:'shale',name:'Shale'},{id:'lime',name:'Limestone'},
+    {id:'gran',name:'Granite'},{id:'cong',name:'Conglomerate'},{id:'mud',name:'Mudstone'}
+  ];
+  var COLS=[
+    {name:'Buff',hex:'#E2CF9C'},{name:'Dark grey',hex:'#A6A39B'},{name:'Pale grey',hex:'#D8D6CF'},
+    {name:'Red-brown',hex:'#C98F72'},{name:'Olive',hex:'#B7B58A'},{name:'Pink-grey',hex:'#D9B9B0'}
+  ];
+  var SEED=[
+    [0,1.8,'sand','Buff',true],[1.8,3.4,'shale','Dark grey',false],[3.4,5.9,'lime','Pale grey',true],
+    [5.9,7.2,'cong','Red-brown',false],[7.2,9.6,'mud','Olive',true],[9.6,12.4,'gran','Pink-grey',true]
+  ];
+  var INK='#1A1B19';
+  function T(id){for(var i=0;i<TYPES.length;i++)if(TYPES[i].id===id)return TYPES[i]}
+  function C(n){for(var i=0;i<COLS.length;i++)if(COLS[i].name===n)return COLS[i]}
+  function seed(){return SEED.map(function(s){return{from:s[0],to:s[1],type:s[2],colour:s[3],photo:s[4],synced:false}})}
+  function fmt(n){var r=Math.round(n*100)/100;return (Math.abs(r*10-Math.round(r*10))<1e-9)?r.toFixed(1):r.toFixed(2)}
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+
+  /* ---------- the strip log ---------- */
+  function strip(samples,o){
+    o=o||{};
+    var compact=!!o.compact, W=compact?360:580, top=36;
+    var total=samples.length?samples[samples.length-1].to:1; if(total<1)total=1;
+    var ppm=Math.max(20,Math.min(46,500/total));
+    var H=Math.round(top+total*ppm+26);
+    var dx=compact?42:50, lx=dx+10, lw=compact?84:112;
+    var swX=lx+lw+14, txX=swX+20;
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Strip log of '+samples.length+' example samples, 0 to '+fmt(total)+' metres">';
+    // headers
+    s+='<g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" letter-spacing=".6" fill="#55564F">';
+    s+='<text x="'+dx+'" y="18" text-anchor="end">DEPTH m</text>';
+    s+='<text x="'+lx+'" y="18">LITHOLOGY</text>';
+    s+='<text x="'+swX+'" y="18">SAMPLE</text>';
+    if(!compact)s+='<text x="'+(W-12)+'" y="18" text-anchor="end">PHOTO</text>';
+    s+='</g><path d="M0 '+(top-8)+'H'+W+'" stroke="'+INK+'" stroke-width="1.2"/>';
+    // axis + ticks
+    var labStep=ppm>=28?1:2;
+    s+='<path d="M'+dx+' '+top+'V'+(top+total*ppm)+'" stroke="'+INK+'" stroke-width="1.4"/>';
+    s+='<g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10.5" fill="'+INK+'">';
+    for(var m=0;m<=total+1e-9;m+=0.5){
+      var y=top+m*ppm, major=Math.abs(m-Math.round(m))<1e-9;
+      s+='<path d="M'+(dx-(major?9:4.5))+' '+y+'H'+dx+'" stroke="'+INK+'" stroke-width="'+(major?1.3:.9)+'"/>';
+      if(major&&Math.round(m)%labStep===0)s+='<text x="'+(dx-13)+'" y="'+(y+3.6)+'" text-anchor="end">'+Math.round(m)+'</text>';
+    }
+    s+='</g>';
+    // intervals
+    samples.forEach(function(sm,i){
+      var y=top+sm.from*ppm, h=(sm.to-sm.from)*ppm, c=C(sm.colour)||COLS[0], t=T(sm.type)||TYPES[0];
+      var anim=(o.anim==='all')?' style="animation-delay:'+(i*0.16)+'s"':'';
+      var cls='iv'+(o.anim==='all'||o.anim===i?'':' still');
+      if(!(o.anim==='all'||o.anim===i))anim=' style="animation:none"';
+      s+='<g class="'+cls+'"'+anim+'>';
+      s+='<rect x="'+lx+'" y="'+y+'" width="'+lw+'" height="'+h+'" fill="'+c.hex+'"/>';
+      s+='<rect x="'+lx+'" y="'+y+'" width="'+lw+'" height="'+h+'" fill="url(#h-'+t.id+')" opacity=".85"/>';
+      s+='<rect x="'+lx+'" y="'+y+'" width="'+lw+'" height="'+h+'" fill="none" stroke="'+INK+'" stroke-width="1.4"/>';
+      s+='<path d="M'+(lx+lw)+' '+y+'H'+(W-8)+'" stroke="'+INK+'" stroke-opacity=".35" stroke-dasharray="2 3"/>';
+      if(h>=13){
+        s+='<rect x="'+swX+'" y="'+(y+6)+'" width="11" height="11" fill="'+c.hex+'" stroke="'+INK+'" stroke-width="1.1"/>';
+        if(h>=34){
+          s+='<text x="'+txX+'" y="'+(y+16)+'" font-family="system-ui,sans-serif" font-weight="650" font-size="13.5" fill="'+INK+'">'+esc(t.name)+'</text>';
+          s+='<text x="'+txX+'" y="'+(y+31)+'" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10.5" fill="#55564F">'+fmt(sm.from)+' to '+fmt(sm.to)+' m, '+esc(sm.colour)+'</text>';
+        }else{
+          s+='<text x="'+txX+'" y="'+(y+15.5)+'" font-family="system-ui,sans-serif" font-weight="650" font-size="12.5" fill="'+INK+'">'+esc(t.name)+' <tspan font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="400" font-size="10" fill="#55564F">'+fmt(sm.from)+' to '+fmt(sm.to)+'</tspan></text>';
+        }
+      }
+      // photo
+      if(!compact){
+        if(h>=16){
+          var ph=Math.min(h-8,40), px=W-12-52;
+          if(sm.photo){
+            s+='<g><rect x="'+px+'" y="'+(y+4)+'" width="52" height="'+ph+'" fill="#CFC9B4" stroke="'+INK+'" stroke-width="1.1"/>';
+            s+='<path d="M'+px+' '+(y+4+ph)+'L'+(px+16)+' '+(y+4+ph*.45)+'L'+(px+28)+' '+(y+4+ph*.7)+'L'+(px+38)+' '+(y+4+ph*.35)+'L'+(px+52)+' '+(y+4+ph)+'Z" fill="'+INK+'" fill-opacity=".55"/>';
+            s+='<circle cx="'+(px+41)+'" cy="'+(y+4+Math.min(9,ph*.25))+'" r="3" fill="#F6F3E9"/></g>';
+          }else{
+            s+='<rect x="'+px+'" y="'+(y+4)+'" width="52" height="'+ph+'" fill="none" stroke="'+INK+'" stroke-opacity=".4" stroke-dasharray="3 3"/>';
+          }
+        }
+      }else if(sm.photo&&h>=13){
+        s+='<rect x="'+(W-24)+'" y="'+(y+6)+'" width="13" height="10" fill="'+INK+'" fill-opacity=".7"/><circle cx="'+(W-17.5)+'" cy="'+(y+11)+'" r="2.6" fill="#F6F3E9"/>';
+      }
+      s+='</g>';
+    });
+    // end cap
+    var yE=top+total*ppm;
+    s+='<path d="M'+(dx-12)+' '+yE+'H'+(W-8)+'" stroke="'+INK+'" stroke-width="2"/>';
+    s+='<text x="'+(W-8)+'" y="'+(yE+18)+'" text-anchor="end" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" letter-spacing=".6" fill="#55564F">END OF RUN, '+fmt(total)+' m (EXAMPLE)</text>';
+    if(!o.signed){
+      s+='<text transform="translate('+(W/2+30)+' '+(H/2)+') rotate(-24)" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="'+(compact?64:96)+'" letter-spacing="8" fill="none" stroke="'+INK+'" stroke-opacity=".13" stroke-width="1.6">DRAFT</text>';
+    }
+    return s+'</svg>';
+  }
+  function stateHTML(signed,compact){
+    if(signed)return '<span class="stamp"><b>SIGNED</b><small>Example geologist</small></span>';
+    return '<strong>Draft</strong>Nothing is final until it is signed.';
+  }
+
+  /* ---------- the workbench ---------- */
+  var state={samples:seed(),signed:false,online:false,syncing:false,anim:'all'};
+  var el=function(id){return document.getElementById(id)};
+  var stripEl=el('strip'),sheet=el('sheet');
+  var compactNow=false;
+
+  function buildForm(){
+    el('types').innerHTML=TYPES.map(function(t,i){
+      return '<label class="opt"><input type="radio" name="type" value="'+t.id+'"'+(i===0?' checked':'')+'><span>'
+       +'<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect width="26" height="26" fill="#fff"/><rect width="26" height="26" fill="url(#h-'+t.id+')"/><rect x=".75" y=".75" width="24.5" height="24.5" fill="none" stroke="'+INK+'" stroke-width="1.5"/></svg>'
+       +t.name+'</span></label>';
+    }).join('');
+    el('cols').innerHTML=COLS.map(function(c,i){
+      return '<label class="opt"><input type="radio" name="col" value="'+c.name+'"'+(i===0?' checked':'')+' aria-label="'+c.name+'"><span><i class="sw" style="background:'+c.hex+'"></i></span></label>';
+    }).join('');
+    el('colname').textContent='Buff';
+  }
+  function checked(n){return document.querySelector('input[name="'+n+'"]:checked').value}
+
+  function render(){
+    var last=state.samples.length?state.samples[state.samples.length-1].to:0;
+    stripEl.innerHTML=strip(state.samples,{signed:state.signed,compact:compactNow,anim:state.anim});
+    state.anim=-99;
+    el('count').textContent=state.samples.length+(state.samples.length===1?' sample':' samples');
+    el('state').innerHTML=stateHTML(state.signed);
+    el('sign').disabled=state.signed||!state.samples.length;
+    el('sign').textContent=state.signed?'Signed off':'Sign off run';
+    el('pdf').disabled=el('csv').disabled=!state.samples.length;
+    el('fs').disabled=state.signed;
+    // network pill
+    var waiting=state.samples.filter(function(s){return !s.synced}).length;
+    var net=el('net'),txt=el('netText'),btn=el('netBtn');
+    net.className='net '+(state.syncing?'sync':state.online?'on':'off');
+    if(state.syncing){txt.textContent='Syncing '+waiting+(waiting===1?' sample':' samples')+'...';btn.textContent='Syncing';btn.disabled=true}
+    else if(state.online){txt.textContent='Signal. '+(waiting?waiting+' waiting.':'All samples synced.');btn.textContent='Go offline';btn.disabled=false}
+    else{txt.textContent='Offline. '+waiting+(waiting===1?' sample':' samples')+' saved on this phone.';btn.textContent='Find signal';btn.disabled=false}
+    btn.setAttribute('aria-pressed',state.online?'true':'false');
+    el('from').value=fmt(last);
+    if(!state.signed){
+      var cur=parseFloat(el('to').value);
+      if(isNaN(cur)||cur<=last)el('to').value=fmt(last+1);
+    }
+  }
+
+  function setMsg(t,err){var m=el('msg');m.textContent=t;m.className='msg'+(err?' err':'')}
+
+  el('form').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(state.signed)return;
+    var last=state.samples.length?state.samples[state.samples.length-1].to:0;
+    var f=parseFloat(String(el('from').value).replace(',','.')),t=parseFloat(String(el('to').value).replace(',','.'));
+    if(isNaN(f)||isNaN(t)){setMsg('Enter both depths in metres.',true);return}
+    if(f<last-1e-9){setMsg('This run is already logged to '+fmt(last)+' m. Start at '+fmt(last)+' m or deeper.',true);return}
+    if(t-f<0.1-1e-9){setMsg('The "to" depth must be at least 0.1 m below "from".',true);return}
+    if(t>60){setMsg('This example stops at 60 m.',true);return}
+    state.samples.push({from:f,to:t,type:checked('type'),colour:checked('col'),photo:el('photo').getAttribute('aria-pressed')==='true',synced:state.online});
+    state.anim=state.samples.length-1;
+    el('to').value='';
+    el('photo').setAttribute('aria-pressed','false');el('phTxt').textContent='Add a photo';
+    setMsg(state.online?'Sample saved and synced.':'Sample saved on this phone. It syncs when there is signal.');
+    render();
+  });
+  el('colname').textContent='Buff';
+  el('cols').addEventListener('change',function(){el('colname').textContent=checked('col')});
+  el('photo').addEventListener('click',function(){
+    var on=this.getAttribute('aria-pressed')!=='true';
+    this.setAttribute('aria-pressed',on);el('phTxt').textContent=on?'Photo attached (example)':'Add a photo';
+  });
+  var syncTimer;
+  el('netBtn').addEventListener('click',function(){
+    if(state.online){state.online=false;render();setMsg('Offline. New samples are kept on this phone.');return}
+    state.online=true;state.syncing=true;render();
+    clearTimeout(syncTimer);
+    syncTimer=setTimeout(function(){
+      state.samples.forEach(function(s){s.synced=true});state.syncing=false;render();
+      setMsg('Synced.');
+    },1100);
+  });
+  el('sign').addEventListener('click',function(){
+    state.signed=true;render();
+    setMsg('This run is signed. Use the reset to start the example again.');
+  });
+  el('reset').addEventListener('click',function(){
+    state.samples=seed();state.signed=false;state.online=false;state.syncing=false;state.anim='all';
+    clearTimeout(syncTimer);el('to').value='';setMsg('');render();
+  });
+  el('pdf').addEventListener('click',function(){window.print()});
+  el('csv').addEventListener('click',function(){
+    var rows=['from_m,to_m,rock_type,colour,photo,run_status'];
+    state.samples.forEach(function(s){rows.push([fmt(s.from),fmt(s.to),T(s.type).name,s.colour,s.photo?'yes':'no',state.signed?'signed':'draft'].join(','))});
+    var blob=new Blob([rows.join('\n')+'\n'],{type:'text/csv'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='coreline-example-run.csv';
+    document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+    setMsg('Example CSV downloaded.');
+  });
+
+  /* compact strip on narrow sheets */
+  function measure(){
+    var w=sheet.getBoundingClientRect().width,c=w<520;
+    if(c!==compactNow){compactNow=c;state.anim=-99;render()}
+  }
+  if('ResizeObserver' in window)new ResizeObserver(measure).observe(sheet);
+  else window.addEventListener('resize',measure);
+
+  buildForm();
+  compactNow=sheet.getBoundingClientRect().width<520;
+  render();
+
+  /* ---------- rock type legend ---------- */
+  el('legend').innerHTML=TYPES.map(function(t,i){
+    var c=COLS[[0,1,2,3,4,5][i]];
+    return '<figure role="listitem"><svg viewBox="0 0 120 96" role="img" aria-label="Hatching for '+t.name+'" preserveAspectRatio="xMidYMid slice"><rect width="120" height="96" fill="'+c.hex+'"/><rect width="120" height="96" fill="url(#h-'+t.id+')" opacity=".9"/></svg><figcaption>'+t.name+'</figcaption></figure>';
+  }).join('');
+
+  /* ---------- draft and signed, side by side ---------- */
+  var pairSamples=seed().slice(0,4).map(function(s){s.synced=true;return s});
+  el('pair').innerHTML=[false,true].map(function(signed){
+    return '<div class="mini"><figure class="sheet" style="margin:0" aria-label="'+(signed?'Signed':'Draft')+' strip log, example data">'
+     +'<div class="title-block" style="grid-template-columns:1fr"><div><span class="label">Strip log</span><h3>Hole EX-01, run 1</h3><div class="meta"><span class="tag">Example data</span></div></div></div>'
+     +'<div class="strip-box">'+strip(pairSamples,{signed:signed,compact:true,anim:-99})+'</div>'
+     +'<div class="sheet-foot"><div class="state">'+stateHTML(signed)+'</div></div></figure>'
+     +'<div class="cap">'+(signed?'Signed':'Draft')+'</div></div>';
+  }).join('');
+
+  /* ---------- page depth ruler ---------- */
+  var mark=el('rulerMark'),ticking=false;
+  function ruler(){
+    var h=document.documentElement,max=h.scrollHeight-window.innerHeight;
+    var p=max>0?window.scrollY/max:0;
+    mark.style.transform='translateY('+Math.round(p*(window.innerHeight-14))+'px)';
+    ticking=false;
+  }
+  window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(ruler)}},{passive:true});
+  window.addEventListener('resize',ruler);ruler();
+})();
+</script>
+</body>
+</html>

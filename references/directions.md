@@ -28,7 +28,7 @@ The ground is the largest thing on the first screen, so it is the first thing a 
 | **Flat colour** | a decision: one colour carries the nav, the ground and the buttons | the product has a colour it owns, or the type and the product card have to carry the page | `scaffold --ground flat --palette cobalt\|mint\|sand`; `flat.mjs` |
 | **Frame** (a dark panel set into a light page) | a stage: the product is shown inside a room of its own | the product card is the point and needs contrast against a quiet page | `scaffold --ground frame --palette sand --hero card`; `flat.mjs` |
 | **Duotone print** | craft: a picture made in one ink, tied to the interface by its texture | there is a subject worth drawing, a real artifact, drawn from the product | `duotone.mjs`, `dotify.mjs --mode lines`; `scaffold --art strata` |
-| **The artifact itself** | the page is made of what the product makes | the artifact is visual (a strip log, a score, a map, a receipt, a waveform) | draw it in code, large, as the hero object (`visual-craft.md`) |
+| **The artifact itself** | the page is made of what the product makes | the artifact is visual (a tide curve, a score, a map, a receipt, a waveform) | draw it in code, large, as the hero object (`visual-craft.md`) |
 
 A flat or framed ground hides nothing, so use it only when the layout and the type are good; the checks read contrast from the pixels, so it is also the easiest ground to get right. These grounds are first-class: the lit gradient is not the safe choice, it is one choice.
 
@@ -139,7 +139,7 @@ Use the system stacks in `house-rules.md`. By direction: **Instrument** pairs th
 **Feel:** printed. One subject, one ink, one paper, with a halftone, a line screen or a dither that ties the picture to the interface.
 **Devices:** the subject at large scale, cropped by its frame; the same ink as the page's ground colour (the scaffold uses `var(--bg)` for ink and `var(--ink)` for paper, so it follows the theme); the grain of the ground over the top.
 **Build with:** `duotone.mjs` (`duotoneSvg({ subject, mode: 'halftone' | 'lines' | 'dither' })`), `dotify.mjs --mode lines` for the product's own artifact rendered to HTML, `scaffold --art column|vase|sphere|drape|strata`.
-**The stand-ins are stand-ins.** A column or a vase is the technique, not the idea: unless the product is about columns, replace it with the product's own artifact (a clause, a core, a tide chart) before the swap test (`gate.md`). The built-in subjects are drawn by computation, so there is no photograph, no licence and no stock image.
+**The stand-ins are stand-ins.** A column or a vase is the technique, not the idea: unless the product is about columns, replace it with the product's own artifact (a tide chart, a firing curve, a cutting pattern) before the swap test (`gate.md`). The built-in subjects are drawn by computation, so there is no photograph, no licence and no stock image.
 
 ## Annotations (a technique, not a direction)
 

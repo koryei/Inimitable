@@ -2,7 +2,7 @@
 // The swap-the-name test: take the product name off the first screen. Does it still say something only this
 // product could say? (references/gate.md, references/direction.md)
 //
-//   node scripts/swap.mjs <url or file> --nouns "clause,redline,contract" [--name Marrow] [--typographic] [--json]
+//   node scripts/swap.mjs <url or file> --nouns "tide,harbour,launch" [--name Neap] [--typographic] [--json]
 //
 //   --nouns        the nouns of the product's own subject, from the concept's native artifact. Two or more. Words that
 //                  fit any product ("platform", "team", "data", "AI") are refused.
@@ -34,7 +34,7 @@ const COLLECT = `(() => {
   const h1 = document.querySelector('h1');
   const headline = h1 ? h1.textContent : '';
   const big = (el) => { const r = el.getBoundingClientRect(); return r.width >= 120 && r.height >= 80; };
-  // A product picture built from HTML (a rota, a contract, a log) has no figure or svg to find. A framed box, at least
+  // A product picture built from HTML (a table, a sheet, a schedule) has no figure or svg to find. A framed box, at least
   // 280 x 180 px, with a border, a fill or a shadow, that is not the hero's own wrapper (it does not hold the headline
   // and does not span the screen) counts as artwork too.
   const framed = (el) => {
@@ -77,7 +77,7 @@ export function format(r, name) {
 if (isMain(import.meta.url)) {
   const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['json', 'typographic'] });
   if (!positional[0] || typeof flags.nouns !== 'string') {
-    console.error('Usage: node scripts/swap.mjs <url or file> --nouns "clause,redline,contract" [--name Marrow] [--typographic] [--json]');
+    console.error('Usage: node scripts/swap.mjs <url or file> --nouns "tide,harbour,launch" [--name Neap] [--typographic] [--json]');
     process.exit(2);
   }
   const name = typeof flags.name === 'string' ? flags.name : undefined;

@@ -1,0 +1,48 @@
+/* Base: the craft without the layout. Colours come from theme.css (written by scaffold.mjs); the layout is yours,
+   in page.css. Every size is in rem, every space on the 4 px grid, every control has a hover and a press. */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 2rem; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.55 var(--sans); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+img, svg { display: block; max-width: 100%; }
+figure { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: absolute; left: 1rem; top: -4rem; z-index: 20; padding: 0.75rem 1rem; background: var(--ink); color: var(--bg); border-radius: 0.5rem; }
+.skip:focus { top: 1rem; }
+
+/* ---------- Shape: one radius decision for the whole page. 999px, 0.75rem or 0, and mean it. ---------- */
+:root { --shape: 999px; --gutter: clamp(1rem, 4vw, 3rem); }
+
+/* ---------- Type: roles, with tracking that follows size (evals/tracking.mjs) ---------- */
+.display { margin: 0; font: 400 clamp(2.75rem, 6vw, 6rem)/0.98 var(--sans); letter-spacing: -0.03em; text-wrap: balance; }
+@media (min-width: 62rem) { .display { letter-spacing: -0.04em; } }
+@media (min-width: 80rem) { .display { letter-spacing: -0.05em; } }
+@media (min-width: 96rem) { .display { letter-spacing: -0.055em; } }
+.h2 { margin: 0; max-width: 22ch; font: 400 clamp(2rem, 4vw, 3.5rem)/1.08 var(--sans); letter-spacing: -0.02em; text-wrap: balance; }
+@media (min-width: 80rem) { .h2 { letter-spacing: -0.03em; } }
+.h3 { margin: 0; font: 500 1.25rem/1.25 var(--sans); text-wrap: balance; }
+.lede { max-width: 34rem; margin: 0; font-size: 1.1875rem; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
+.note { margin: 0; font: 400 0.8125rem/1.4 var(--mono); color: var(--ink-3); }
+.dim { color: var(--ink-3); }
+.num { font-variant-numeric: tabular-nums; }
+.dec { color: var(--ink-3); }
+p { max-width: 65ch; text-wrap: pretty; }
+
+/* ---------- Controls ---------- */
+.m-btn { --btn-bg: var(--ink); --btn-ink: var(--bg); --btn-fill: var(--accent); --btn-ink-hover: var(--on-accent); --btn-ring: var(--accent); --btn-radius: var(--shape); font-family: var(--sans); white-space: nowrap; }
+.m-btn.ghost { --btn-bg: transparent; --btn-ink: var(--ink); --btn-edge: var(--line-strong); --btn-fill: var(--ink); --btn-ink-hover: var(--bg); }
+.m-btn.large { min-height: 3.25rem; padding: 0 1.5rem; font-size: 1rem; }
+.m-link { display: inline-flex; align-items: center; min-height: 2.75rem; min-width: 2.75rem; }
+.m-link:hover, .m-link:focus-visible { color: var(--accent); }
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; }
+
+/* ---------- The few blocks every page needs, left plain ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem var(--gutter); }
+.brand { display: inline-flex; align-items: center; min-height: 2.75rem; min-width: 2.75rem; font: 500 1.0625rem/1 var(--sans); text-decoration: none; transition: color 180ms var(--m-ease); }
+.brand:hover, .brand:focus-visible { color: var(--accent); }
+:where(.first, .last) { padding: clamp(3rem, 8vw, 7rem) var(--gutter); }
+:where(.first, .last) > * + * { margin-top: 1.5rem; }
+.legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1.5rem var(--gutter); font: 400 0.8125rem/1.4 var(--mono); color: var(--ink-3); border-top: 1px solid var(--line); }
+@media (max-width: 40rem) { .actions .m-btn { flex: 1 1 100%; justify-content: center; } }

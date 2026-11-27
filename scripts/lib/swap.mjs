@@ -2,7 +2,7 @@
 //
 // The question: take the product name off the first screen. Does it still say something only this product could
 // say? A script cannot judge taste, so it checks one narrow thing. The agent declares the nouns of the product's
-// own subject (the native artifact from the concept: "clause", "redline", "core", "depth"), and this checks that
+// own subject (the native artifact from the concept: "tide", "harbour", "launch", "depth"), and this checks that
 // the first screen uses them, and that the artwork (not only the headline) is about them.
 //
 // It cannot tell a good picture from a bad one, and an agent can declare weak nouns. The generic list below

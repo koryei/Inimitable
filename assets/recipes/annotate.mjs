@@ -3,7 +3,7 @@
 // the chip says what to look at, the arrow says where, the lines say how the card connects to the rest.
 //
 //   import { chip, heroDiagram, annotationCss } from './annotate.mjs';
-//   chip({ label: 'Clause 4.2 deviates', x: 8, y: 30, pointer: 'br' })   // HTML, positioned in % of its parent
+//   chip({ label: 'High water 14:10', x: 8, y: 30, pointer: 'br' })   // HTML, positioned in % of its parent
 //   heroDiagram({ width: 1200, height: 520, card: { x: 200, y: 250, w: 800 }, seed: 2 })   // an SVG string
 //
 // Rules that keep it honest (references/directions.md, "Annotations"): a chip points at something real in the

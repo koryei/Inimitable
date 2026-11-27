@@ -2,10 +2,12 @@
 // Start a page from the landing starter: a complete, tested layout with a lit grainient ground, a floating nav,
 // a product frame, a bento, steps, a big number, a closing call and a footer, with the motion kit wired in.
 //
-//   node scripts/scaffold.mjs <folder> [--kind landing|app] [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c']
+//   node scripts/scaffold.mjs <folder> [--kind base|landing|app] [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c']
 //                             [--seed 1] [--grain 0.45] [--hero stack|split|card] [--ground lit|flat|frame] [--art column]
 //
-//   kind     landing (default) or app: a working surface with a sidebar, key numbers, a chart, a table and an empty state
+//   kind     base: type, buttons, colour, motion and fonts with no layout, for a page that composes its own frame from
+//            its concept; landing (default): the whole standard page; app: a working surface with a sidebar, key numbers,
+//            a chart, a table and an empty state
 //   theme    dark or light (default dark)
 //   palette  one of the built-in grounds (see assets/recipes/mesh.mjs), or use --accent to derive one
 //   minimal  keep only the hero, the steps, the closing call and the footer (for a short brief with few facts)
@@ -23,7 +25,7 @@
 // Everything marked data-todo is placeholder. Replace it with the product's real words and numbers.
 // signs.mjs reports every data-todo left on a page, so unfinished copy cannot ship.
 
-import { copyFileSync, cpSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chip, annotationCss, heroDiagram } from '../assets/recipes/annotate.mjs';
@@ -174,15 +176,61 @@ export function scaffoldApp(dest, { theme = 'dark', accent } = {}) {
   return { dest, todo, problems: [], shape: 'app' };
 }
 
+// ---------- base starter: the craft without the layout ----------
+// For a page whose frame comes from its own concept. No hero, no sections beyond the first and the last: the agent
+// composes the layout in page.css from the shape of the product's artifact (references/direction.md).
+export function scaffoldBase(dest, { theme = 'dark', palette, accent } = {}) {
+  if (accent && !/^#[0-9a-f]{6}$/i.test(accent)) throw new Error(`--accent is a six-digit hex colour (got "${accent}").`);
+  const problems = [];
+  let css;
+  if (palette && FLATS[palette]) {
+    theme = FLATS[palette].dark ? 'dark' : 'light';
+    css = flatThemeCss({ tone: palette });
+  } else {
+    const dark = theme === 'dark';
+    let pal;
+    if (accent) pal = fromAccent(accent, { dark });
+    else {
+      pal = PALETTES[palette || (dark ? 'midnight' : 'ember')];
+      if (!pal) throw new Error(`Unknown palette "${palette}". Use one of ${[...Object.keys(PALETTES), ...FLAT_NAMES].join(', ')} or --accent '#hex'.`);
+      if (Boolean(pal.dark) !== dark) throw new Error(`The ${palette} palette is ${pal.dark ? 'dark' : 'light'}: use --theme ${pal.dark ? 'dark' : 'light'}, or pick another palette.`);
+    }
+    css = themeCss({ dark, palette: pal });
+    // In the base the colour asked for is the accent itself, not the seed of a derived palette.
+    if (accent) {
+      const onAccent = ratio(accent, '#0b0b0c') >= ratio(accent, '#ffffff') ? '#0b0b0c' : '#ffffff';
+      css = css.replace(/--accent: [^;]+;/, `--accent: ${accent};`).replace(/--on-accent: [^;]+;/, `--on-accent: ${onAccent};`);
+      // The accent also draws focus rings and link hover, so it has to read on the page.
+      const seen = ratio(accent, pal.base);
+      if (seen < 4.5) problems.push(`the accent ${accent} is ${seen.toFixed(1)}:1 on the page colour: too faint for link hover and focus. Darken or lighten it, or use it only as a fill.`);
+    }
+  }
+  const starter = join(root, 'assets', 'starters', 'base');
+  mkdirSync(dest, { recursive: true });
+  writeFileSync(join(dest, 'index.html'), readFileSync(join(starter, 'index.html'), 'utf8').replace('data-theme="dark"', `data-theme="${theme}"`));
+  copyFileSync(join(starter, 'base.css'), join(dest, 'base.css'));
+  writeFileSync(join(dest, 'theme.css'), css);
+  // Never overwrite the layout someone has already written.
+  if (!existsSync(join(dest, 'page.css'))) writeFileSync(join(dest, 'page.css'), '/* Your layout. Take it from the shape of the product\'s own artifact. */\n');
+  copyFileSync(join(root, 'assets', 'motion', 'motion.css'), join(dest, 'motion.css'));
+  copyFileSync(join(root, 'assets', 'motion', 'motion.js'), join(dest, 'motion.js'));
+  cpSync(join(root, 'assets', 'fonts'), join(dest, 'fonts'), { recursive: true });
+  const todo = (readFileSync(join(dest, 'index.html'), 'utf8').match(/data-todo/g) || []).length;
+  return { dest, todo, problems, shape: 'base', theme };
+}
+
 if (isMain(import.meta.url)) {
   const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['motes', 'minimal'] });
   if (!positional[0]) {
-    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split|card] [--ground lit|flat|frame] [--art column] [--motes] [--minimal] [--kind app]");
+    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split|card] [--ground lit|flat|frame] [--art column] [--motes] [--minimal] [--kind base|app]");
     process.exit(2);
   }
   try {
-    const kind = flags.kind === 'app' ? 'app' : 'landing';
-    const result = kind === 'app' ? scaffoldApp(positional[0], { theme: flags.theme === 'light' ? 'light' : 'dark', accent: typeof flags.accent === 'string' ? flags.accent : undefined }) : scaffold(positional[0], {
+    const kind = flags.kind === undefined ? 'landing' : flags.kind;
+    if (!['landing', 'app', 'base'].includes(kind)) throw new Error(`--kind is base, landing or app (got "${kind}").`);
+    const text = (name) => (typeof flags[name] === 'string' ? flags[name] : undefined);
+    const mode = flags.theme === 'light' ? 'light' : 'dark';
+    const result = kind === 'app' ? scaffoldApp(positional[0], { theme: mode, accent: text('accent') }) : kind === 'base' ? scaffoldBase(positional[0], { theme: mode, accent: text('accent'), palette: text('palette') }) : scaffold(positional[0], {
       theme: flags.theme === 'light' ? 'light' : 'dark',
       palette: typeof flags.palette === 'string' ? flags.palette : undefined,
       accent: typeof flags.accent === 'string' ? flags.accent : undefined,
@@ -195,11 +243,13 @@ if (isMain(import.meta.url)) {
       motes: Boolean(flags.motes),
       minimal: Boolean(flags.minimal),
     });
-    console.log(`Started ${result.dest}  (${kind === 'app' ? `${flags.theme === 'light' ? 'light' : 'dark'}, app shell` : `${result.theme}, ${result.shape}`})`);
-    if (kind !== 'app' && result.ground === 'lit') console.log('Ground: lit, the soft grainy gradient. It is the default of machine-built pages: keep it only if the concept says why this product wants light (flat and frame are the alternatives).');
+    console.log(`Started ${result.dest}  (${kind === 'app' ? `${mode}, app shell` : kind === 'base' ? `${result.theme}, no layout` : `${result.theme}, ${result.shape}`})`);
+    if (kind === 'base') console.log('The layout is yours: write it in page.css, from the shape of the artifact in your concept, and carry one material through the page (data-device).');
+    if (kind === 'landing') console.log('This is the shared frame: every page started here has the same nav, hero and closing block. For a page that has to be recognisably this product, use --kind base.');
+    if (kind === 'landing' && result.ground === 'lit') console.log('Ground: lit, the soft grainy gradient. It is the default of machine-built pages: keep it only if the concept says why this product wants light (flat and frame are the alternatives).');
     console.log(`${result.todo} placeholders to replace (every data-todo). signs.mjs lists any left.`);
     for (const p of result.problems) console.log(`warning: ${p}`);
-    console.log('\nNext: replace the placeholders with the real content, then run shoot, signs, check and craft on index.html.');
+    console.log(`\nNext: replace the placeholders with the real content, then run shoot, signs, check, craft${kind === 'app' ? '' : ' and frame'} on index.html.`);
   } catch (error) {
     console.error(error.message);
     process.exit(1);

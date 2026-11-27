@@ -89,7 +89,7 @@ export const SUBJECTS = {
       return tone(0.5 - dx * 0.035 + (n(u * 9, v * 9) - 0.5) * 0.06);
     });
   },
-  // A cylinder on its side, cut into wavering layers: a core sample, a rolled length of tape, a stack of pages.
+  // A cylinder on its side, cut into wavering layers: banded rock, a rolled length of tape, a stack of pages.
   strata(w, h, { seed = 1 } = {}) {
     const n = valueNoise(seed, 3);
     const tones = [0.9, 0.35, 0.65, 0.12, 0.78, 0.5];

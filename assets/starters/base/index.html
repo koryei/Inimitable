@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product name: what it does for whom</title>
+<meta name="description" content="One sentence that says what the product does, for whom.">
+<script>document.documentElement.classList.add('m-js')</script>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="motion.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="page.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- This starter has no layout on purpose. The craft is done (type, buttons, focus, motion, fonts, colour); the frame
+     is yours, and it comes from the concept (references/direction.md):
+       Layout:   follow the shape of the native artifact. Where it runs, the page runs.
+       Material: one thing the artifact is made of, drawn in the page itself, marked data-device="name" on the first
+                 screen and in at least two more sections.
+     Write your layout in page.css. Replace everything marked data-todo; signs.mjs reports any left.
+     Check the result with scripts/frame.mjs. -->
+
+<header class="top">
+  <a class="brand" href="#top" data-todo>Product</a>
+  <a class="m-link" href="#start" data-todo>Primary action</a>
+</header>
+
+<main id="main">
+  <section class="first" id="top" aria-labelledby="title">
+    <h1 class="display" id="title" data-todo>
+      <span class="m-line"><span style="--d:0">What it does,</span></span>
+      <span class="m-line dim"><span style="--d:90">for whom.</span></span>
+    </h1>
+    <p class="lede" data-enter style="--d:260" data-todo>One or two plain sentences: what the product is, who it is for, and the result they get.</p>
+    <p class="actions" data-enter style="--d:340"><a class="m-btn large" href="#start" data-todo>Primary action <span class="m-arrow" aria-hidden="true"></span></a></p>
+    <!-- The native artifact, drawn from the product and labelled as an example if it is one:
+         <figure data-artwork data-device="name" aria-label="Example: ..."> ... </figure> -->
+  </section>
+
+  <section class="last" id="start" aria-labelledby="start-title">
+    <h2 class="h2" id="start-title" data-todo>One clear next step.</h2>
+    <p data-todo>One sentence that makes the next step feel small.</p>
+    <p class="actions"><a class="m-btn large" href="#top" data-todo>Primary action <span class="m-arrow" aria-hidden="true"></span></a></p>
+  </section>
+</main>
+
+<footer class="legal"><span data-todo>&copy; Year Company</span><span data-todo>A true line</span></footer>
+
+<script src="motion.js" defer></script>
+</body>
+</html>

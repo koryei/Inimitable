@@ -1,0 +1,44 @@
+{
+ "key": {
+  "12-plain-landing/baseline": "P1",
+  "12-plain-landing/skilled": "P7",
+  "13-native-artifact/baseline": "P2",
+  "13-native-artifact/skilled": "P3",
+  "14-plain-scheduling/baseline": "P8",
+  "14-plain-scheduling/skilled": "P4",
+  "15-held-out/baseline": "P5",
+  "15-held-out/skilled": "P6"
+ },
+ "assign": {
+  "j1": {
+   "pair1-A": "12-plain-landing/skilled",
+   "pair1-B": "12-plain-landing/baseline",
+   "pair2-A": "13-native-artifact/baseline",
+   "pair2-B": "13-native-artifact/skilled",
+   "pair3-A": "14-plain-scheduling/skilled",
+   "pair3-B": "14-plain-scheduling/baseline",
+   "pair4-A": "15-held-out/baseline",
+   "pair4-B": "15-held-out/skilled"
+  },
+  "j2": {
+   "pair1-A": "12-plain-landing/skilled",
+   "pair1-B": "12-plain-landing/baseline",
+   "pair2-A": "13-native-artifact/baseline",
+   "pair2-B": "13-native-artifact/skilled",
+   "pair3-A": "14-plain-scheduling/baseline",
+   "pair3-B": "14-plain-scheduling/skilled",
+   "pair4-A": "15-held-out/skilled",
+   "pair4-B": "15-held-out/baseline"
+  },
+  "blur": {
+   "A": "14-plain-scheduling/skilled",
+   "B": "15-held-out/baseline",
+   "C": "13-native-artifact/skilled",
+   "D": "12-plain-landing/baseline",
+   "E": "14-plain-scheduling/baseline",
+   "F": "12-plain-landing/skilled",
+   "G": "15-held-out/skilled",
+   "H": "13-native-artifact/baseline"
+  }
+ }
+}
