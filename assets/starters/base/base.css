@@ -15,19 +15,17 @@ a { color: inherit; }
 /* ---------- Shape: one radius decision for the whole page. 999px, 0.75rem or 0, and mean it. ---------- */
 :root { --shape: 999px; --gutter: clamp(1rem, 4vw, 3rem); }
 
-/* ---------- Type: roles, with tracking that follows size (evals/tracking.mjs) ---------- */
-.display { margin: 0; font: 400 clamp(2.75rem, 6vw, 6rem)/0.98 var(--sans); letter-spacing: -0.03em; text-wrap: balance; }
-@media (min-width: 62rem) { .display { letter-spacing: -0.04em; } }
-@media (min-width: 80rem) { .display { letter-spacing: -0.05em; } }
-@media (min-width: 96rem) { .display { letter-spacing: -0.055em; } }
-.h2 { margin: 0; max-width: 22ch; font: 400 clamp(2rem, 4vw, 3.5rem)/1.08 var(--sans); letter-spacing: -0.02em; text-wrap: balance; }
-@media (min-width: 80rem) { .h2 { letter-spacing: -0.03em; } }
-.h3 { margin: 0; font: 500 1.25rem/1.25 var(--sans); text-wrap: balance; }
-.lede { max-width: 34rem; margin: 0; font-size: 1.1875rem; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
-.note { margin: 0; font: 400 0.8125rem/1.4 var(--mono); color: var(--ink-3); }
-.dim { color: var(--ink-3); }
+/* ---------- Type: the face and weight come from theme.css, with tracking measured for them ---------- */
+/* Margins carry no specificity, so the stacking rule below and your page.css both win. */
+:where(.display, .h2, .h3, .lede, .note, .actions) { margin: 0; }
+.display { font: var(--display-weight) clamp(2.75rem, 6vw, 6rem)/0.98 var(--display); letter-spacing: var(--track-1); text-wrap: balance; }
+@media (min-width: 62rem) { .display { letter-spacing: var(--track-2); } }
+@media (min-width: 80rem) { .display { letter-spacing: var(--track-3); } }
+.h2 { max-width: 22ch; font: var(--display-weight) clamp(2rem, 4vw, 3.5rem)/1.08 var(--display); letter-spacing: var(--track-h2); text-wrap: balance; }
+.h3 { font: 600 1.25rem/1.25 var(--sans); text-wrap: balance; }
+.lede { max-width: 34rem; font-size: 1.1875rem; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
+.note { font-size: 0.8125rem; line-height: 1.4; color: var(--ink-3); }
 .num { font-variant-numeric: tabular-nums; }
-.dec { color: var(--ink-3); }
 p { max-width: 65ch; text-wrap: pretty; }
 
 /* ---------- Controls ---------- */
@@ -36,7 +34,7 @@ p { max-width: 65ch; text-wrap: pretty; }
 .m-btn.large { min-height: 3.25rem; padding: 0 1.5rem; font-size: 1rem; }
 .m-link { display: inline-flex; align-items: center; min-height: 2.75rem; min-width: 2.75rem; }
 .m-link:hover, .m-link:focus-visible { color: var(--accent); }
-.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
 /* ---------- The few blocks every page needs, left plain ---------- */
 .top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem var(--gutter); }
@@ -44,5 +42,5 @@ p { max-width: 65ch; text-wrap: pretty; }
 .brand:hover, .brand:focus-visible { color: var(--accent); }
 :where(.first, .last) { padding: clamp(3rem, 8vw, 7rem) var(--gutter); }
 :where(.first, .last) > * + * { margin-top: 1.5rem; }
-.legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1.5rem var(--gutter); font: 400 0.8125rem/1.4 var(--mono); color: var(--ink-3); border-top: 1px solid var(--line); }
+.legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1.5rem var(--gutter); font-size: 0.8125rem; color: var(--ink-3); border-top: 1px solid var(--line); }
 @media (max-width: 40rem) { .actions .m-btn { flex: 1 1 100%; justify-content: center; } }

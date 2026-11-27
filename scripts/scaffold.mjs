@@ -5,6 +5,8 @@
 //   node scripts/scaffold.mjs <folder> [--kind base|landing|app] [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c']
 //                             [--seed 1] [--grain 0.45] [--hero stack|split|card] [--ground lit|flat|frame] [--art column]
 //
+//   voice    base only, required: sans (Geist), grotesk (Bricolage Grotesque), serif (Newsreader, with italic) or
+//            condensed (Big Shoulders Display). weight is required with it: the headline's weight, 100 to 900.
 //   kind     base: type, buttons, colour, motion and fonts with no layout, for a page that composes its own frame from
 //            its concept; landing (default): the whole standard page; app: a working surface with a sidebar, key numbers,
 //            a chart, a table and an empty state
@@ -176,10 +178,32 @@ export function scaffoldApp(dest, { theme = 'dark', accent } = {}) {
   return { dest, todo, problems: [], shape: 'app' };
 }
 
+// ---------- display voices for the base starter ----------
+// The face and weight are the page's own decision (references/direction.md), so the base has no default for either.
+// Tracking per face and weight comes from measured letter gaps (evals/tracking.mjs): heavy type needs far less
+// tightening than light type, and Newsreader takes none. Order: [h2, small display, 62rem, 80rem and up].
+export const VOICES = {
+  sans: { family: 'Geist', fallback: 'ui-sans-serif, system-ui, sans-serif', weights: [100, 900], files: [], light: [-0.02, -0.03, -0.03, -0.04], heavy: [0.01, 0, -0.01, -0.02] },
+  grotesk: { family: 'Bricolage Grotesque', fallback: 'ui-sans-serif, system-ui, sans-serif', weights: [200, 800], files: ['bricolage.woff2'], licence: 'OFL-bricolage.txt', light: [-0.02, -0.03, -0.035, -0.04], heavy: [-0.01, -0.02, -0.02, -0.03] },
+  serif: { family: 'Newsreader', fallback: '"Iowan Old Style", Georgia, serif', weights: [200, 800], files: ['newsreader.woff2', 'newsreader-italic.woff2'], licence: 'OFL-newsreader.txt', light: [0, 0.01, 0.01, 0], heavy: [0, 0.02, 0.02, 0.01] },
+  condensed: { family: 'Big Shoulders Display', fallback: '"Arial Narrow", ui-sans-serif, sans-serif', weights: [100, 900], files: ['big-shoulders.woff2'], licence: 'OFL-big-shoulders.txt', light: [0, -0.02, -0.02, -0.03], heavy: [0.01, 0, 0, -0.01] },
+};
+
+export function voiceCss(voice, weight) {
+  const v = VOICES[voice];
+  const faces = v.files.map((file) => `@font-face { font-family: "${v.family}"; src: url("fonts/${file}") format("woff2"); font-weight: ${v.weights[0]} ${v.weights[1]}; font-style: ${file.includes('italic') ? 'italic' : 'normal'}; font-display: swap; }`);
+  const [h2, s, m, l] = weight > 500 ? v.heavy : v.light;
+  return `\n/* Display voice: ${voice}, ${weight}. Tracking measured for this face and weight. */\n${faces.join('\n')}\n:root {\n  --display: "${v.family}", ${v.fallback};\n  --display-weight: ${weight};\n  --track-h2: ${h2}em;\n  --track-1: ${s}em;\n  --track-2: ${m}em;\n  --track-3: ${l}em;\n}\n`;
+}
+
 // ---------- base starter: the craft without the layout ----------
 // For a page whose frame comes from its own concept. No hero, no sections beyond the first and the last: the agent
 // composes the layout in page.css from the shape of the product's artifact (references/direction.md).
-export function scaffoldBase(dest, { theme = 'dark', palette, accent } = {}) {
+export function scaffoldBase(dest, { theme = 'dark', palette, accent, voice, weight } = {}) {
+  const how = 'Choose from the concept\'s voice line (references/direction.md).';
+  if (!VOICES[voice]) throw new Error(`--voice is ${Object.keys(VOICES).join(', ')}${voice ? ` (got "${voice}")` : ''}. ${how}`);
+  const [low, high] = VOICES[voice].weights;
+  if (!Number.isInteger(weight) || weight < low || weight > high) throw new Error(`--weight for ${voice} is a number from ${low} to ${high}. ${how}`);
   if (accent && !/^#[0-9a-f]{6}$/i.test(accent)) throw new Error(`--accent is a six-digit hex colour (got "${accent}").`);
   const problems = [];
   let css;
@@ -209,20 +233,22 @@ export function scaffoldBase(dest, { theme = 'dark', palette, accent } = {}) {
   mkdirSync(dest, { recursive: true });
   writeFileSync(join(dest, 'index.html'), readFileSync(join(starter, 'index.html'), 'utf8').replace('data-theme="dark"', `data-theme="${theme}"`));
   copyFileSync(join(starter, 'base.css'), join(dest, 'base.css'));
-  writeFileSync(join(dest, 'theme.css'), css);
+  writeFileSync(join(dest, 'theme.css'), css + voiceCss(voice, weight));
   // Never overwrite the layout someone has already written.
   if (!existsSync(join(dest, 'page.css'))) writeFileSync(join(dest, 'page.css'), '/* Your layout. Take it from the shape of the product\'s own artifact. */\n');
   copyFileSync(join(root, 'assets', 'motion', 'motion.css'), join(dest, 'motion.css'));
   copyFileSync(join(root, 'assets', 'motion', 'motion.js'), join(dest, 'motion.js'));
   cpSync(join(root, 'assets', 'fonts'), join(dest, 'fonts'), { recursive: true });
+  const { files, licence } = VOICES[voice];
+  for (const file of [...files, ...(licence ? [licence] : [])]) copyFileSync(join(root, 'assets', 'voices', file), join(dest, 'fonts', file));
   const todo = (readFileSync(join(dest, 'index.html'), 'utf8').match(/data-todo/g) || []).length;
-  return { dest, todo, problems, shape: 'base', theme };
+  return { dest, todo, problems, shape: 'base', theme, voice, weight };
 }
 
 if (isMain(import.meta.url)) {
   const { positional, flags } = parseArgs(process.argv.slice(2), { booleans: ['motes', 'minimal'] });
   if (!positional[0]) {
-    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split|card] [--ground lit|flat|frame] [--art column] [--motes] [--minimal] [--kind base|app]");
+    console.error("Usage: node scripts/scaffold.mjs <folder> [--theme dark|light] [--palette ember] [--shape bowl] [--accent '#e8742c'] [--seed 1] [--grain 0.45] [--hero stack|split|card] [--ground lit|flat|frame] [--art column] [--motes] [--minimal] [--kind app]\n       node scripts/scaffold.mjs <folder> --kind base --voice sans|grotesk|serif|condensed --weight 400 [--theme dark|light] [--accent '#hex' | --palette name]");
     process.exit(2);
   }
   try {
@@ -230,7 +256,7 @@ if (isMain(import.meta.url)) {
     if (!['landing', 'app', 'base'].includes(kind)) throw new Error(`--kind is base, landing or app (got "${kind}").`);
     const text = (name) => (typeof flags[name] === 'string' ? flags[name] : undefined);
     const mode = flags.theme === 'light' ? 'light' : 'dark';
-    const result = kind === 'app' ? scaffoldApp(positional[0], { theme: mode, accent: text('accent') }) : kind === 'base' ? scaffoldBase(positional[0], { theme: mode, accent: text('accent'), palette: text('palette') }) : scaffold(positional[0], {
+    const result = kind === 'app' ? scaffoldApp(positional[0], { theme: mode, accent: text('accent') }) : kind === 'base' ? scaffoldBase(positional[0], { theme: mode, accent: text('accent'), palette: text('palette'), voice: text('voice'), weight: flags.weight ? Number(flags.weight) : undefined }) : scaffold(positional[0], {
       theme: flags.theme === 'light' ? 'light' : 'dark',
       palette: typeof flags.palette === 'string' ? flags.palette : undefined,
       accent: typeof flags.accent === 'string' ? flags.accent : undefined,
