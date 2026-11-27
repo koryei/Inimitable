@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.10.0
+
+Driven by round 7 and a second opinion from a stronger model: the skill's own taste rules banned or penalised the moves that made the baseline pages memorable. **Not yet evaluated:** nothing here shows the pages are now more distinctive.
+
+- **Pages that persuade may shout.** On `data-mode="persuade"` or `experience`, heavy weights and tracked capitals are no longer tells or drift flags; italic, full stops, strong colour and long headlines are allowed when the concept chooses them. Working screens keep every rule.
+- **A seven-line concept:** adds one headline move only this product's headline could make, and a voice (face, weight, case, loudness). "Keep the rest calm" is gone.
+- **Three display voices** under the Open Font Licence: Bricolage Grotesque, Newsreader (with italic) and Big Shoulders Display, beside Geist. `scaffold --kind base` now requires `--voice` and `--weight`, and writes letter spacing measured for that face and weight.
+- **The base lost its house furniture:** no button arrow, no monospace captions, no dimmed second headline line.
+- **Gate guidance:** the checks find faults in a chosen design; do not design toward the score.
+
 ## 0.9.0
 
 Driven by round 6, where skilled pages lost on distinctiveness because they shared one frame.
