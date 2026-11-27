@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.0
+
+Driven by round 6, where skilled pages lost on distinctiveness because they shared one frame.
+
+- **A base starter** (`scaffold --kind base`): type with tracking by size, controls, colour, motion kit and fonts, and no layout. New landing pages start here; the full landing starter is for a brief that asks for the standard page.
+- **A five-line concept:** the layout is taken from the shape of the product's artifact, and one material (`data-device`) runs through the page.
+- **A frame check** (`scripts/frame.mjs`): compares a page's skeleton with the landing starter and with sibling pages, and requires the material to run through.
+- **Examples replaced.** The skill's text had used all three eval products as examples, and only the skilled arm read it. Corrected in the round 6 write-up too.
+- **Round 7, and what it found.** The skilled pages **still did not beat the baseline**: judged more swappable in 6 of 8 judgements and remembered in 2 of 8, tied on ownability, ahead on design quality (4 against 2). All three judges grouped all four skilled pages as one hand: the base's typeface, button arrow and captions. The frame check passed them all, so it does not catch that. Details and limits in `evals/results/2026-11-26-r7.md`.
+- **Fixes:** `--accent` on the base writes the colour given and warns when it is too faint; the base's first and last blocks no longer override a page's own layout.
+
 ## 0.8.0
 
 Driven by the verdicts "good but replaceable" and "nothing sets this apart". The craft floor was solid; the weak point was that pages were their own skeleton and nothing else. The skill now makes an agent decide what is ownable before it builds, and gives it grounds and artwork that are not the default.
