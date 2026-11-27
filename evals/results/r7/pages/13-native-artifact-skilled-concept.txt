@@ -1,0 +1,12 @@
+Artifact: the strip log of one example hole: a depth scale and a column of rock layers, each drawn from a sample record (depth from and to, rock type, colour, photo).
+Without the category word: a column of hatched rock layers on a metre scale runs down the whole page; beside layer 3 sits its sample record; change the rock type or colour and that layer redraws.
+Signature: the sample record redraws its own layer in the column, and the same row in the table, CSV and PDF sheet. Ground: flat cool log-sheet white, because the rock colours must be the only colour on a page that is a printed sheet.
+Layout: down. The page is the log sheet: depth track, lithology column the full height, description track holding every section, section rules landing on layer contacts.
+Material: the depth scale (ticks and metres computed from the drawing, with lithology hatching), from the first screen to the 1 m scale bar in the title block.
+
+Product: Coreline lets geologists log drill core on a phone, offline, and draws the strip log for the report.
+Character: exact, field-plain, readable.
+World: log sheets, core trays, hatching conventions.
+Moments: the lithology column; the sample record that drives it.
+Signature detail: an orange bracket marking the one layer you can edit.
+Not: a dashboard template or an outdoor-adventure brand in earth gradients.

@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tern: shift scheduling for small cafes and shops</title>
+<meta name="description" content="Build the week as a grid of shifts. Staff see their own shifts on their phones. Tern warns when the rota breaks a rule. Free for up to 10 staff.">
+<style>
+:root{
+  --paper:#F2EEE4; --paper2:#E8E2D2; --card:#FBF9F3;
+  --ink:#15171B; --ink2:#2A2D33; --mute:#6A665B; --line:#CDC6B3; --line2:#DDD7C7;
+  --tern:#E8431F; --tern-d:#B9300F; --tern-t:#F8D9CF;
+  --open:#D6E3E8; --open-d:#6C8F9E;
+  --mid:#EFE0AE; --mid-d:#A88A2B;
+  --close:#CBD8C1; --close-d:#6E8A5E;
+  --short:#EBCFC2; --short-d:#A5674F;
+  --display:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --pad:clamp(20px,4vw,56px);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--display);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--tern);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--pad)}
+.mono{font-family:var(--mono)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:24px;letter-spacing:-.04em;text-decoration:none;color:var(--ink)}
+.logo svg{width:30px;height:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:14px 26px;font-weight:700;font-size:17px;text-decoration:none;letter-spacing:-.01em;transition:transform .15s,background .15s}
+.btn:hover{background:var(--tern);transform:translateY(-1px)}
+.btn .arr{transition:transform .2s}
+.btn:hover .arr{transform:translateX(4px)}
+.btn.sm{padding:9px 20px;font-size:15px}
+.btn.tern{background:var(--tern);color:#fff}
+.btn.tern:hover{background:#fff;color:var(--ink)}
+
+/* tags */
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);display:flex;gap:10px;align-items:center}
+.tag b{background:var(--ink);color:var(--paper);padding:3px 8px;border-radius:3px;font-weight:600}
+.ex{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;border:1px dashed var(--mute);color:var(--mute);padding:2px 8px;border-radius:3px;white-space:nowrap}
+
+/* hero */
+.hero{position:relative;padding:64px 0 56px;overflow:hidden}
+.cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr);pointer-events:none;max-width:1280px;margin:0 auto;padding:0 var(--pad)}
+.cols span{border-left:1px solid var(--line2);font-family:var(--mono);font-size:11px;color:var(--mute);padding:10px 8px;text-transform:uppercase;letter-spacing:.08em}
+.cols span:last-child{border-right:1px solid var(--line2)}
+.hero .wrap{position:relative}
+h1{font-weight:800;font-size:clamp(46px,9.4vw,136px);line-height:.92;letter-spacing:-.055em;margin:34px 0 28px}
+h1 .l2{display:block;color:var(--tern)}
+h1 .chk{display:inline-block;position:relative}
+h1 .chk::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.09em;background:var(--tern);transform-origin:left;animation:draw 1s .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes draw{from{transform:scaleX(0)}}
+.lede{font-size:clamp(18px,2vw,23px);max-width:34em;color:var(--ink2);margin-bottom:30px;line-height:1.4}
+.cta-row{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.cta-row small{font-family:var(--mono);font-size:13px;color:var(--mute)}
+
+/* rota */
+.rotawrap{margin-top:56px;background:var(--card);border:1.5px solid var(--ink);border-radius:14px;box-shadow:8px 8px 0 var(--ink);position:relative}
+.rotahead{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1.5px solid var(--ink)}
+.rotahead h2{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.status{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;background:var(--tern);color:#fff;transition:background .3s}
+.status.ok{background:var(--ink)}
+.status i{width:9px;height:9px;border-radius:50%;background:#fff;display:inline-block}
+.status.ok i{background:#9BD08A}
+.tray{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--paper)}
+.tray p{font-family:var(--mono);font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.rota{display:grid;grid-template-columns:150px repeat(7,minmax(112px,1fr)) 124px;min-width:1040px}
+.rota>.r{display:contents}
+.h,.n,.cell,.hrs{border-bottom:1px solid var(--line);border-right:1px solid var(--line2)}
+.h{padding:10px 10px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);background:var(--paper)}
+.n{position:sticky;left:0;z-index:2;background:var(--card);padding:12px 14px;display:flex;flex-direction:column;justify-content:center;border-right:1.5px solid var(--ink)}
+.h.n{background:var(--paper)}
+.n b{font-size:18px;letter-spacing:-.02em}
+.n span{font-family:var(--mono);font-size:11px;color:var(--mute)}
+.cell{min-height:92px;padding:6px;display:flex;flex-direction:column;gap:5px;position:relative;transition:background .15s}
+.cell.off{background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(21,23,27,.07) 6px 7px);}
+.cell.off::after{content:"can't work";position:absolute;right:6px;bottom:4px;font-family:var(--mono);font-size:10px;color:var(--mute)}
+.cell.over{background:var(--tern-t)}
+.cell.target{outline:2.5px dashed var(--ink);outline-offset:-3px;background:#fff}
+.picking .cell:hover{outline:2px dashed var(--mute);outline-offset:-3px;cursor:copy}
+.chip{position:relative;touch-action:none;user-select:none;-webkit-user-select:none;border:1.5px solid var(--ink);border-left-width:5px;border-radius:7px;padding:5px 24px 5px 8px;line-height:1.15;cursor:grab;background:var(--open);border-left-color:var(--open-d);text-align:left;display:block;width:100%}
+.chip b{display:block;font-size:14px;letter-spacing:-.01em}
+.chip span{font-family:var(--mono);font-size:11px;color:var(--ink2)}
+.chip[data-type=mid]{background:var(--mid);border-left-color:var(--mid-d)}
+.chip[data-type=close]{background:var(--close);border-left-color:var(--close-d)}
+.chip[data-type=short]{background:var(--short);border-left-color:var(--short-d)}
+.chip:active{cursor:grabbing}
+.chip .x{position:absolute;top:2px;right:2px;width:22px;height:22px;border:0;background:transparent;border-radius:4px;font-size:15px;line-height:1;opacity:.45}
+.chip .x:hover,.chip .x:focus-visible{opacity:1;background:rgba(0,0,0,.1)}
+.chip.clash{border-color:var(--tern-d);background-image:repeating-linear-gradient(45deg,rgba(232,67,31,.22) 0 5px,transparent 5px 10px)}
+.chip.clash::before{content:"!";position:absolute;left:-12px;top:-8px;background:var(--tern);color:#fff;width:18px;height:18px;border-radius:50%;font:700 12px/18px var(--mono);text-align:center}
+.chip.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.tray .chip{width:auto;padding-right:12px;min-width:118px;border-left-width:5px}
+.tray .chip.sel{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
+.ghost{position:fixed;z-index:999;pointer-events:none;width:128px;transform:rotate(-3deg);box-shadow:6px 8px 0 rgba(21,23,27,.25)}
+.hrs{padding:12px;display:flex;flex-direction:column;justify-content:center;gap:6px;border-right:0}
+.hrs .t{font-family:var(--mono);font-size:13px;font-weight:600}
+.hrs .t em{font-style:normal;color:var(--mute);font-weight:400}
+.bar{height:8px;border-radius:4px;background:var(--line2);position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ink);border-radius:4px;transition:width .3s}
+.hrs.bad .bar i{background:var(--tern)}
+.hrs.bad .t{color:var(--tern-d)}
+.hrs small{font-family:var(--mono);font-size:11px;color:var(--tern-d);min-height:14px}
+.rota .r:last-child>*{border-bottom:0}
+.flags{padding:16px 20px;border-top:1.5px solid var(--ink);background:var(--paper);min-height:72px}
+.flags ul{list-style:none;padding:0;display:grid;gap:8px}
+.flags li{display:flex;gap:12px;align-items:baseline;font-size:15.5px}
+.flags li::before{content:"";flex:none;width:10px;height:10px;border-radius:2px;background:var(--tern);transform:translateY(1px)}
+.flags .clear{display:flex;gap:12px;align-items:baseline;color:var(--ink2);font-size:15.5px}
+.flags .clear::before{content:"";flex:none;width:10px;height:10px;border-radius:2px;background:#6FA85A;transform:translateY(1px)}
+.rotafoot{display:flex;flex-wrap:wrap;gap:12px 20px;justify-content:space-between;align-items:center;padding:12px 20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--mute)}
+.rotafoot button{background:none;border:1px solid var(--mute);border-radius:999px;padding:5px 14px;font-family:var(--mono);font-size:12px}
+.rotafoot button:hover{background:var(--ink);color:var(--paper)}
+.swipe{display:none}
+
+/* sections */
+section.s{padding:104px 0;border-top:1.5px solid var(--ink);position:relative}
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,6vw,96px);align-items:center}
+h2.big{font-size:clamp(34px,5.2vw,68px);line-height:.98;letter-spacing:-.045em;font-weight:800;margin:20px 0 22px}
+.copy{font-size:19px;color:var(--ink2);max-width:30em}
+.copy+.copy{margin-top:14px}
+
+/* availability */
+.who{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.who button,.who2 button{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:7px 18px;font-weight:600;font-size:15px}
+.who button[aria-pressed=true],.who2 button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.avail{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.avail button{aspect-ratio:3/4;min-height:96px;border:1.5px solid var(--ink);border-radius:10px;background:var(--card);display:flex;flex-direction:column;justify-content:space-between;padding:10px;text-align:left;transition:transform .12s,background .2s}
+.avail button:hover{transform:translateY(-3px)}
+.avail button b{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.avail button span{font-size:14px;font-weight:700;line-height:1.1}
+.avail button.no{background:repeating-linear-gradient(135deg,var(--paper2) 0 6px,var(--paper) 6px 12px);color:var(--mute);border-style:dashed}
+.avail button.no span{text-decoration:line-through}
+.panelnote{font-family:var(--mono);font-size:12px;color:var(--mute);margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* rules */
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
+.rule{background:var(--card);border:1.5px solid var(--ink);border-radius:14px;padding:26px;display:flex;flex-direction:column;gap:18px}
+.rule h3{font-size:28px;letter-spacing:-.035em;line-height:1}
+.rule p{color:var(--ink2);font-size:17px}
+.draw{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 16px 12px;margin-top:auto}
+.axis{position:relative;height:96px}
+.axis .tick{position:absolute;top:0;bottom:16px;border-left:1px dashed var(--line);font-family:var(--mono);font-size:10px;color:var(--mute)}
+.axis .tick span{position:absolute;bottom:-16px;left:-12px}
+.axis .bk{position:absolute;height:34px;border:1.5px solid var(--ink);border-radius:6px;padding:6px 8px;font-size:13px;font-weight:700;line-height:1.1}
+.axis .ov{position:absolute;top:0;bottom:16px;background:repeating-linear-gradient(45deg,rgba(232,67,31,.35) 0 5px,rgba(232,67,31,.12) 5px 10px);border:1.5px solid var(--tern);border-radius:4px;display:flex;align-items:flex-end;justify-content:center}
+.axis .ov em{font:600 10px var(--mono);color:var(--tern-d);background:var(--card);padding:1px 5px;transform:translateY(-84px);position:absolute;top:84px;white-space:nowrap}
+.hbar{position:relative;height:34px;border:1.5px solid var(--ink);border-radius:6px;background:var(--card);overflow:hidden;margin:26px 0 6px}
+.hbar i{position:absolute;left:0;top:0;bottom:0;background:var(--ink)}
+.hbar u{position:absolute;top:0;bottom:0;text-decoration:none;background:repeating-linear-gradient(45deg,var(--tern) 0 5px,#f27a5c 5px 10px)}
+.hbar s{position:absolute;top:-8px;bottom:-8px;border-left:2.5px solid var(--ink);text-decoration:none}
+.hlab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--mute)}
+.hlab b{color:var(--tern-d)}
+
+/* phone */
+.phonezone{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:30px;align-items:center}
+.phone{width:320px;max-width:100%;margin:0 auto;background:var(--ink);border-radius:44px;padding:12px;box-shadow:10px 10px 0 var(--tern)}
+.screen{background:var(--paper);border-radius:34px;min-height:560px;padding:20px 16px 20px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.screen header{display:flex;justify-content:space-between;align-items:center;padding:6px 6px 0}
+.screen header b{font-size:22px;letter-spacing:-.04em}
+.screen .sub{font-family:var(--mono);font-size:11px;color:var(--mute);padding:0 6px}
+.shift{background:var(--card);border:1.5px solid var(--ink);border-left-width:6px;border-radius:12px;padding:12px;display:grid;gap:8px}
+.shift[data-type=open]{border-left-color:var(--open-d)}.shift[data-type=mid]{border-left-color:var(--mid-d)}.shift[data-type=close]{border-left-color:var(--close-d)}.shift[data-type=short]{border-left-color:var(--short-d)}
+.shift .top{display:flex;justify-content:space-between;align-items:baseline}
+.shift .top b{font-size:19px;letter-spacing:-.03em}
+.shift .top span{font-family:var(--mono);font-size:12px;color:var(--mute)}
+.shift .tm{font-family:var(--mono);font-size:13px}
+.shift .sw{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600;justify-self:start}
+.shift .sw:hover{background:var(--ink);color:var(--paper)}
+.shift .st{font-family:var(--mono);font-size:12px;display:flex;gap:8px;align-items:center}
+.shift .st::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mid-d)}
+.shift .st.declined::before{background:var(--tern)}
+.pick{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px}
+.pick span{font-family:var(--mono);font-size:11px;color:var(--mute);width:100%}
+.pick button{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600}
+.pick button:hover{background:var(--ink);color:var(--paper)}
+.pick .c{border-color:transparent;color:var(--mute);text-decoration:underline}
+.emptyp{text-align:center;color:var(--mute);padding:40px 10px;font-size:15px}
+.mgr{background:var(--card);border:1.5px solid var(--ink);border-radius:14px;overflow:hidden}
+.mgr h3{font-size:15px;padding:14px 16px;border-bottom:1.5px solid var(--ink);display:flex;justify-content:space-between;align-items:center}
+.mgr ul{list-style:none;padding:0}
+.mgr li{padding:14px 16px;border-bottom:1px solid var(--line);font-size:15px;display:grid;gap:10px}
+.mgr li:last-child{border-bottom:0}
+.mgr .acts{display:flex;gap:8px}
+.mgr .acts button{border:1.5px solid var(--ink);border-radius:999px;padding:6px 16px;font-weight:700;font-size:14px;background:transparent}
+.mgr .acts .ok{background:var(--ink);color:var(--paper)}
+.mgr .acts .ok:hover{background:var(--tern);border-color:var(--tern)}
+.mgr .acts .no:hover{background:var(--paper2)}
+.mgr .done{font-family:var(--mono);font-size:12px;color:var(--mute)}
+.mgr .empty{padding:22px 16px;color:var(--mute);font-size:15px}
+.mgr .rule2{padding:12px 16px;font-family:var(--mono);font-size:12px;background:var(--paper);border-top:1.5px solid var(--ink);color:var(--ink2)}
+
+/* price */
+.price{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center}
+.pfig{font-weight:800;font-size:clamp(88px,15vw,210px);letter-spacing:-.07em;line-height:.85}
+.pfig small{display:block;font-size:clamp(18px,2vw,24px);letter-spacing:-.01em;font-weight:500;color:var(--ink2);margin-top:18px;line-height:1.3}
+.pfig .after{color:var(--tern)}
+.team{background:var(--card);border:1.5px solid var(--ink);border-radius:14px;padding:24px;box-shadow:8px 8px 0 var(--ink)}
+.team label{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.team .big2{font-size:clamp(26px,3vw,38px);font-weight:800;letter-spacing:-.04em;line-height:1.05;margin:14px 0 20px;min-height:2.1em}
+.team .big2 span{color:var(--tern)}
+input[type=range]{width:100%;accent-color:var(--tern);height:28px;margin-bottom:14px}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.dots i{aspect-ratio:1;border-radius:5px;border:1.5px solid var(--line);background:transparent;transition:background .15s,border-color .15s,transform .15s}
+.dots i.in{background:var(--ink);border-color:var(--ink)}
+.dots i.in.paid{background:var(--tern);border-color:var(--tern-d)}
+.dots i.pop{transform:scale(1.12)}
+.legend{display:flex;gap:18px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--mute);flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--ink);margin-right:6px}
+.legend span+span::before{background:var(--tern)}
+
+/* final */
+.final{background:var(--ink);color:var(--paper);padding:112px 0 36px;border-top:0;position:relative;overflow:hidden}
+.final .cols span{border-color:rgba(242,238,228,.1);color:rgba(242,238,228,.35)}
+.final h2{font-weight:800;font-size:clamp(48px,10vw,150px);line-height:.9;letter-spacing:-.06em;margin-bottom:34px}
+.final h2 em{font-style:normal;color:var(--tern)}
+.final p{font-size:20px;max-width:28em;color:rgba(242,238,228,.78);margin-bottom:34px}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:104px;padding-top:20px;border-top:1px solid rgba(242,238,228,.2);font-family:var(--mono);font-size:13px;color:rgba(242,238,228,.7)}
+.foot b{color:var(--paper)}
+.final .wrap{position:relative}
+
+@media (max-width:980px){
+  .split,.price,.phonezone{grid-template-columns:minmax(0,1fr)}
+  .rules{grid-template-columns:minmax(0,1fr)}
+  .phonezone .phone{order:-1}
+  .swipe{display:block;font-family:var(--mono);font-size:11px;color:var(--mute);padding:8px 20px 0;text-transform:uppercase;letter-spacing:.06em}
+  section.s{padding:72px 0}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .cols span:nth-child(n+4){display:none}
+  .cols{grid-template-columns:repeat(3,1fr)}
+  .avail{gap:5px}.avail button{padding:7px 6px;min-height:84px}.avail button span{font-size:11px;overflow-wrap:anywhere}.avail button b{font-size:10px}
+  .rotawrap{box-shadow:5px 5px 0 var(--ink)}
+  .tray{padding:12px}
+  .tray .chip{min-width:0;flex:1 1 40%}
+  .dots{grid-template-columns:repeat(10,1fr);gap:4px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Tern, back to top">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 8 Q10 8 16 17 Q22 8 30 8 Q23 19 16 22 Q9 19 2 8Z" fill="#15171B"/><path d="M13 21 L10 29 L16 24.5 L22 29 L19 21Z" fill="#E8431F"/></svg>
+      Tern
+    </a>
+    <a class="btn sm" href="#try">Try it free</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="cols" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+  <div class="wrap">
+    <div class="tag"><b>Mon</b> Shift scheduling for small cafes and shops</div>
+    <h1>Build the week.<span class="l2">Tern <span class="chk">checks it.</span></span></h1>
+    <p class="lede">Drag shifts onto a weekly grid. Tern warns you when someone is double-booked, or would go over the hours agreed in their contract.</p>
+    <div class="cta-row">
+      <a class="btn" href="#try">Try it free <span class="arr" aria-hidden="true">&rarr;</span></a>
+      <small>Free for up to 10 staff</small>
+    </div>
+
+    <div class="rotawrap" id="rotawrap">
+      <div class="rotahead">
+        <h2>The week <span class="ex" style="margin-left:8px">Example data</span></h2>
+        <div class="status" id="status" role="status" aria-live="polite"><i></i><span id="statustxt"></span></div>
+      </div>
+      <div class="tray" id="tray">
+        <p>Drag a shift onto the grid</p>
+      </div>
+      <p class="swipe">Scroll the grid sideways</p>
+      <div class="scroller"><div class="rota" id="rota"></div></div>
+      <div class="flags" id="flags"></div>
+      <div class="rotafoot">
+        <span>Example rota. Names, shifts and agreed hours are made up. Tap a shift above, then tap a cell, if dragging is awkward. Drag a shift back to the tray to remove it.</span>
+        <button id="reset" type="button">Reset the example</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="s" id="avail">
+  <div class="wrap split">
+    <div>
+      <div class="tag"><b>Tue</b> Availability</div>
+      <h2 class="big">Staff say when they can't.</h2>
+      <p class="copy">Everyone enters the days they can and cannot work. You build the week with that in front of you.</p>
+      <p class="copy">Try it. Pick a person, tap a day, and look at the grid above. The day is marked.</p>
+    </div>
+    <div>
+      <div class="who" id="whoA" role="group" aria-label="Choose a person"></div>
+      <div class="avail" id="availGrid"></div>
+      <div class="panelnote"><span class="ex">Example data</span><span>Tap a day to switch between can work and can't work.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="rules">
+  <div class="wrap">
+    <div class="tag"><b>Wed</b> Two rules, checked as you go</div>
+    <h2 class="big" style="max-width:12em">It speaks up when the rota breaks a rule.</h2>
+    <div class="rules">
+      <article class="rule">
+        <h3>Double-booked</h3>
+        <p>The same person, two shifts, overlapping hours on one day. Tern flags both shifts.</p>
+        <div class="draw" aria-label="Example: an Open shift 07:00 to 13:00 overlapping a Mid shift 10:00 to 16:00">
+          <div class="axis">
+            <div class="tick" style="left:0"><span>07</span></div>
+            <div class="tick" style="left:33.3%"><span>10</span></div>
+            <div class="tick" style="left:66.6%"><span>13</span></div>
+            <div class="tick" style="left:100%"><span>16</span></div>
+            <div class="bk" style="left:0;width:66.6%;top:4px;background:var(--open)">Open 07:00&ndash;13:00</div>
+            <div class="bk" style="left:33.3%;width:66.7%;top:44px;background:var(--mid)">Mid 10:00&ndash;16:00</div>
+            <div class="ov" style="left:33.3%;width:33.3%"></div>
+          </div>
+          <div class="hlab" style="margin-top:22px"><span class="ex">Example data</span><b>3 hours overlap</b></div>
+        </div>
+      </article>
+      <article class="rule">
+        <h3>Over contract hours</h3>
+        <p>Add up a person's shifts for the week. If it goes past the hours agreed in their contract, Tern says so.</p>
+        <div class="draw" aria-label="Example: 18 hours scheduled against 12 hours agreed">
+          <div class="hbar"><i style="width:66.6%"></i><u style="left:66.6%;width:33.4%"></u><s style="left:66.6%"></s></div>
+          <div class="hlab"><span>0 h</span><span>12 h agreed</span><b>18 h scheduled</b></div>
+          <div class="hlab" style="margin-top:14px"><span class="ex">Example data</span><b>6 h over</b></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="phones">
+  <div class="wrap">
+    <div class="tag"><b>Thu</b> Phones and swaps</div>
+    <h2 class="big" style="max-width:13em">Staff see their shifts. You approve every swap.</h2>
+    <p class="copy" style="margin-bottom:48px">Each person sees their own shifts on their phone and can ask to swap one. Nothing moves until you say yes. Try it: ask for a swap on the phone, then approve it as the manager.</p>
+    <div class="phonezone">
+      <div>
+        <div class="mgr" aria-label="Manager's swap requests">
+          <h3><span>Manager: swap requests</span><span class="ex">Example data</span></h3>
+          <ul id="mgrList"></ul>
+          <div class="rule2">Every swap waits for the manager. The shift moves only on approval.</div>
+        </div>
+        <p class="panelnote" style="margin-top:18px">An approved swap moves the shift on the grid at the top of the page. Watch the hours.</p>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <header><b id="phName">Alex</b><span class="ex">Example</span></header>
+          <div class="who2 who" id="whoP" role="group" aria-label="Choose whose phone"></div>
+          <div class="sub">Your shifts this week</div>
+          <div id="phList" style="display:grid;gap:10px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="price">
+  <div class="wrap">
+    <div class="tag"><b>Fri</b> Price</div>
+    <div class="price" style="margin-top:28px">
+      <div class="pfig">Free<small>for up to 10 staff.<br><span class="after">Then £2 per person per month.</span></small></div>
+      <div class="team">
+        <label for="n"><span>How many staff?</span><span class="ex">Example</span></label>
+        <div class="big2" id="teamTxt" aria-live="polite"></div>
+        <input type="range" id="n" min="1" max="30" value="8">
+        <div class="dots" id="dots" aria-hidden="true"></div>
+        <div class="legend"><span>Free</span><span>£2 per person per month</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="final" id="try">
+  <div class="cols" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+  <div class="wrap">
+    <div class="tag" style="color:rgba(242,238,228,.6)"><b style="background:var(--paper);color:var(--ink)">Sun</b> Done for the week</div>
+    <h2 style="margin-top:30px">Next week,<br><em>on a grid.</em></h2>
+    <p>Free for up to 10 staff. Then £2 per person per month.</p>
+    <a class="btn tern" href="#try">Try it free <span class="arr" aria-hidden="true">&rarr;</span></a>
+    <div class="foot"><span><b>Tern</b> &middot; shift scheduling for small cafes and shops</span><span>Made in Manchester.</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var FULL=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  var TYPES={open:{label:'Open',s:7,e:13},mid:{label:'Mid',s:10,e:16},close:{label:'Close',s:13,e:19},short:{label:'Short',s:8,e:12}};
+  var PEOPLE=[{id:0,name:'Alex',c:24},{id:1,name:'Bea',c:24},{id:2,name:'Cal',c:30},{id:3,name:'Dee',c:12}];
+  var $=function(s){return document.querySelector(s)};
+  var p2=function(n){return (n<10?'0':'')+n};
+  var tm=function(t){var d=TYPES[t];return p2(d.s)+':00–'+p2(d.e)+':00'};
+  var dur=function(t){return TYPES[t].e-TYPES[t].s};
+
+  var shifts, nid, avail, swaps, sid, selected=null, askOpen=null, prevClash={};
+  function initial(){
+    nid=1; sid=1; swaps=[]; askOpen=null;
+    shifts=[];
+    [[0,0,'open'],[0,1,'open'],[0,3,'close'],[0,4,'close'],
+     [1,0,'close'],[1,2,'mid'],[1,5,'short'],
+     [2,1,'close'],[2,2,'open'],[2,2,'mid'],[2,4,'open'],[2,5,'open'],
+     [3,3,'open'],[3,5,'close'],[3,6,'mid']].forEach(function(a){shifts.push({id:nid++,p:a[0],d:a[1],t:a[2]})});
+    avail=[[1,1,1,1,1,1,0],[1,0,1,0,1,1,1],[0,1,1,1,1,1,0],[0,0,0,1,0,1,1]];
+  }
+  initial();
+
+  /* tray */
+  var tray=$('#tray');
+  Object.keys(TYPES).forEach(function(k){
+    var b=document.createElement('button');b.type='button';b.className='chip';b.dataset.type=k;b.dataset.tray='1';
+    b.innerHTML='<b>'+TYPES[k].label+'</b><span>'+tm(k)+'</span>';
+    b.setAttribute('aria-label','Add a '+TYPES[k].label+' shift, '+tm(k)+'. Press to select, then choose a cell.');
+    tray.appendChild(b);
+  });
+
+  /* checks */
+  function check(){
+    var clash={},list=[],hours=[];
+    PEOPLE.forEach(function(p){
+      var mine=shifts.filter(function(s){return s.p===p.id});
+      var tot=0;mine.forEach(function(s){tot+=dur(s.t)});
+      hours[p.id]=tot;
+      for(var d=0;d<7;d++){
+        var day=mine.filter(function(s){return s.d===d});
+        for(var i=0;i<day.length;i++)for(var j=i+1;j<day.length;j++){
+          var a=day[i],b=day[j],A=TYPES[a.t],B=TYPES[b.t];
+          if(A.s<B.e&&B.s<A.e){
+            clash[a.id]=1;clash[b.id]=1;
+            list.push(p.name+' is double-booked on '+FULL[d]+': '+A.label+' '+tm(a.t)+' overlaps '+B.label+' '+tm(b.t)+'.');
+          }
+        }
+      }
+      if(tot>p.c)list.push(p.name+' is down for '+tot+' hours. The contract says '+p.c+'. That is '+(tot-p.c)+' over.');
+    });
+    return {clash:clash,list:list,hours:hours};
+  }
+
+  /* render grid */
+  function renderGrid(){
+    var r=check();
+    var h='<div class="r"><div class="h n">Week</div>';
+    DAYS.forEach(function(d){h+='<div class="h">'+d+'</div>'});
+    h+='<div class="h">Hours</div></div>';
+    PEOPLE.forEach(function(p){
+      var tot=r.hours[p.id],bad=tot>p.c,pct=Math.min(100,tot/Math.max(p.c,tot)*100);
+      h+='<div class="r"><div class="n"><b>'+p.name+'</b><span>agreed '+p.c+' h</span></div>';
+      for(var d=0;d<7;d++){
+        var cls='cell'+(avail[p.id][d]?'':' off');
+        h+='<div class="'+cls+'" data-p="'+p.id+'" data-d="'+d+'" tabindex="0" role="button" aria-label="'+p.name+', '+FULL[d]+(avail[p.id][d]?'':', marked can’t work')+'">';
+        shifts.forEach(function(s){
+          if(s.p!==p.id||s.d!==d)return;
+          var c=r.clash[s.id]?' clash':'';
+          var sh=(r.clash[s.id]&&!prevClash[s.id])?' shake':'';
+          h+='<div class="chip'+c+sh+'" data-type="'+s.t+'" data-sid="'+s.id+'"><b>'+TYPES[s.t].label+'</b><span>'+tm(s.t)+'</span><button type="button" class="x" data-del="'+s.id+'" aria-label="Remove '+TYPES[s.t].label+' shift for '+p.name+' on '+FULL[d]+'">×</button></div>';
+        });
+        h+='</div>';
+      }
+      h+='<div class="hrs'+(bad?' bad':'')+'"><div class="t">'+tot+' <em>/ '+p.c+' h</em></div><div class="bar"><i style="width:'+pct+'%"></i></div><small>'+(bad?(tot-p.c)+' h over':'')+'</small></div></div>';
+    });
+    $('#rota').innerHTML=h;
+    prevClash=r.clash;
+    var n=r.list.length;
+    var st=$('#status');st.className='status'+(n?'':' ok');
+    $('#statustxt').textContent=n?(n+(n===1?' thing to fix':' things to fix')):'Rota is clear';
+    $('#flags').innerHTML=n?'<ul>'+r.list.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul>':'<div class="clear">Nothing to flag. No one is double-booked and no one is over their agreed hours.</div>';
+    $('#rotawrap').classList.toggle('picking',!!selected);
+    renderPhone();
+  }
+
+  /* drag, drop, tap */
+  var drag=null;
+  document.addEventListener('pointerdown',function(e){
+    if(e.target.closest('[data-del]'))return;
+    var chip=e.target.closest('.chip');
+    if(!chip||e.button>0)return;
+    if(!chip.dataset.tray&&!chip.dataset.sid)return;
+    drag={chip:chip,x:e.clientX,y:e.clientY,moved:false,ghost:null,from:chip.dataset.tray?null:+chip.dataset.sid,type:chip.dataset.type,target:null};
+  });
+  document.addEventListener('pointermove',function(e){
+    if(!drag)return;
+    if(!drag.moved){
+      if(Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y)<6)return;
+      drag.moved=true;
+      var g=drag.chip.cloneNode(true);g.classList.add('ghost');g.classList.remove('sel','shake');
+      var x=g.querySelector('.x');if(x)x.remove();
+      document.body.appendChild(g);drag.ghost=g;
+      if(drag.from)drag.chip.style.opacity='.3';
+    }
+    e.preventDefault();
+    drag.ghost.style.left=(e.clientX-64)+'px';drag.ghost.style.top=(e.clientY-20)+'px';
+    var el=document.elementFromPoint(e.clientX,e.clientY);
+    var cell=el&&el.closest('.cell');
+    if(drag.target&&drag.target!==cell)drag.target.classList.remove('target');
+    drag.target=cell;if(cell)cell.classList.add('target');
+  },{passive:false});
+  function endDrag(e,cancel){
+    if(!drag)return;
+    var d=drag;drag=null;
+    if(d.ghost)d.ghost.remove();
+    if(d.target)d.target.classList.remove('target');
+    if(d.chip)d.chip.style.opacity='';
+    if(d.moved){
+      if(cancel)return;
+      var el=document.elementFromPoint(e.clientX,e.clientY);
+      var cell=el&&el.closest('.cell');
+      if(cell){
+        var p=+cell.dataset.p,day=+cell.dataset.d;
+        if(d.from){var s=shifts.filter(function(x){return x.id===d.from})[0];if(s){s.p=p;s.d=day}}
+        else shifts.push({id:nid++,p:p,d:day,t:d.type});
+        selected=null;
+      }else if(d.from&&el&&el.closest('#tray')){
+        shifts=shifts.filter(function(x){return x.id!==d.from});
+      }
+      syncTray();renderGrid();
+    }else if(d.chip.dataset.tray){
+      selected=(selected===d.type)?null:d.type;syncTray();$('#rotawrap').classList.toggle('picking',!!selected);
+    }
+  }
+  document.addEventListener('pointerup',function(e){endDrag(e,false)});
+  document.addEventListener('pointercancel',function(e){endDrag(e,true)});
+  function syncTray(){
+    [].forEach.call(tray.querySelectorAll('.chip'),function(c){c.classList.toggle('sel',c.dataset.type===selected)});
+  }
+  function place(cell){
+    if(!selected)return;
+    shifts.push({id:nid++,p:+cell.dataset.p,d:+cell.dataset.d,t:selected});
+    selected=null;syncTray();renderGrid();
+  }
+  $('#rota').addEventListener('click',function(e){
+    var del=e.target.closest('[data-del]');
+    if(del){var id=+del.dataset.del;shifts=shifts.filter(function(s){return s.id!==id});renderGrid();return}
+    var cell=e.target.closest('.cell');
+    if(cell&&selected&&!e.target.closest('.chip'))place(cell);
+  });
+  $('#rota').addEventListener('keydown',function(e){
+    var cell=e.target.closest('.cell');
+    if(cell&&e.target===cell&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(cell)}
+  });
+  tray.addEventListener('keydown',function(e){
+    if((e.key==='Enter'||e.key===' ')&&e.target.dataset.tray){
+      e.preventDefault();selected=selected===e.target.dataset.type?null:e.target.dataset.type;syncTray();$('#rotawrap').classList.toggle('picking',!!selected);
+    }
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&selected){selected=null;syncTray();$('#rotawrap').classList.remove('picking')}});
+  $('#reset').addEventListener('click',function(){initial();selected=null;prevClash={};syncTray();buildAll()});
+
+  /* availability section */
+  var availP=0;
+  function whoBtns(el,cur,cb){
+    el.innerHTML='';
+    PEOPLE.forEach(function(p){
+      var b=document.createElement('button');b.type='button';b.textContent=p.name;b.setAttribute('aria-pressed',p.id===cur);
+      b.addEventListener('click',function(){cb(p.id)});el.appendChild(b);
+    });
+  }
+  function renderAvail(){
+    whoBtns($('#whoA'),availP,function(i){availP=i;renderAvail()});
+    var g=$('#availGrid');g.innerHTML='';
+    DAYS.forEach(function(d,i){
+      var ok=avail[availP][i];
+      var b=document.createElement('button');b.type='button';b.className=ok?'':'no';
+      b.setAttribute('aria-pressed',!ok);
+      b.setAttribute('aria-label',PEOPLE[availP].name+', '+FULL[i]+': '+(ok?'can work':'cannot work')+'. Press to change.');
+      b.innerHTML='<b>'+d+'</b><span>'+(ok?'Can work':'Can’t work')+'</span>';
+      b.addEventListener('click',function(){avail[availP][i]=ok?0:1;renderAvail();renderGrid()});
+      g.appendChild(b);
+    });
+  }
+
+  /* phone */
+  var phoneP=0;
+  function sName(id){return PEOPLE[id].name}
+  function renderPhone(){
+    whoBtns($('#whoP'),phoneP,function(i){phoneP=i;askOpen=null;renderPhone()});
+    $('#phName').textContent=sName(phoneP);
+    var mine=shifts.filter(function(s){return s.p===phoneP}).sort(function(a,b){return a.d-b.d||TYPES[a.t].s-TYPES[b.t].s});
+    var h='';
+    if(!mine.length)h='<div class="emptyp">No shifts this week.</div>';
+    mine.forEach(function(s){
+      var sw=swaps.filter(function(w){return w.sid===s.id&&w.from===phoneP}).pop();
+      h+='<div class="shift" data-type="'+s.t+'"><div class="top"><b>'+FULL[s.d]+'</b><span>'+dur(s.t)+' h</span></div><div class="tm">'+TYPES[s.t].label+' &middot; '+tm(s.t)+'</div>';
+      if(sw&&sw.status==='pending')h+='<div class="st">Asked '+sName(sw.to)+'. Waiting for the manager.</div>';
+      else if(askOpen===s.id){
+        h+='<div class="pick"><span>Swap with</span>';
+        PEOPLE.forEach(function(p){if(p.id!==phoneP)h+='<button type="button" data-to="'+p.id+'" data-s="'+s.id+'">'+p.name+'</button>'});
+        h+='<button type="button" class="c" data-cancel="1">Cancel</button></div>';
+      }else{
+        if(sw&&sw.status==='declined')h+='<div class="st declined">Swap declined by the manager.</div>';
+        h+='<button type="button" class="sw" data-ask="'+s.id+'">Ask to swap</button>';
+      }
+      h+='</div>';
+    });
+    $('#phList').innerHTML=h;
+    renderMgr();
+  }
+  $('#phList').addEventListener('click',function(e){
+    var a=e.target.closest('[data-ask]');if(a){askOpen=+a.dataset.ask;renderPhone();return}
+    if(e.target.closest('[data-cancel]')){askOpen=null;renderPhone();return}
+    var t=e.target.closest('[data-to]');
+    if(t){swaps.push({id:sid++,sid:+t.dataset.s,from:phoneP,to:+t.dataset.to,status:'pending'});askOpen=null;renderPhone()}
+  });
+  function sLabel(w){
+    var s=shifts.filter(function(x){return x.id===w.sid})[0];
+    return s?FULL[s.d]+' '+TYPES[s.t].label+' '+tm(s.t):'a shift that has since changed';
+  }
+  function renderMgr(){
+    var pend=swaps.filter(function(w){return w.status==='pending'});
+    var done=swaps.filter(function(w){return w.status!=='pending'}).slice(-3).reverse();
+    var h='';
+    if(!pend.length&&!done.length)h='<li class="empty">No swap requests yet. Ask for one on the phone.</li>';
+    pend.forEach(function(w){
+      h+='<li><span><b>'+sName(w.from)+'</b> asks to swap <b>'+sLabel(w)+'</b> with <b>'+sName(w.to)+'</b>.</span><div class="acts"><button class="ok" type="button" data-ok="'+w.id+'">Approve</button><button class="no" type="button" data-no="'+w.id+'">Decline</button></div></li>';
+    });
+    done.forEach(function(w){
+      var t=w.status==='approved'?'Approved. The shift is now '+sName(w.to)+'’s.':w.status==='declined'?'Declined. The shift stays with '+sName(w.from)+'.':'No longer applies.';
+      h+='<li><span class="done">'+sName(w.from)+' &rarr; '+sName(w.to)+': '+t+'</span></li>';
+    });
+    $('#mgrList').innerHTML=h;
+  }
+  $('#mgrList').addEventListener('click',function(e){
+    var ok=e.target.closest('[data-ok]'),no=e.target.closest('[data-no]');
+    var id=ok?+ok.dataset.ok:no?+no.dataset.no:0;if(!id)return;
+    var w=swaps.filter(function(x){return x.id===id})[0];
+    if(ok){
+      var s=shifts.filter(function(x){return x.id===w.sid})[0];
+      if(s&&s.p===w.from){s.p=w.to;w.status='approved'}else w.status='void';
+    }else w.status='declined';
+    renderGrid();
+  });
+
+  /* price */
+  var dots=$('#dots'),nIn=$('#n');
+  for(var i=0;i<30;i++){dots.appendChild(document.createElement('i'))}
+  function renderPrice(){
+    var n=+nIn.value;
+    [].forEach.call(dots.children,function(d,i){d.className=(i<n?'in'+(i>=10?' paid':''):'')});
+    $('#teamTxt').innerHTML=n<=10?(n+' staff: <span style="color:var(--ink)">free.</span>'):(n+' staff: <span>£2 per person per month.</span>');
+  }
+  nIn.addEventListener('input',renderPrice);
+
+  function buildAll(){renderGrid();renderAvail();renderPrice()}
+  buildAll();
+})();
+</script>
+</body>
+</html>

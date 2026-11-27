@@ -1,0 +1,12 @@
+Artifact: next week's rota for a small cafe or shop, names down the side and Monday to Sunday across, at the moment a shift is moved and a row turns out double-booked or over contract hours.
+Without the category word: a week of names and shift times across the whole screen; one Saturday cell holds two overlapping shifts, one person's hours total is marked over, and a yellow shift can be moved to someone else.
+Signature: move the yellow Saturday shift (drag, tap or keyboard) and the double-booked and over-hours warnings answer. Ground: flat sheet white, because the rota grid is the picture and a lit ground would say nothing about it.
+Layout: the grid. A name column, seven day columns and an hours column are the page's own columns; every section sits on them.
+Material: the diagonal hatch that marks "can't work", on the hero rota, the availability row and the staff phone.
+
+Product: Tern lets a cafe or shop manager build the week's shifts and warns about double-bookings and contract hours.
+Character: plain, exact, quick.
+World: the printed rota pinned in the back room, marked with a highlighter.
+Moments: the hero rota; the seven-column drawings of the two warnings.
+Signature detail: highlighter yellow marks the thing you can act on (the movable shift and "Try it free"); red appears only on a broken rule.
+Must not look like: a software dashboard in a card, or three feature tiles under a headline.
