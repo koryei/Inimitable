@@ -83,6 +83,7 @@ for (const el of document.querySelectorAll('body, body *')) {
     if (v > 0) tally(out.spacing, v);
   }
 }
+out.mode = document.documentElement.dataset.mode || '';
 return out;
 })()`;
 
@@ -100,6 +101,8 @@ const VAGUE_ERROR = new RegExp(${JSON.stringify(VAGUE_ERROR_PATTERN)}, 'i');
 const EMOJI = /(?![\\u00A9\\u00AE\\u2122])\\p{Extended_Pictographic}/u;
 const found = [];
 const add = (tell, el, detail) => found.push({ tell, where: describe(el), detail: String(detail).slice(0, 90) });
+// A page that persuades may shout: heavy headlines and tracked capitals are choices there, and tells on a working screen.
+const loud = /^(persuade|experience)$/.test(document.documentElement.dataset.mode || '');
 function hue(rgba) {
   const [r, g, b] = rgba.slice(0, 3).map((v) => v / 255);
   const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
@@ -180,8 +183,8 @@ for (const el of document.querySelectorAll('body, body *')) {
     if (colour && hue(colour) !== null) add('Coloured glow', el, s.filter);
   }
   if (text) {
-    if ((heading || size >= 24) && weight >= 800) add('Heavy heading', el, 'weight ' + weight + ': ' + text);
-    if (s.textTransform === 'uppercase' && size < 16 && px(s.letterSpacing) / size > 0.04 && text.length > 3) add('Uppercase tracked label', el, text);
+    if (!loud && (heading || size >= 24) && weight >= 800) add('Heavy heading', el, 'weight ' + weight + ': ' + text);
+    if (!loud && s.textTransform === 'uppercase' && size < 16 && px(s.letterSpacing) / size > 0.04 && text.length > 3) add('Uppercase tracked label', el, text);
     if (size < 16 && px(s.letterSpacing) < 0) add('Negative tracking on small text', el, 'letter-spacing ' + s.letterSpacing);
     if (EMOJI.test(text)) add('Emoji in the interface', el, text);
     if (/!/.test(text) && !/!=|!\\w+\\(/.test(text)) add('Exclamation mark', el, text);

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-mode="persuade">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,8 @@
 
 <!-- This starter has no layout on purpose. The craft is done (type, buttons, focus, motion, fonts, colour); the frame
      is yours, and it comes from the concept (references/direction.md):
+       Headline: one move only this product's headline could make. Build it into the h1.
+       Voice:    the face and weight are set in theme.css; case, size and how loud the ground is are yours.
        Layout:   follow the shape of the native artifact. Where it runs, the page runs.
        Material: one thing the artifact is made of, drawn in the page itself, marked data-device="name" on the first
                  screen and in at least two more sections.
@@ -32,10 +34,10 @@
   <section class="first" id="top" aria-labelledby="title">
     <h1 class="display" id="title" data-todo>
       <span class="m-line"><span style="--d:0">What it does,</span></span>
-      <span class="m-line dim"><span style="--d:90">for whom.</span></span>
+      <span class="m-line"><span style="--d:90">for whom.</span></span>
     </h1>
     <p class="lede" data-enter style="--d:260" data-todo>One or two plain sentences: what the product is, who it is for, and the result they get.</p>
-    <p class="actions" data-enter style="--d:340"><a class="m-btn large" href="#start" data-todo>Primary action <span class="m-arrow" aria-hidden="true"></span></a></p>
+    <p class="actions" data-enter style="--d:340"><a class="m-btn large" href="#start" data-todo>Primary action</a></p>
     <!-- The native artifact, drawn from the product and labelled as an example if it is one:
          <figure data-artwork data-device="name" aria-label="Example: ..."> ... </figure> -->
   </section>
@@ -43,7 +45,7 @@
   <section class="last" id="start" aria-labelledby="start-title">
     <h2 class="h2" id="start-title" data-todo>One clear next step.</h2>
     <p data-todo>One sentence that makes the next step feel small.</p>
-    <p class="actions"><a class="m-btn large" href="#top" data-todo>Primary action <span class="m-arrow" aria-hidden="true"></span></a></p>
+    <p class="actions"><a class="m-btn large" href="#top" data-todo>Primary action</a></p>
   </section>
 </main>
 

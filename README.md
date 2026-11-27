@@ -111,7 +111,7 @@ Review this screen against our brand guide.
 | --- | --- | --- |
 | 1 | **Read** | Finds your design rules, watches the screens run and measures the drift. |
 | 2 | **Decide the mode** | Persuade, Operate, Read, Experience or Terminal: what the person is doing here. |
-| 3 | **Fix the direction** | A five-line concept (what the product makes, what the page shows without its category word, one signature, a layout taken from that artifact, one material that runs through), then five lines on how it should feel and what it must never look like. |
+| 3 | **Fix the direction** | A seven-line concept (what the product makes, what the page shows without its category word, one signature, a layout taken from that artifact, one material that runs through, one headline move, and a voice: face, weight, case and loudness), then five lines on how it should feel and what it must never look like. |
 | 4 | **Branch** | Repairs an existing screen layer by layer, or builds a new one around one star. |
 | 5 | **Build** | One section at a time, from your own components, with every state designed. |
 | 6 | **Gate** | Runs your lint, types and tests, then measures contrast, target size and tells. |
@@ -124,14 +124,14 @@ Review this screen against our brand guide.
 A blank file loses the craft, and a finished template loses the identity. So a new landing page starts from a base with tested type, controls and motion and no layout, and the agent builds the layout from the product’s own artifact. There are also two complete starters for when the standard shape is what you want. All of them pass the skill’s craft checks.
 
 ```bash
-node scripts/scaffold.mjs my-page --kind base --theme light
+node scripts/scaffold.mjs my-page --kind base --theme light --voice serif --weight 600
 node scripts/scaffold.mjs my-standard-page --theme light --palette ember --shape contour
 node scripts/scaffold.mjs my-app --kind app --theme dark
 ```
 
 | Starter | What you get |
 | --- | --- |
-| **Base** (`--kind base`) | Type with tracking set by size, buttons and links with hover and press, focus styles, colour, the motion kit and fonts. `page.css` is empty: the frame is yours. |
+| **Base** (`--kind base`) | Buttons and links with hover and press, focus styles, colour, the motion kit and fonts. You choose the headline face and weight (`--voice sans`, `grotesk`, `serif` or `condensed`, with `--weight`), and the letter spacing measured for them is written in. `page.css` is empty: the frame is yours. |
 | **Landing page** | A lit grainient ground, a floating nav, a product frame, an uneven bento, steps, one big number, a closing call and a footer. The motion kit is wired in: ordered entrance, scroll reveals, count-up, and a hover and press state on every control. |
 | **App screen** (`--kind app`) | A sidebar that becomes a menu on a phone, a page header with one primary action, four key numbers, one chart, a table whose status is a word and a dot, and an empty state that says what to do. |
 
@@ -187,6 +187,7 @@ references/
 assets/motion/           the motion kit: entrance, reveal, count-up, magnetic, tilt, spotlight, marquee, draw, sweep buttons
 assets/starters/         the landing and app starters, tested in a browser
 assets/fonts/            Geist, Geist Mono and Instrument Serif under the Open Font Licence
+assets/voices/           Bricolage Grotesque, Newsreader and Big Shoulders Display, same licence
 assets/recipes/          tested generators and kits: grounds, flat colour tones, duotone prints, annotation chips and diagrams, headline helpers, contours, stones, vessels, dither, halftone, HUD callouts, isometric art
 scripts/                 the measuring and building tools above
 evals/                   briefs, scoring, a tracking measurement and the write-up of every test round

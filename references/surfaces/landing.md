@@ -1,6 +1,6 @@
 # Surface: landing and marketing pages (Persuade)
 
-**Start with `node scripts/scaffold.mjs <folder> --kind base`** (see `landing-craft.md`). It writes the craft with no layout: type with tracking by size, controls with hover and press, focus styles, colour and the motion kit. Build the layout in `page.css` from the concept (`direction.md`): the shape of the product's artifact, and one material that runs through. The full starter (no `--kind`) writes the standard page, for a brief that asks for exactly that or has no time for more. Starting from a blank file loses the craft; stopping at the starter loses the identity.
+**Start with `node scripts/scaffold.mjs <folder> --kind base --voice … --weight …`** (see `landing-craft.md`). It writes the craft with no layout: the headline voice your concept chose, controls with hover and press, focus styles, colour and the motion kit. Build the layout in `page.css` from the concept (`direction.md`): the shape of the product's artifact, and one material that runs through. The full starter (no `--kind`) writes the standard page, for a brief that asks for exactly that or has no time for more. Starting from a blank file loses the craft; stopping at the starter loses the identity.
 
 A landing page is not a brochure. It is an **argument** made in a fixed order, to someone who is deciding whether to keep reading. Design is the product here: the page has to earn attention, then belief, then action, and it has about five seconds to earn the first one.
 

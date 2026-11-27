@@ -155,6 +155,6 @@ The finished looks above are starting points. What makes one feel *made for this
 - The **hero object** drawn from its world, not a generic sphere or chip.
 - **Real labels** from its real facts.
 - **One accent** from its world or brand.
-- **One signature** (a status dot, a unit, a typeface detail, one artwork, one interaction) used everywhere, with everything else calm.
+- **One signature** (a status dot, a unit, a typeface detail, one artwork, one interaction) used everywhere.
 
 If you could swap the product name and the page still fits, it is a template. Go back to the inventory.

@@ -62,3 +62,14 @@ A page's visual score is the sum (out of 50). Judge blind where possible: shuffl
 ## Why two arms
 
 Without the baseline you cannot tell whether the skill helped or the model is simply good. Without the skilled arm's own report you cannot tell why it fell short. Both are needed to improve the skill rather than admire it.
+
+## Before claiming a win on distinctiveness
+
+One build per arm can show a loss, not a win: in round 7 the same baseline pages moved from 4.5 to 3.33 mean ownability between two sets of judges. To claim that the skill helps:
+
+- At least six briefs the skill has never seen, three builds per arm for each (36 pages).
+- **Spread first:** judge the three builds of one brief against each other. If skilled builds look more alike than baseline builds, the skill is narrowing the output, whatever the pairs say.
+- **Lineup:** show a judge the first screens, names masked, and ask them to group them by hand. Score how well the groups match the arms.
+- At least one judge from a different model family, and one pass with text blurred.
+- Pass bar: remembered and less swappable in 60% or more of at least 36 pair judgements, with the skill's own scores left out.
+

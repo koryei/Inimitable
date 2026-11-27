@@ -60,7 +60,8 @@ export function analyse(raw, { scale = SCALE } = {}) {
   if (working.length > 7) flags.push(`${working.length} working font sizes under 40 px (a scale needs about 7 or fewer)`);
   if (display.length > 4) flags.push(`${display.length} display sizes at 40 px and up (keep to about 4: headline, numeral, statement, price)`);
   if (tinyText.length) flags.push(`text smaller than 12 px: ${tinyText.join(', ')}`);
-  if (weights.some((w) => w >= 700)) flags.push(`weights ${weights.filter((w) => w >= 700).join(', ')} in use (heavy)`);
+  const loud = /^(persuade|experience)$/.test(raw.mode || '');
+  if (!loud && weights.some((w) => w >= 700)) flags.push(`weights ${weights.filter((w) => w >= 700).join(', ')} in use (heavy)`);
   if (weights.length > 3) flags.push(`${weights.length} font weights in use`);
   const proportional = Object.keys(raw.fontFamilies).filter((f) => !MONO.test(f));
   if (proportional.length > 2) flags.push(`${proportional.length} proportional font families in use (one family plus one partner is the rule; a mono for code or figures is extra)`);
