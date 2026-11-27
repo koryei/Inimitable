@@ -180,6 +180,8 @@ export function scaffoldApp(dest, { theme = 'dark', accent } = {}) {
 // For a page whose frame comes from its own concept. No hero, no sections beyond the first and the last: the agent
 // composes the layout in page.css from the shape of the product's artifact (references/direction.md).
 export function scaffoldBase(dest, { theme = 'dark', palette, accent } = {}) {
+  if (accent && !/^#[0-9a-f]{6}$/i.test(accent)) throw new Error(`--accent is a six-digit hex colour (got "${accent}").`);
+  const problems = [];
   let css;
   if (palette && FLATS[palette]) {
     theme = FLATS[palette].dark ? 'dark' : 'light';
@@ -194,6 +196,14 @@ export function scaffoldBase(dest, { theme = 'dark', palette, accent } = {}) {
       if (Boolean(pal.dark) !== dark) throw new Error(`The ${palette} palette is ${pal.dark ? 'dark' : 'light'}: use --theme ${pal.dark ? 'dark' : 'light'}, or pick another palette.`);
     }
     css = themeCss({ dark, palette: pal });
+    // In the base the colour asked for is the accent itself, not the seed of a derived palette.
+    if (accent) {
+      const onAccent = ratio(accent, '#0b0b0c') >= ratio(accent, '#ffffff') ? '#0b0b0c' : '#ffffff';
+      css = css.replace(/--accent: [^;]+;/, `--accent: ${accent};`).replace(/--on-accent: [^;]+;/, `--on-accent: ${onAccent};`);
+      // The accent also draws focus rings and link hover, so it has to read on the page.
+      const seen = ratio(accent, pal.base);
+      if (seen < 4.5) problems.push(`the accent ${accent} is ${seen.toFixed(1)}:1 on the page colour: too faint for link hover and focus. Darken or lighten it, or use it only as a fill.`);
+    }
   }
   const starter = join(root, 'assets', 'starters', 'base');
   mkdirSync(dest, { recursive: true });
@@ -206,7 +216,7 @@ export function scaffoldBase(dest, { theme = 'dark', palette, accent } = {}) {
   copyFileSync(join(root, 'assets', 'motion', 'motion.js'), join(dest, 'motion.js'));
   cpSync(join(root, 'assets', 'fonts'), join(dest, 'fonts'), { recursive: true });
   const todo = (readFileSync(join(dest, 'index.html'), 'utf8').match(/data-todo/g) || []).length;
-  return { dest, todo, problems: [], shape: 'base', theme };
+  return { dest, todo, problems, shape: 'base', theme };
 }
 
 if (isMain(import.meta.url)) {

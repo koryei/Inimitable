@@ -34,6 +34,23 @@ test('a flat tone sets the theme, and an unknown palette is refused', () => {
   assert.throws(() => scaffoldBase(folder('bad'), { palette: 'nope' }), /Unknown palette/);
 });
 
+test('the accent asked for is the accent written, with readable text on it, and a faint one is reported', () => {
+  const dir = folder('accent');
+  const strong = scaffoldBase(dir, { theme: 'light', accent: '#b0271c' });
+  const css = readFileSync(join(dir, 'theme.css'), 'utf8');
+  assert.match(css, /--accent: #b0271c;/);
+  assert.match(css, /--on-accent: #ffffff;/);
+  assert.deepEqual(strong.problems, []);
+  assert.match(scaffoldBase(folder('faint'), { theme: 'light', accent: '#ffd43b' }).problems[0], /too faint/);
+  assert.throws(() => scaffoldBase(folder('short'), { accent: 'red' }), /hex/);
+});
+
+test('the base sets no layout a page has to fight: its two blocks carry no specificity', () => {
+  const css = readFileSync(new URL('../assets/starters/base/base.css', import.meta.url), 'utf8');
+  assert.match(css, /:where\(\.first, \.last\)/);
+  assert.ok(!/justify-items/.test(css));
+});
+
 for (const { name, options } of variants) {
   const dir = folder(name);
   scaffoldBase(dir, options);
